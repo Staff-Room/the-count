@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Count - Financial Account Connection</title>
+    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .account-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .connect-btn {
+            background-color: #00d4aa;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .connect-btn:hover {
+            background-color: #00b894;
+        }
+        .connect-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .account-list {
+            margin-top: 20px;
+        }
+        .account-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #00d4aa;
+        }
+        .transactions-section {
+            margin-top: 30px;
+        }
+        .transaction-item {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .target-accounts {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .load-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .load-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧛 The Count - Financial Account Connection</h1>
+        
+        <div class="target-accounts">
+            <h3>Target Accounts to Connect:</h3>
+            <ul>
+                <li>🏦 Amplify Credit Union (bank)</li>
+                <li>💳 Capital One (credit card)</li>
+                <li>💰 Venmo</li>
+                <li>💸 PayPal</li>
+            </ul>
+        </div>
+
+        <div class="account-section">
+            <h2>Connect Your Financial Accounts</h2>
+            <p>Use Plaid Link to securely connect your bank accounts, credit cards, and payment services.</p>
+            
+            <button id="linkButton" class="connect-btn">
+                🔗 Connect Account with Plaid
+            </button>
+            
+            <div id="status"></div>
+        </div>
+
+        <div class="account-section">
+            <h3>Connected Accounts</h3>
+            <button id="loadAccountsBtn" class="load-btn">🔄 Load Accounts</button>
+            <div id="accountsList" class="account-list"></div>
+        </div>
+
+        <div class="transactions-section">
+            <h3>Recent Transactions</h3>
+            <button id="loadTransactionsBtn" class="load-btn">🔄 Load Transactions</button>
+            <div id="transactionsList"></div>
+        </div>
+    </div>
+
+    <script>
+        let linkHandler;
+
+        // Initialize Plaid Link
+        async function initializeLink() {
+            try {
+                // Get link token from backend
+                const response = await fetch('/api/create_link_token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to create link token');
+                }
+                
+                const data = await response.json();
+                
+                // Initialize Plaid Link
+                linkHandler = Plaid.create({
+                    token: data.link_token,
+                    onSuccess: async (public_token, metadata) => {
+                        console.log('Link success:', metadata);
+                        showStatus('Successfully connected to ' + metadata.institution.name, 'success');
+                        
+                        // Exchange public token for access token
+                        try {
+                            const exchangeResponse = await fetch('/api/exchange_public_token', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    public_token: public_token,
+                                    metadata: metadata
+                                })
+                            });
+                            
+                            if (exchangeResponse.ok) {
+                                showStatus('Account successfully connected and ready to use!', 'success');
+                                loadAccounts(); // Automatically load accounts after connection
+                            } else {
+                                throw new Error('Failed to exchange token');
+                            }
+                        } catch (error) {
+                            console.error('Token exchange error:', error);
+                            showStatus('Error connecting account: ' + error.message, 'error');
+                        }
+                    },
+                    onExit: (err, metadata) => {
+                        if (err) {
+                            console.error('Link exit error:', err);
+                            showStatus('Connection cancelled: ' + err.error_message, 'error');
+                        } else {
+                            showStatus('Connection cancelled by user', 'error');
+                        }
+                    },
+                    onEvent: (eventName, metadata) => {
+                        console.log('Link event:', eventName, metadata);
+                    }
+                });
+                
+                // Enable the connect button
+                document.getElementById('linkButton').disabled = false;
+                
+            } catch (error) {
+                console.error('Link initialization error:', error);
+                showStatus('Error initializing Plaid Link: ' + error.message, 'error');
+            }
+        }
+
+        // Show status messages
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        // Load connected accounts
+        async function loadAccounts() {
+            try {
+                const response = await fetch('/api/accounts');
+                if (!response.ok) {
+                    throw new Error('Failed to load accounts');
+                }
+                
+                const data = await response.json();
+                const accountsList = document.getElementById('accountsList');
+                
+                if (data.accounts && data.accounts.length > 0) {
+                    accountsList.innerHTML = data.accounts.map(account => `
+                        <div class="account-item">
+                            <strong>${account.name}</strong> (${account.type}/${account.subtype})<br>
+                            <small>Mask: *${account.mask} | Balance: $${account.balance.current}</small>
+                        </div>
+                    `).join('');
+                } else {
+                    accountsList.innerHTML = '<p>No accounts connected yet.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading accounts:', error);
+                showStatus('Error loading accounts: ' + error.message, 'error');
+            }
+        }
+
+        // Load transactions
+        async function loadTransactions() {
+            try {
+                const response = await fetch('/api/transactions');
+                if (!response.ok) {
+                    throw new Error('Failed to load transactions');
+                }
+                
+                const data = await response.json();
+                const transactionsList = document.getElementById('transactionsList');
+                
+                if (data.transactions && data.transactions.length > 0) {
+                    transactionsList.innerHTML = data.transactions.slice(0, 20).map(transaction => `
+                        <div class="transaction-item">
+                            <div>
+                                <strong>${transaction.name}</strong><br>
+                                <small>${transaction.date} | ${transaction.category.join(', ')}</small>
+                            </div>
+                            <div>
+                                <strong>$${Math.abs(transaction.amount).toFixed(2)}</strong>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    transactionsList.innerHTML = '<p>No transactions found.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading transactions:', error);
+                showStatus('Error loading transactions: ' + error.message, 'error');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('linkButton').addEventListener('click', () => {
+            if (linkHandler) {
+                linkHandler.open();
+            }
+        });
+
+        document.getElementById('loadAccountsBtn').addEventListener('click', loadAccounts);
+        document.getElementById('loadTransactionsBtn').addEventListener('click', loadTransactions);
+
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            initializeLink();
+        });
+    </script>
+</body>
+</html>
