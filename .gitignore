@@ -37,3 +37,7 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local app data
+src/backend/data/
+*.db
