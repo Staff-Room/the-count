@@ -1,260 +1,479 @@
 """
-The Count - Plaid Integration Backend
-Main Flask application for handling Plaid API integration
+The Count - Plaid integration and financial dashboard backend.
 """
 
-import os
+from __future__ import annotations
+
+import csv
+import io
 import json
-from datetime import datetime
-from flask import Flask, request, jsonify, render_template
-from dotenv import load_dotenv
+import os
+from calendar import monthrange
+from datetime import date, datetime, timedelta, timezone
+
 import plaid
+from dotenv import load_dotenv
+from flask import Flask, Response, jsonify, redirect, render_template, request
 from plaid.api import plaid_api
+from plaid.model.accounts_get_request import AccountsGetRequest
+from plaid.model.country_code import CountryCode
+from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
+from plaid.model.item_remove_request import ItemRemoveRequest
 from plaid.model.link_token_create_request import LinkTokenCreateRequest
 from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
-from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
-from plaid.model.accounts_get_request import AccountsGetRequest
-from plaid.model.auth_get_request import AuthGetRequest
-from plaid.model.transactions_sync_request import TransactionsSyncRequest
-from plaid.model.country_code import CountryCode
 from plaid.model.products import Products
+from plaid.model.transactions_sync_request import TransactionsSyncRequest
 
-# Load environment variables
+import db
+import plaid_sync
+
 load_dotenv()
 
 app = Flask(__name__)
 
-# Plaid configuration
-PLAID_CLIENT_ID = os.getenv('PLAID_CLIENT_ID')
-PLAID_SECRET = os.getenv('PLAID_SECRET')
-PLAID_ENV = os.getenv('PLAID_ENVIRONMENT', 'sandbox')
+PLAID_CLIENT_ID = os.getenv("PLAID_CLIENT_ID")
+PLAID_SECRET = os.getenv("PLAID_SECRET")
+PLAID_ENV = os.getenv("PLAID_ENVIRONMENT", "sandbox")
 
-# Map environment names to Plaid environment objects
 PLAID_ENVIRONMENTS = {
-    'sandbox': plaid.Environment.Sandbox,
-    'development': plaid.Environment.Development,
-    'production': plaid.Environment.Production,
+    "sandbox": plaid.Environment.Sandbox,
+    "development": plaid.Environment.Development,
+    "production": plaid.Environment.Production,
 }
 
-# Initialize Plaid client
 configuration = plaid.Configuration(
     host=PLAID_ENVIRONMENTS[PLAID_ENV],
     api_key={
-        'clientId': PLAID_CLIENT_ID,
-        'secret': PLAID_SECRET,
-        'plaidVersion': '2020-09-14'
-    }
+        "clientId": PLAID_CLIENT_ID,
+        "secret": PLAID_SECRET,
+        "plaidVersion": "2020-09-14",
+    },
 )
 api_client = plaid.ApiClient(configuration)
 plaid_client = plaid_api.PlaidApi(api_client)
 
-# In-memory storage (replace with database in production)
-access_tokens = {}
+db.init_db()
 
 
-@app.route('/')
-def index():
-    """Serve the main page with Plaid Link integration"""
-    return render_template('index.html')
+def _month_start(d: date | None = None) -> date:
+    if d is None:
+        d = date.today()
+    return date(d.year, d.month, 1)
 
 
-@app.route('/api/create_link_token', methods=['POST'])
-def create_link_token():
-    """Create a link token for Plaid Link initialization"""
-    try:
-        # Create link token request
-        request = LinkTokenCreateRequest(
-            products=[Products('auth'), Products('transactions')],
-            client_name="The Count - Financial Tracker",
-            country_codes=[CountryCode('US')],
-            language='en',
-            user=LinkTokenCreateRequestUser(client_user_id='user-1'),  # In production, use actual user ID
-            webhook='https://your-webhook-url.com/webhook'  # Replace with actual webhook URL
-        )
-        
-        response = plaid_client.link_token_create(request)
-        return jsonify({
-            'link_token': response['link_token'],
-            'expiration': response['expiration']
-        })
-    
-    except plaid.ApiException as e:
-        return jsonify({'error': json.loads(e.body)}), 400
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+@app.route("/")
+def root():
+    return redirect("/dashboard")
 
 
-@app.route('/api/exchange_public_token', methods=['POST'])
-def exchange_public_token():
-    """Exchange public token for access token"""
-    try:
-        data = request.get_json()
-        public_token = data.get('public_token')
-        
-        if not public_token:
-            return jsonify({'error': 'public_token is required'}), 400
-        
-        # Exchange public token for access token
-        exchange_request = ItemPublicTokenExchangeRequest(
-            public_token=public_token
-        )
-        
-        response = plaid_client.item_public_token_exchange(exchange_request)
-        access_token = response['access_token']
-        item_id = response['item_id']
-        
-        # Store access token (in production, store in database)
-        access_tokens[item_id] = {
-            'access_token': access_token,
-            'item_id': item_id,
-            'created_at': datetime.now().isoformat()
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
+
+
+@app.route("/api/status", methods=["GET"])
+def get_status():
+    counts = db.transaction_counts()
+    items = db.list_items()
+    return jsonify(
+        {
+            "connected_items": len(items),
+            "environment": PLAID_ENV,
+            "transaction_store": counts,
+            "items": [
+                {
+                    "item_id": i["item_id"],
+                    "institution_name": i.get("institution_name"),
+                    "last_sync_at": i.get("last_sync_at"),
+                    "last_error": i.get("last_error"),
+                }
+                for i in items
+            ],
         }
-        
-        return jsonify({
-            'success': True,
-            'item_id': item_id,
-            'message': 'Successfully connected account'
-        })
-    
+    )
+
+
+@app.route("/api/create_link_token", methods=["POST"])
+def create_link_token():
+    try:
+        webhook = os.getenv("PLAID_WEBHOOK_URL", "").strip()
+        kwargs = {
+            "products": [Products("transactions")],
+            "client_name": "The Count",
+            "country_codes": [CountryCode("US")],
+            "language": "en",
+            "user": LinkTokenCreateRequestUser(client_user_id="local-dashboard-user"),
+        }
+        if webhook:
+            kwargs["webhook"] = webhook
+
+        link_request = LinkTokenCreateRequest(**kwargs)
+        response = plaid_client.link_token_create(link_request)
+        return jsonify(
+            {
+                "link_token": response["link_token"],
+                "expiration": response["expiration"],
+            }
+        )
     except plaid.ApiException as e:
-        return jsonify({'error': json.loads(e.body)}), 400
+        return jsonify({"error": json.loads(e.body)}), 400
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 
-@app.route('/api/accounts', methods=['GET'])
+@app.route("/api/exchange_public_token", methods=["POST"])
+def exchange_public_token():
+    try:
+        body = request.get_json(force=True, silent=True) or {}
+        public_token = body.get("public_token")
+        meta = body.get("metadata") or {}
+        institution = meta.get("institution") or {}
+
+        if not public_token:
+            return jsonify({"error": "public_token is required"}), 400
+
+        exchange_request = ItemPublicTokenExchangeRequest(public_token=public_token)
+        response = plaid_client.item_public_token_exchange(exchange_request)
+        access_token = response["access_token"]
+        item_id = response["item_id"]
+
+        db.upsert_item(
+            item_id,
+            access_token,
+            institution_id=institution.get("institution_id"),
+            institution_name=institution.get("name"),
+        )
+
+        return jsonify(
+            {
+                "success": True,
+                "item_id": item_id,
+                "message": "Successfully connected account",
+            }
+        )
+    except plaid.ApiException as e:
+        return jsonify({"error": json.loads(e.body)}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+def _sync_one_item(item_id: str, access_token: str) -> dict:
+    """Run transactions_sync until complete; persist cursor and transactions."""
+    cursor = db.get_cursor(item_id)
+    total_stats = {"added": 0, "modified": 0, "removed": 0, "pages": 0}
+
+    while True:
+        if cursor:
+            sync_req = TransactionsSyncRequest(
+                access_token=access_token, cursor=cursor
+            )
+        else:
+            sync_req = TransactionsSyncRequest(access_token=access_token)
+
+        response = plaid_client.transactions_sync(sync_req)
+        total_stats["pages"] += 1
+        page = plaid_sync.apply_sync_response(item_id, response)
+        total_stats["added"] += page["added"]
+        total_stats["modified"] += page["modified"]
+        total_stats["removed"] += page["removed"]
+
+        cursor = response.next_cursor
+        if not response.has_more:
+            break
+
+    db.set_cursor(item_id, cursor, error=None)
+    return total_stats
+
+
+@app.route("/api/sync_transactions", methods=["POST"])
+def sync_transactions():
+    """Pull latest transactions from Plaid for all linked items."""
+    items = db.iter_items_with_tokens()
+    if not items:
+        return jsonify({"synced": [], "message": "No linked accounts"})
+
+    results = []
+    for row in items:
+        item_id = row["item_id"]
+        token = row["access_token"]
+        try:
+            stats = _sync_one_item(item_id, token)
+            results.append({"item_id": item_id, "ok": True, **stats})
+        except plaid.ApiException as e:
+            err = json.loads(e.body)
+            db.set_cursor(item_id, db.get_cursor(item_id), error=json.dumps(err))
+            results.append({"item_id": item_id, "ok": False, "error": err})
+        except Exception as e:
+            db.set_cursor(item_id, db.get_cursor(item_id), error=str(e))
+            results.append({"item_id": item_id, "ok": False, "error": str(e)})
+
+    summary = {
+        "items": len(results),
+        "ok": sum(1 for r in results if r.get("ok")),
+        "transactions_added": sum(r.get("added", 0) for r in results if r.get("ok")),
+    }
+    return jsonify({"summary": summary, "details": results})
+
+
+@app.route("/api/accounts", methods=["GET"])
 def get_accounts():
-    """Get accounts for all connected items"""
     try:
         all_accounts = []
-        
-        app.logger.info(f"Getting accounts for {len(access_tokens)} connected items")
-        
-        for item_id, item_data in access_tokens.items():
-            access_token = item_data['access_token']
-            app.logger.info(f"Processing item {item_id}")
-            
-            # Get account information
+        for row in db.iter_items_with_tokens():
+            item_id = row["item_id"]
+            access_token = row["access_token"]
+            inst = row.get("institution_name") or "Linked institution"
+
             accounts_request = AccountsGetRequest(access_token=access_token)
             accounts_response = plaid_client.accounts_get(accounts_request)
-            
-            # Get auth information (routing/account numbers)
-            auth_request = AuthGetRequest(access_token=access_token)
-            auth_response = plaid_client.auth_get(auth_request)
-            
-            # Convert response to dict (Plaid API returns response objects, not dicts)
-            accounts_data = accounts_response.to_dict()
-            auth_data = auth_response.to_dict()
-            
-            app.logger.info(f"Found {len(accounts_data['accounts'])} accounts for item {item_id}")
-            
-            # Combine account and auth data
-            for account in accounts_data['accounts']:
-                account_data = {
-                    'account_id': account['account_id'],
-                    'name': account['name'],
-                    'type': account['type'],
-                    'subtype': account['subtype'],
-                    'mask': account['mask'],
-                    'balance': {
-                        'available': account['balances']['available'],
-                        'current': account['balances']['current'],
-                        'currency': account['balances']['iso_currency_code']
+            data = accounts_response.to_dict()
+
+            for account in data.get("accounts") or []:
+                balances = account.get("balances") or {}
+                all_accounts.append(
+                    {
+                        "item_id": item_id,
+                        "institution_name": inst,
+                        "account_id": account.get("account_id"),
+                        "name": account.get("name"),
+                        "official_name": account.get("official_name"),
+                        "type": account.get("type"),
+                        "subtype": account.get("subtype"),
+                        "mask": account.get("mask"),
+                        "balance": {
+                            "available": balances.get("available"),
+                            "current": balances.get("current"),
+                            "currency": balances.get("iso_currency_code"),
+                        },
                     }
-                }
-                
-                # Add routing/account numbers if available
-                for auth_account in auth_data['accounts']:
-                    if auth_account['account_id'] == account['account_id']:
-                        account_data['numbers'] = auth_account.get('numbers', {})
-                        break
-                
-                all_accounts.append(account_data)
-        
-        app.logger.info(f"Returning {len(all_accounts)} total accounts")
-        return jsonify({'accounts': all_accounts})
-    
-    except plaid.ApiException as e:
-        error_details = json.loads(e.body)
-        app.logger.error(f"Plaid API error in get_accounts: {error_details}")
-        return jsonify({'error': error_details}), 400
-    except Exception as e:
-        app.logger.error(f"Unexpected error in get_accounts: {str(e)}", exc_info=True)
-        return jsonify({'error': str(e)}), 500
-
-
-@app.route('/api/transactions', methods=['GET'])
-def get_transactions():
-    """Get transactions for all connected accounts"""
-    try:
-        all_transactions = []
-        
-        app.logger.info(f"Getting transactions for {len(access_tokens)} connected items")
-        
-        for item_id, item_data in access_tokens.items():
-            access_token = item_data['access_token']
-            app.logger.info(f"Processing transactions for item {item_id}")
-            
-            # Get transactions using sync method
-            transactions_request = TransactionsSyncRequest(
-                access_token=access_token
-            )
-            
-            response = plaid_client.transactions_sync(transactions_request)
-            # Access response attributes directly (safer than to_dict conversion)
-            transactions = response.added
-            
-            app.logger.info(f"Found {len(transactions)} initial transactions for item {item_id}")
-            
-            # Handle pagination
-            while response.has_more:
-                transactions_request = TransactionsSyncRequest(
-                    access_token=access_token,
-                    cursor=response.next_cursor
                 )
-                response = plaid_client.transactions_sync(transactions_request)
-                transactions.extend(response.added)
-                app.logger.info(f"Found {len(response.added)} additional transactions")
-            
-            all_transactions.extend(transactions)
-        
-        app.logger.info(f"Total transactions found: {len(all_transactions)}")
-        
-        # Format transactions for frontend
-        formatted_transactions = []
-        for transaction in all_transactions:
-            # Access transaction attributes directly (transaction objects, not dicts)
-            formatted_transactions.append({
-                'transaction_id': transaction.transaction_id,
-                'account_id': transaction.account_id,
-                'amount': transaction.amount,
-                'date': str(transaction.date),
-                'name': transaction.name,
-                'merchant_name': getattr(transaction, 'merchant_name', None),
-                'category': getattr(transaction, 'category', []) or [],
-                'account_owner': getattr(transaction, 'account_owner', None)
-            })
-        
-        return jsonify({'transactions': formatted_transactions})
-    
+
+        return jsonify({"accounts": all_accounts})
     except plaid.ApiException as e:
-        error_details = json.loads(e.body)
-        app.logger.error(f"Plaid API error in get_transactions: {error_details}")
-        return jsonify({'error': error_details}), 400
+        return jsonify({"error": json.loads(e.body)}), 400
     except Exception as e:
-        app.logger.error(f"Unexpected error in get_transactions: {str(e)}", exc_info=True)
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 
-@app.route('/api/status', methods=['GET'])
-def get_status():
-    """Get connection status"""
-    return jsonify({
-        'connected_accounts': len(access_tokens),
-        'environment': PLAID_ENV,
-        'items': list(access_tokens.keys())
-    })
+@app.route("/api/items/<item_id>", methods=["DELETE"])
+def disconnect_item(item_id: str):
+    row = db.get_item(item_id)
+    if not row:
+        return jsonify({"error": "Unknown item"}), 404
+    try:
+        remove_req = ItemRemoveRequest(access_token=row["access_token"])
+        plaid_client.item_remove(remove_req)
+    except plaid.ApiException as e:
+        return jsonify({"error": json.loads(e.body)}), 400
+    db.delete_item(item_id)
+    return jsonify({"ok": True, "item_id": item_id})
 
 
-if __name__ == '__main__':
+@app.route("/api/transactions", methods=["GET"])
+def get_transactions():
+    limit = min(int(request.args.get("limit", 100)), 500)
+    offset = int(request.args.get("offset", 0))
+    account_id = request.args.get("account_id")
+    since = request.args.get("since")
+    until = request.args.get("until")
+    q = request.args.get("q")
+
+    rows, total = db.fetch_transactions(
+        limit=limit,
+        offset=offset,
+        account_id=account_id or None,
+        since=since or None,
+        until=until or None,
+        q=q or None,
+    )
+    return jsonify({"transactions": rows, "total": total, "limit": limit, "offset": offset})
+
+
+@app.route("/api/transactions/export.csv", methods=["GET"])
+def export_transactions_csv():
+    """Export filtered transactions for spreadsheet workflows (replaces manual xlsx paste)."""
+    account_id = request.args.get("account_id")
+    since = request.args.get("since")
+    until = request.args.get("until")
+    q = request.args.get("q")
+
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    writer.writerow(
+        [
+            "date",
+            "amount",
+            "currency",
+            "name",
+            "merchant_name",
+            "primary_category",
+            "detailed_category",
+            "pending",
+            "account_id",
+            "item_id",
+            "transaction_id",
+        ]
+    )
+
+    offset = 0
+    page = 5000
+    total_written = 0
+    max_rows = 100_000
+
+    while total_written < max_rows:
+        rows, _ = db.fetch_transactions(
+            limit=page,
+            offset=offset,
+            account_id=account_id or None,
+            since=since or None,
+            until=until or None,
+            q=q or None,
+        )
+        if not rows:
+            break
+        for t in rows:
+            writer.writerow(
+                [
+                    t["date"],
+                    t["amount"],
+                    t.get("iso_currency_code") or "",
+                    t.get("name") or "",
+                    t.get("merchant_name") or "",
+                    t.get("primary_category") or "",
+                    t.get("detailed_category") or "",
+                    "yes" if t.get("pending") else "no",
+                    t.get("account_id") or "",
+                    t.get("item_id") or "",
+                    t.get("transaction_id") or "",
+                ]
+            )
+            total_written += 1
+            if total_written >= max_rows:
+                break
+        if len(rows) < page:
+            break
+        offset += page
+
+    return Response(
+        buf.getvalue(),
+        mimetype="text/csv",
+        headers={
+            "Content-Disposition": 'attachment; filename="the-count-transactions.csv"'
+        },
+    )
+
+
+@app.route("/api/dashboard/summary", methods=["GET"])
+def dashboard_summary():
+    """Balances from Plaid, aggregates and recent activity from SQLite."""
+    month_start = _month_start()
+    month_end = date(
+        month_start.year,
+        month_start.month,
+        monthrange(month_start.year, month_start.month)[1],
+    )
+
+    accounts_payload: list[dict] = []
+    total_assets = 0.0
+    total_liabilities = 0.0
+
+    for row in db.iter_items_with_tokens():
+        access_token = row["access_token"]
+        inst = row.get("institution_name") or "Institution"
+        try:
+            accounts_request = AccountsGetRequest(access_token=access_token)
+            accounts_response = plaid_client.accounts_get(accounts_request)
+            for account in accounts_response.to_dict().get("accounts") or []:
+                b = account.get("balances") or {}
+                current = b.get("current")
+                if current is None:
+                    continue
+                cur_f = float(current)
+                t = (account.get("type") or "").lower()
+
+                if t in ("depository", "investment"):
+                    total_assets += cur_f
+                elif t == "credit":
+                    total_liabilities += cur_f
+                elif t == "loan":
+                    total_liabilities += abs(cur_f)
+                else:
+                    total_assets += cur_f
+
+                accounts_payload.append(
+                    {
+                        "item_id": row["item_id"],
+                        "institution_name": inst,
+                        "account_id": account.get("account_id"),
+                        "name": account.get("name"),
+                        "type": t,
+                        "subtype": account.get("subtype"),
+                        "mask": account.get("mask"),
+                        "current": current,
+                        "available": b.get("available"),
+                        "currency": b.get("iso_currency_code"),
+                    }
+                )
+        except plaid.ApiException:
+            accounts_payload.append(
+                {
+                    "item_id": row["item_id"],
+                    "institution_name": inst,
+                    "error": "Could not load accounts (re-link or check credentials)",
+                }
+            )
+
+    counts = db.transaction_counts()
+    flows = db.spending_inflow_totals(
+        since_date=month_start.isoformat(),
+        until_date=month_end.isoformat(),
+    )
+    categories = db.sum_by_category(
+        since=month_start.isoformat(), outflows_only=True
+    )
+    recent, _ = db.fetch_transactions(limit=12, offset=0)
+
+    last30 = date.today() - timedelta(days=30)
+    flows_30 = db.spending_inflow_totals(since_date=last30.isoformat())
+
+    return jsonify(
+        {
+            "as_of": datetime.now(timezone.utc).isoformat(),
+            "month": {
+                "label": month_start.strftime("%B %Y"),
+                "start": month_start.isoformat(),
+                "end": month_end.isoformat(),
+            },
+            "balances": {
+                "assets": round(total_assets, 2),
+                "liabilities": round(total_liabilities, 2),
+                "net_simplified": round(total_assets - total_liabilities, 2),
+            },
+            "linked_items": [
+                {
+                    "item_id": i["item_id"],
+                    "institution_name": i.get("institution_name"),
+                    "last_sync_at": i.get("last_sync_at"),
+                    "last_error": i.get("last_error"),
+                }
+                for i in db.list_items()
+            ],
+            "accounts": accounts_payload,
+            "activity_month": {
+                "spend_outflow": round(flows["outflow"], 2),
+                "income_inflow": round(flows["inflow"], 2),
+                "net_cash_flow": round(flows["inflow"] - flows["outflow"], 2),
+            },
+            "activity_last_30_days": {
+                "spend_outflow": round(flows_30["outflow"], 2),
+                "income_inflow": round(flows_30["inflow"], 2),
+            },
+            "categories_month": categories[:12],
+            "transaction_store": counts,
+            "recent_transactions": recent,
+        }
+    )
+
+
+if __name__ == "__main__":
     app.run(debug=True, port=5000)

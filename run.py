@@ -17,9 +17,8 @@ from app import app
 
 if __name__ == "__main__":
     print("🧛 Starting The Count development server...")
-    print("📊 Financial account connection system")
-    print("🔗 Visit: http://localhost:5001")
-    print("📝 Make sure to set up your .env file with Plaid credentials")
+    print("📊 Open the dashboard: http://localhost:5001/dashboard")
+    print("📝 Set up .env with Plaid credentials, then connect accounts and sync")
     print("-" * 50)
     
     app.run(debug=True, host="0.0.0.0", port=5001)
