@@ -25,7 +25,9 @@ from plaid.model.products import Products
 from plaid.model.transactions_sync_request import TransactionsSyncRequest
 
 import db
+import goals as goal_eval
 import plaid_sync
+import tagging
 
 load_dotenv()
 
@@ -37,12 +39,14 @@ PLAID_ENV = os.getenv("PLAID_ENVIRONMENT", "sandbox")
 
 PLAID_ENVIRONMENTS = {
     "sandbox": plaid.Environment.Sandbox,
-    "development": plaid.Environment.Development,
     "production": plaid.Environment.Production,
 }
+if hasattr(plaid.Environment, "Development"):
+    PLAID_ENVIRONMENTS["development"] = plaid.Environment.Development
 
+_plaid_host = PLAID_ENVIRONMENTS.get(PLAID_ENV) or plaid.Environment.Sandbox
 configuration = plaid.Configuration(
-    host=PLAID_ENVIRONMENTS[PLAID_ENV],
+    host=_plaid_host,
     api_key={
         "clientId": PLAID_CLIENT_ID,
         "secret": PLAID_SECRET,
@@ -53,6 +57,13 @@ api_client = plaid.ApiClient(configuration)
 plaid_client = plaid_api.PlaidApi(api_client)
 
 db.init_db()
+tagging.seed_default_tags_and_rules()
+try:
+    counts = db.tag_summary_counts()
+    if counts.get("total", 0) > 0 and counts.get("tagged", 0) == 0:
+        tagging.apply_rules(None)
+except Exception:
+    pass
 
 
 def _month_start(d: date | None = None) -> date:
@@ -161,6 +172,7 @@ def _sync_one_item(item_id: str, access_token: str) -> dict:
     """Run transactions_sync until complete; persist cursor and transactions."""
     cursor = db.get_cursor(item_id)
     total_stats = {"added": 0, "modified": 0, "removed": 0, "pages": 0}
+    touched_ids: list[str] = []
 
     while True:
         if cursor:
@@ -177,11 +189,28 @@ def _sync_one_item(item_id: str, access_token: str) -> dict:
         total_stats["modified"] += page["modified"]
         total_stats["removed"] += page["removed"]
 
+        for tx in (getattr(response, "added", None) or []):
+            tid = getattr(tx, "transaction_id", None)
+            if tid:
+                touched_ids.append(tid)
+        for tx in (getattr(response, "modified", None) or []):
+            tid = getattr(tx, "transaction_id", None)
+            if tid:
+                touched_ids.append(tid)
+
         cursor = response.next_cursor
         if not response.has_more:
             break
 
     db.set_cursor(item_id, cursor, error=None)
+
+    if touched_ids:
+        try:
+            tag_stats = tagging.apply_rules(touched_ids)
+            total_stats["tagged"] = tag_stats.get("tagged", 0)
+        except Exception as e:
+            app.logger.warning(f"Tagging failed for {item_id}: {e}")
+
     return total_stats
 
 
@@ -269,6 +298,21 @@ def disconnect_item(item_id: str):
     return jsonify({"ok": True, "item_id": item_id})
 
 
+def _parse_int(value: str | None) -> int | None:
+    if value is None or value == "":
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        return None
+
+
+def _parse_bool(value: str | None) -> bool:
+    if value is None:
+        return False
+    return value.lower() in {"1", "true", "yes", "on"}
+
+
 @app.route("/api/transactions", methods=["GET"])
 def get_transactions():
     limit = min(int(request.args.get("limit", 100)), 500)
@@ -277,6 +321,8 @@ def get_transactions():
     since = request.args.get("since")
     until = request.args.get("until")
     q = request.args.get("q")
+    tag_id = _parse_int(request.args.get("tag_id"))
+    untagged_only = _parse_bool(request.args.get("untagged_only"))
 
     rows, total = db.fetch_transactions(
         limit=limit,
@@ -285,6 +331,8 @@ def get_transactions():
         since=since or None,
         until=until or None,
         q=q or None,
+        tag_id=tag_id,
+        untagged_only=untagged_only,
     )
     return jsonify({"transactions": rows, "total": total, "limit": limit, "offset": offset})
 
@@ -296,6 +344,8 @@ def export_transactions_csv():
     since = request.args.get("since")
     until = request.args.get("until")
     q = request.args.get("q")
+    tag_id = _parse_int(request.args.get("tag_id"))
+    untagged_only = _parse_bool(request.args.get("untagged_only"))
 
     buf = io.StringIO()
     writer = csv.writer(buf)
@@ -308,6 +358,8 @@ def export_transactions_csv():
             "merchant_name",
             "primary_category",
             "detailed_category",
+            "tag",
+            "tag_source",
             "pending",
             "account_id",
             "item_id",
@@ -328,6 +380,8 @@ def export_transactions_csv():
             since=since or None,
             until=until or None,
             q=q or None,
+            tag_id=tag_id,
+            untagged_only=untagged_only,
         )
         if not rows:
             break
@@ -341,6 +395,8 @@ def export_transactions_csv():
                     t.get("merchant_name") or "",
                     t.get("primary_category") or "",
                     t.get("detailed_category") or "",
+                    t.get("tag_label") or t.get("tag_key") or "",
+                    t.get("tag_source") or "",
                     "yes" if t.get("pending") else "no",
                     t.get("account_id") or "",
                     t.get("item_id") or "",
@@ -361,6 +417,365 @@ def export_transactions_csv():
             "Content-Disposition": 'attachment; filename="the-count-transactions.csv"'
         },
     )
+
+
+# --- Tags ---------------------------------------------------------------------
+
+
+@app.route("/api/tags", methods=["GET"])
+def api_list_tags():
+    return jsonify({"tags": db.list_tags(), "summary": db.tag_summary_counts()})
+
+
+def _slugify(s: str) -> str:
+    out = []
+    for ch in s.strip().lower():
+        if ch.isalnum():
+            out.append(ch)
+        elif ch in (" ", "-", "_"):
+            out.append("_")
+    return "".join(out).strip("_") or "tag"
+
+
+@app.route("/api/tags", methods=["POST"])
+def api_create_tag():
+    body = request.get_json(force=True, silent=True) or {}
+    label = (body.get("label") or "").strip()
+    if not label:
+        return jsonify({"error": "label is required"}), 400
+    key = (body.get("key") or _slugify(label)).strip()
+    kind = body.get("kind") or "spend"
+    if kind not in {"spend", "save", "income"}:
+        return jsonify({"error": "kind must be one of spend|save|income"}), 400
+    color = body.get("color")
+    tag_id = db.insert_tag(key=key, label=label, kind=kind, color=color)
+    return jsonify({"tag": db.get_tag(tag_id)}), 201
+
+
+@app.route("/api/tags/<int:tag_id>", methods=["PATCH"])
+def api_update_tag(tag_id: int):
+    if db.get_tag(tag_id) is None:
+        return jsonify({"error": "tag not found"}), 404
+    body = request.get_json(force=True, silent=True) or {}
+    db.update_tag(
+        tag_id,
+        label=body.get("label"),
+        kind=body.get("kind"),
+        color=body.get("color"),
+    )
+    return jsonify({"tag": db.get_tag(tag_id)})
+
+
+@app.route("/api/tags/<int:tag_id>", methods=["DELETE"])
+def api_delete_tag(tag_id: int):
+    if db.get_tag(tag_id) is None:
+        return jsonify({"error": "tag not found"}), 404
+    db.delete_tag(tag_id)
+    return jsonify({"ok": True, "tag_id": tag_id})
+
+
+# --- Tag rules ----------------------------------------------------------------
+
+
+@app.route("/api/tag_rules", methods=["GET"])
+def api_list_tag_rules():
+    tag_id = _parse_int(request.args.get("tag_id"))
+    return jsonify({"rules": db.list_tag_rules(tag_id=tag_id)})
+
+
+@app.route("/api/tag_rules", methods=["POST"])
+def api_create_tag_rule():
+    body = request.get_json(force=True, silent=True) or {}
+    tag_id = _parse_int(str(body.get("tag_id")))
+    if tag_id is None or db.get_tag(tag_id) is None:
+        return jsonify({"error": "valid tag_id required"}), 400
+    field = body.get("match_field")
+    op = body.get("match_op")
+    value = body.get("match_value") or ""
+    if field not in tagging.VALID_FIELDS:
+        return jsonify({"error": f"match_field must be one of {sorted(tagging.VALID_FIELDS)}"}), 400
+    if op not in tagging.VALID_OPS:
+        return jsonify({"error": f"match_op must be one of {sorted(tagging.VALID_OPS)}"}), 400
+    rule_id = db.insert_tag_rule(
+        tag_id=tag_id,
+        match_field=field,
+        match_op=op,
+        match_value=str(value),
+        priority=int(body.get("priority") or 100),
+        min_amount=body.get("min_amount"),
+        max_amount=body.get("max_amount"),
+        enabled=bool(body.get("enabled", True)),
+    )
+    if bool(body.get("apply_now", True)):
+        try:
+            tagging.apply_rules(None)
+        except Exception as e:
+            app.logger.warning(f"apply_rules after rule create failed: {e}")
+    return jsonify({"rule": db.get_tag_rule(rule_id)}), 201
+
+
+@app.route("/api/tag_rules/<int:rule_id>", methods=["PATCH"])
+def api_update_tag_rule(rule_id: int):
+    if db.get_tag_rule(rule_id) is None:
+        return jsonify({"error": "rule not found"}), 404
+    body = request.get_json(force=True, silent=True) or {}
+    field = body.get("match_field")
+    if field is not None and field not in tagging.VALID_FIELDS:
+        return jsonify({"error": "invalid match_field"}), 400
+    op = body.get("match_op")
+    if op is not None and op not in tagging.VALID_OPS:
+        return jsonify({"error": "invalid match_op"}), 400
+    db.update_tag_rule(
+        rule_id,
+        **{k: v for k, v in body.items() if k in {
+            "tag_id", "priority", "match_field", "match_op",
+            "match_value", "min_amount", "max_amount", "enabled",
+        }},
+    )
+    if bool(body.get("apply_now", False)):
+        try:
+            tagging.apply_rules(None)
+        except Exception:
+            pass
+    return jsonify({"rule": db.get_tag_rule(rule_id)})
+
+
+@app.route("/api/tag_rules/<int:rule_id>", methods=["DELETE"])
+def api_delete_tag_rule(rule_id: int):
+    if db.get_tag_rule(rule_id) is None:
+        return jsonify({"error": "rule not found"}), 404
+    db.delete_tag_rule(rule_id)
+    return jsonify({"ok": True, "rule_id": rule_id})
+
+
+@app.route("/api/tag_rules/reapply", methods=["POST"])
+def api_reapply_rules():
+    body = request.get_json(force=True, silent=True) or {}
+    transaction_ids = body.get("transaction_ids") or None
+    stats = tagging.apply_rules(transaction_ids)
+    return jsonify({"stats": stats, "summary": db.tag_summary_counts()})
+
+
+@app.route("/api/transactions/<transaction_id>/tag", methods=["POST", "DELETE"])
+def api_set_transaction_tag(transaction_id: str):
+    if request.method == "DELETE":
+        tagging.clear_tag(transaction_id)
+        return jsonify({"ok": True, "transaction_id": transaction_id, "tag": None})
+
+    body = request.get_json(force=True, silent=True) or {}
+    tag_id = _parse_int(str(body.get("tag_id")))
+    if tag_id is None:
+        tag_key = body.get("tag_key")
+        if tag_key:
+            tag = db.get_tag_by_key(str(tag_key))
+            if tag:
+                tag_id = int(tag["id"])
+    if tag_id is None or db.get_tag(tag_id) is None:
+        return jsonify({"error": "valid tag_id or tag_key required"}), 400
+
+    tagging.set_manual_tag(transaction_id, tag_id)
+
+    create_rule = bool(body.get("create_rule"))
+    rule_field = body.get("rule_field") or "merchant_name"
+    rule_op = body.get("rule_op") or "equals"
+    rule_value = body.get("rule_value")
+    rule_id = None
+    if create_rule and rule_value:
+        if rule_field in tagging.VALID_FIELDS and rule_op in tagging.VALID_OPS:
+            rule_id = db.insert_tag_rule(
+                tag_id=tag_id,
+                match_field=rule_field,
+                match_op=rule_op,
+                match_value=str(rule_value),
+                priority=int(body.get("rule_priority") or 50),
+                enabled=True,
+            )
+            try:
+                tagging.apply_rules(None)
+            except Exception:
+                pass
+
+    return jsonify({
+        "ok": True,
+        "transaction_id": transaction_id,
+        "tag": db.get_tag(tag_id),
+        "created_rule_id": rule_id,
+    })
+
+
+# --- Goals --------------------------------------------------------------------
+
+
+_GOAL_KIND_REQUIREMENTS = {
+    "spend_cap": {"target_amount": True, "tag": True},
+    "spend_floor": {"target_amount": True, "tag": True},
+    "frequency": {"target_count": True, "tag": True},
+    "savings_target": {"target_amount": True, "tag": False},
+    "streak": {"target_amount": True, "tag": True},
+}
+
+
+def _validate_goal_payload(body: dict, *, partial: bool = False) -> tuple[bool, str | None]:
+    if not partial:
+        if not body.get("name"):
+            return False, "name is required"
+        kind = body.get("kind")
+        if kind not in goal_eval.VALID_KINDS:
+            return False, f"kind must be one of {sorted(goal_eval.VALID_KINDS)}"
+        period = body.get("period") or "month"
+        if period not in goal_eval.VALID_PERIODS:
+            return False, f"period must be one of {sorted(goal_eval.VALID_PERIODS)}"
+        req = _GOAL_KIND_REQUIREMENTS[kind]
+        if req["tag"] and not body.get("tag_id"):
+            return False, f"goal kind '{kind}' requires tag_id"
+        if req.get("target_amount") and body.get("target_amount") in (None, ""):
+            return False, f"goal kind '{kind}' requires target_amount"
+        if req.get("target_count") and body.get("target_count") in (None, ""):
+            return False, f"goal kind '{kind}' requires target_count"
+    else:
+        if "kind" in body and body["kind"] not in goal_eval.VALID_KINDS:
+            return False, f"kind must be one of {sorted(goal_eval.VALID_KINDS)}"
+        if "period" in body and body["period"] not in goal_eval.VALID_PERIODS:
+            return False, f"period must be one of {sorted(goal_eval.VALID_PERIODS)}"
+    return True, None
+
+
+@app.route("/api/goals", methods=["GET"])
+def api_list_goals():
+    active_only = _parse_bool(request.args.get("active_only"))
+    return jsonify({"goals": db.list_goals(active_only=active_only)})
+
+
+@app.route("/api/goals", methods=["POST"])
+def api_create_goal():
+    body = request.get_json(force=True, silent=True) or {}
+    ok, err = _validate_goal_payload(body, partial=False)
+    if not ok:
+        return jsonify({"error": err}), 400
+    tag_id = _parse_int(str(body.get("tag_id"))) if body.get("tag_id") is not None else None
+    if tag_id is not None and db.get_tag(tag_id) is None:
+        return jsonify({"error": "tag_id not found"}), 400
+
+    goal_id = db.insert_goal(
+        name=str(body["name"]),
+        kind=str(body["kind"]),
+        tag_id=tag_id,
+        account_id=body.get("account_id"),
+        period=str(body.get("period") or "month"),
+        period_start=body.get("period_start"),
+        target_amount=body.get("target_amount"),
+        target_count=body.get("target_count"),
+        currency=str(body.get("currency") or "USD"),
+        rollover=bool(body.get("rollover")),
+        active=bool(body.get("active", True)),
+        notes=body.get("notes"),
+    )
+    return jsonify({"goal": db.get_goal(goal_id)}), 201
+
+
+@app.route("/api/goals/<int:goal_id>", methods=["GET"])
+def api_get_goal(goal_id: int):
+    g = db.get_goal(goal_id)
+    if not g:
+        return jsonify({"error": "goal not found"}), 404
+    return jsonify({"goal": g})
+
+
+@app.route("/api/goals/<int:goal_id>", methods=["PATCH"])
+def api_update_goal(goal_id: int):
+    g = db.get_goal(goal_id)
+    if not g:
+        return jsonify({"error": "goal not found"}), 404
+    body = request.get_json(force=True, silent=True) or {}
+    ok, err = _validate_goal_payload(body, partial=True)
+    if not ok:
+        return jsonify({"error": err}), 400
+    db.update_goal(
+        goal_id,
+        **{k: v for k, v in body.items() if k in {
+            "name", "kind", "tag_id", "account_id", "period", "period_start",
+            "target_amount", "target_count", "currency", "rollover", "active", "notes",
+        }},
+    )
+    return jsonify({"goal": db.get_goal(goal_id)})
+
+
+@app.route("/api/goals/<int:goal_id>", methods=["DELETE"])
+def api_delete_goal(goal_id: int):
+    if not db.get_goal(goal_id):
+        return jsonify({"error": "goal not found"}), 404
+    db.delete_goal(goal_id)
+    return jsonify({"ok": True, "goal_id": goal_id})
+
+
+@app.route("/api/goals/<int:goal_id>/events", methods=["GET", "POST"])
+def api_goal_events(goal_id: int):
+    g = db.get_goal(goal_id)
+    if not g:
+        return jsonify({"error": "goal not found"}), 404
+    if request.method == "GET":
+        return jsonify({"events": db.list_goal_events(goal_id)})
+    body = request.get_json(force=True, silent=True) or {}
+    amount = body.get("amount")
+    if amount in (None, ""):
+        return jsonify({"error": "amount is required"}), 400
+    try:
+        amount = float(amount)
+    except (TypeError, ValueError):
+        return jsonify({"error": "amount must be numeric"}), 400
+    event_date = body.get("event_date") or date.today().isoformat()
+    event_id = db.insert_goal_event(
+        goal_id=goal_id,
+        event_date=str(event_date),
+        amount=amount,
+        kind=str(body.get("kind") or "contribution"),
+        note=body.get("note"),
+    )
+    return jsonify({"event_id": event_id, "events": db.list_goal_events(goal_id)}), 201
+
+
+@app.route("/api/goals/progress", methods=["GET"])
+def api_goals_progress():
+    period_arg = request.args.get("period") or "current"
+    offset = 0
+    if period_arg == "previous":
+        offset = -1
+    elif period_arg == "next":
+        offset = 1
+    elif period_arg.startswith("offset:"):
+        try:
+            offset = int(period_arg.split(":", 1)[1])
+        except ValueError:
+            offset = 0
+
+    active_only = _parse_bool(request.args.get("active_only") or "true")
+    progresses = goal_eval.evaluate_all(offset=offset, active_only=active_only)
+    return jsonify({
+        "progresses": progresses,
+        "summary": goal_eval.summarize_statuses(progresses),
+        "offset": offset,
+    })
+
+
+@app.route("/api/goals/<int:goal_id>/progress", methods=["GET"])
+def api_goal_progress(goal_id: int):
+    g = db.get_goal(goal_id)
+    if not g:
+        return jsonify({"error": "goal not found"}), 404
+    period_arg = request.args.get("period") or "current"
+    offset = 0
+    if period_arg == "previous":
+        offset = -1
+    elif period_arg == "next":
+        offset = 1
+    elif period_arg.startswith("offset:"):
+        try:
+            offset = int(period_arg.split(":", 1)[1])
+        except ValueError:
+            offset = 0
+    progress = goal_eval.evaluate_goal(g, offset=offset)
+    burn = goal_eval.daily_burn_for_goal(g, offset=offset)
+    return jsonify({"progress": progress, "daily_burn": burn})
 
 
 @app.route("/api/dashboard/summary", methods=["GET"])
@@ -436,6 +851,17 @@ def dashboard_summary():
     last30 = date.today() - timedelta(days=30)
     flows_30 = db.spending_inflow_totals(since_date=last30.isoformat())
 
+    progresses = goal_eval.evaluate_all(active_only=True)
+    goals_summary = goal_eval.summarize_statuses(progresses)
+
+    def _goal_priority(p: dict) -> tuple[int, float]:
+        order = {"over": 0, "at_risk": 1, "on_track": 2, "met": 3, "unconfigured": 4}
+        return (order.get(p.get("status") or "unconfigured", 5),
+                -(p.get("pace_ratio") or 0))
+
+    top_goals = sorted(progresses, key=_goal_priority)[:4]
+    tag_summary = db.tag_summary_counts()
+
     return jsonify(
         {
             "as_of": datetime.now(timezone.utc).isoformat(),
@@ -471,6 +897,9 @@ def dashboard_summary():
             "categories_month": categories[:12],
             "transaction_store": counts,
             "recent_transactions": recent,
+            "goals_summary": goals_summary,
+            "top_goals": top_goals,
+            "tag_summary": tag_summary,
         }
     )
 
