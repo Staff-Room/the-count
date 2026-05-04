@@ -138,6 +138,128 @@
             background: linear-gradient(90deg, #2a7d6b, var(--accent));
             border-radius: 4px;
         }
+        .bar-fill.warn { background: linear-gradient(90deg, #b08530, var(--warn)); }
+        .bar-fill.bad { background: linear-gradient(90deg, #8b3a44, var(--danger)); }
+        .bar-fill.good { background: linear-gradient(90deg, #2a7d6b, var(--accent)); }
+
+        .goal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .goal-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .goal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .goal-name { font-weight: 600; font-size: 1rem; }
+        .goal-period { font-size: 0.8rem; color: var(--muted); }
+        .goal-numbers { font-variant-numeric: tabular-nums; }
+        .goal-numbers .actual { font-size: 1.25rem; font-weight: 700; }
+        .goal-numbers .of { color: var(--muted); }
+        .pace-pill {
+            font-size: 0.72rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            background: #243040;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .pace-pill.good { color: var(--accent); border-color: #2a6d5a; background: #14332a; }
+        .pace-pill.warn { color: var(--warn); border-color: #6e5a30; background: #2f2818; }
+        .pace-pill.bad { color: var(--danger); border-color: #8b3a44; background: #3a1f24; }
+        .pace-pill.met { color: var(--accent); border-color: #2a6d5a; background: #14332a; }
+
+        .goal-meta { display: flex; justify-content: space-between; gap: 0.5rem; align-items: center; font-size: 0.8rem; color: var(--muted); }
+        .goal-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .icon-btn {
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            padding: 0.25rem 0.55rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            cursor: pointer;
+        }
+        .icon-btn:hover { color: var(--text); border-color: var(--accent); }
+
+        dialog {
+            background: var(--panel);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 520px;
+            width: 95%;
+        }
+        dialog::backdrop { background: rgba(0,0,0,0.55); }
+        .form-row { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.85rem; }
+        .form-row label { font-size: 0.85rem; color: var(--muted); }
+        .form-row input, .form-row select, .form-row textarea {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 0.65rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+        .modal-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.5rem; }
+
+        .tag-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.72rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            background: #243040;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+        .tag-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+        .tag-chip.manual { border-style: dashed; }
+
+        .inbox-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 110px auto;
+            gap: 0.6rem;
+            align-items: center;
+            padding: 0.5rem 0.6rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .inbox-row:last-child { border-bottom: none; }
+        .inbox-row select {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.3rem 0.4rem;
+            font-size: 0.85rem;
+        }
+        .inbox-row .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .inbox-row .controls { display: flex; gap: 0.3rem; align-items: center; flex-wrap: wrap; }
+        .inbox-row label.always {
+            font-size: 0.72rem; color: var(--muted); display: inline-flex; align-items: center; gap: 0.25rem;
+        }
+
+        .sparkline { width: 100%; height: 40px; }
+        .sparkline path { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+        .sparkline .target { stroke: var(--muted); stroke-dasharray: 3 3; }
+
+        .summary-pill { font-size: 0.78rem; color: var(--muted); margin-left: 0.5rem; }
     </style>
 </head>
 <body>
@@ -163,6 +285,19 @@
             <div class="card"><h3>This month — spending</h3><div class="value" id="spendVal">—</div></div>
             <div class="card"><h3>This month — income</h3><div class="value pos" id="incVal">—</div></div>
             <div class="card"><h3>This month — net cash flow</h3><div class="value" id="cfVal">—</div></div>
+            <div class="card"><h3>Goals on track</h3><div class="value" id="goalsSummaryVal">—</div></div>
+        </section>
+
+        <section>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+                <h2 style="margin:0">Lifestyle goals</h2>
+                <div class="actions">
+                    <button type="button" id="newGoalBtn" class="primary">New goal</button>
+                </div>
+            </div>
+            <div id="goalsBox" class="goal-grid">
+                <p class="muted">Loading…</p>
+            </div>
         </section>
 
         <section>
@@ -207,13 +342,22 @@
                         <tr>
                             <th>Date</th>
                             <th>Description</th>
-                            <th>Category</th>
+                            <th>Tag</th>
                             <th style="text-align:right">Amount</th>
                         </tr>
                     </thead>
                     <tbody id="recentBody"></tbody>
                 </table>
             </div>
+        </section>
+
+        <section>
+            <h2>Review inbox <span class="summary-pill" id="inboxCount"></span></h2>
+            <p class="muted" style="margin-top:0">
+                Untagged transactions need a lifestyle bucket so goals stay accurate. Pick a tag,
+                or check "Always tag like this" to make a rule for that merchant.
+            </p>
+            <div class="card" id="inboxBox"><p class="muted" style="padding:0.5rem 0.6rem;margin:0">Loading…</p></div>
         </section>
 
         <section>
@@ -234,7 +378,7 @@
                         <tr>
                             <th>Date</th>
                             <th>Name</th>
-                            <th>Category</th>
+                            <th>Tag</th>
                             <th style="text-align:right">Amount</th>
                         </tr>
                     </thead>
@@ -248,12 +392,71 @@
         </section>
     </div>
 
+    <dialog id="goalDialog">
+        <h2 style="margin-top:0" id="goalDialogTitle">New lifestyle goal</h2>
+        <form id="goalForm" method="dialog">
+            <input type="hidden" id="goalId" value="">
+            <div class="form-row">
+                <label for="goalName">Name</label>
+                <input id="goalName" type="text" required placeholder="e.g. Coffee under $50/mo">
+            </div>
+            <div class="form-grid">
+                <div class="form-row">
+                    <label for="goalKind">Goal type</label>
+                    <select id="goalKind">
+                        <option value="spend_cap">Spend cap (stay under)</option>
+                        <option value="spend_floor">Spend floor (at least)</option>
+                        <option value="frequency">Frequency (count of days)</option>
+                        <option value="savings_target">Savings target</option>
+                        <option value="streak">Streak (cap met N periods)</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="goalPeriod">Period</label>
+                    <select id="goalPeriod">
+                        <option value="week">Week</option>
+                        <option value="month" selected>Month</option>
+                        <option value="quarter">Quarter</option>
+                        <option value="year">Year</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="goalTag">Lifestyle tag</label>
+                <select id="goalTag"><option value="">Loading tags…</option></select>
+            </div>
+            <div class="form-grid">
+                <div class="form-row" id="goalAmountRow">
+                    <label for="goalAmount">Target amount ($)</label>
+                    <input id="goalAmount" type="number" step="0.01" min="0">
+                </div>
+                <div class="form-row" id="goalCountRow" style="display:none">
+                    <label for="goalCount">Target count</label>
+                    <input id="goalCount" type="number" step="1" min="0">
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="goalNotes">Notes (optional)</label>
+                <textarea id="goalNotes" rows="2"></textarea>
+            </div>
+            <p class="muted" id="goalHint" style="font-size:0.78rem;margin:0 0 0.6rem"></p>
+            <div class="modal-actions">
+                <button type="button" id="goalDeleteBtn" class="danger" style="display:none">Delete</button>
+                <button type="button" id="goalCancelBtn">Cancel</button>
+                <button type="button" id="goalSaveBtn" class="primary">Save goal</button>
+            </div>
+        </form>
+    </dialog>
+
     <script>
         const $ = (id) => document.getElementById(id);
         let linkHandler = null;
         let txnOffset = 0;
         const txnLimit = 50;
         let allTxnTotal = 0;
+        let TAGS = [];
+        let TAGS_BY_ID = {};
+        let TAGS_BY_KEY = {};
 
         function money(n) {
             if (n === null || n === undefined || Number.isNaN(n)) return '—';
@@ -313,6 +516,8 @@
                 txnOffset = 0;
                 await loadDashboard();
                 await loadAllTransactions(false);
+                await loadGoals();
+                await loadInbox();
             } catch (e) {
                 flash(String(e), false);
             } finally {
@@ -400,21 +605,64 @@
             const spendMonth = d.activity_month.spend_outflow;
             renderCategories(d.categories_month, spendMonth);
 
+            const gs = d.goals_summary || { on_track: 0, at_risk: 0, over: 0, met: 0, unconfigured: 0 };
+            const totalGoals = gs.on_track + gs.at_risk + gs.over + gs.met + (gs.unconfigured || 0);
+            const goodGoals = gs.on_track + gs.met;
+            const goalsEl = $('goalsSummaryVal');
+            if (totalGoals === 0) {
+                goalsEl.textContent = '—';
+                goalsEl.className = 'value';
+            } else {
+                goalsEl.textContent = `${goodGoals}/${totalGoals}`;
+                goalsEl.className = 'value ' + (gs.over > 0 || gs.at_risk > 0 ? (gs.over > 0 ? 'neg' : '') : 'pos');
+            }
+
             const recent = d.recent_transactions || [];
             $('recentBody').innerHTML = recent.map(formatTxnRow).join('') ||
                 '<tr><td colspan="4" class="muted">No transactions in local store. Run sync.</td></tr>';
         }
 
+        function escapeHtml(s) {
+            return String(s ?? '').replace(/[&<>"']/g, (c) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[c]);
+        }
+
+        function tagChipHtml(t) {
+            if (!t || !t.tag_id) {
+                return '<span class="tag-chip muted" style="opacity:0.7">untagged</span>';
+            }
+            const color = t.tag_color || '#8b9bb0';
+            const cls = t.tag_source === 'manual' ? 'tag-chip manual' : 'tag-chip';
+            return `<span class="${cls}"><span class="dot" style="background:${escapeHtml(color)}"></span>${escapeHtml(t.tag_label || t.tag_key || 'tag')}</span>`;
+        }
+
         function formatTxnRow(t) {
             const desc = t.merchant_name || t.name || '—';
-            const cat = t.primary_category || t.detailed_category || '—';
             const cls = t.amount > 0 ? 'out' : 'in';
             return `<tr>
                 <td>${t.date}</td>
-                <td>${desc}</td>
-                <td class="muted">${String(cat).replace(/_/g, ' ')}</td>
+                <td>${escapeHtml(desc)}${t.pending ? ' <span class="pill" style="font-size:0.65rem">pending</span>' : ''}</td>
+                <td>${tagChipHtml(t)}</td>
                 <td class="txn-amt ${cls}">${money(t.amount)}</td>
             </tr>`;
+        }
+
+        async function loadTags() {
+            const res = await fetch('/api/tags');
+            if (!res.ok) return;
+            const data = await res.json();
+            TAGS = data.tags || [];
+            TAGS_BY_ID = Object.fromEntries(TAGS.map(t => [t.id, t]));
+            TAGS_BY_KEY = Object.fromEntries(TAGS.map(t => [t.key, t]));
+        }
+
+        function tagOptionsHtml(selectedId) {
+            const blank = '<option value="">— pick a tag —</option>';
+            const opts = TAGS.map(t =>
+                `<option value="${t.id}"${selectedId == t.id ? ' selected' : ''}>${escapeHtml(t.label)}${t.kind && t.kind !== 'spend' ? ' (' + t.kind + ')' : ''}</option>`
+            ).join('');
+            return blank + opts;
         }
 
         async function loadAllTransactions(append) {
@@ -453,9 +701,288 @@
             }
         }
 
+        function paceClass(status) {
+            if (status === 'over' || status === 'at_risk') return status === 'over' ? 'bad' : 'warn';
+            if (status === 'met') return 'met';
+            return 'good';
+        }
+        function paceLabel(p) {
+            if (p.status === 'over') return 'Over';
+            if (p.status === 'at_risk') return 'At risk';
+            if (p.status === 'met') return 'Met';
+            if (p.status === 'unconfigured') return 'Setup';
+            if (p.kind === 'spend_floor') return 'On pace';
+            if (p.pace_ratio == null) return 'On pace';
+            if (p.pace_ratio > 1.10) return 'Behind';
+            return 'On pace';
+        }
+        function fillClass(p) {
+            const s = p.status;
+            if (p.kind === 'spend_floor') {
+                if (s === 'met') return 'good';
+                if (s === 'at_risk') return 'warn';
+                return 'good';
+            }
+            if (s === 'over') return 'bad';
+            if (s === 'at_risk') return 'warn';
+            if (s === 'met') return 'good';
+            return 'good';
+        }
+
+        function sparklineSvg(burn, days, target, kind) {
+            if (!burn || !burn.length) return '';
+            const W = 280, H = 40;
+            const dayMap = new Map(burn.map(b => [b.date, b]));
+            // Build cumulative outflow-or-count series across the whole period.
+            const start = new Date(days.start);
+            const end = new Date(days.end);
+            const points = [];
+            let acc = 0;
+            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                const iso = d.toISOString().slice(0, 10);
+                const row = dayMap.get(iso);
+                if (kind === 'frequency') {
+                    if (row && row.count) acc += 1;
+                } else {
+                    if (row) acc += (row.outflow || 0) - (row.inflow || 0);
+                }
+                points.push({ d: new Date(d), v: acc });
+            }
+            const total = (end - start) / (1000 * 86400) + 1;
+            const maxV = Math.max(target || 0, ...points.map(p => p.v), 1);
+            const x = (i) => (i / Math.max(points.length - 1, 1)) * (W - 2) + 1;
+            const y = (v) => H - 2 - (v / maxV) * (H - 4);
+            const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+            const targetLine = target ? `<line class="target" x1="0" y1="${y(target).toFixed(1)}" x2="${W}" y2="${y(target).toFixed(1)}"></line>` : '';
+            return `<svg class="sparkline" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><g>${targetLine}<path d="${path}"/></g></svg>`;
+        }
+
+        async function loadGoals() {
+            const res = await fetch('/api/goals/progress');
+            if (!res.ok) {
+                $('goalsBox').innerHTML = '<p class="muted">Could not load goals.</p>';
+                return;
+            }
+            const data = await res.json();
+            const progresses = data.progresses || [];
+            if (!progresses.length) {
+                $('goalsBox').innerHTML = '<div class="card"><p class="muted" style="margin:0">No goals yet. Click <strong>New goal</strong> to set a lifestyle target like "Coffee under $50/month".</p></div>';
+                return;
+            }
+            const burnPromises = progresses.map(async (p) => {
+                if (!p.tag_id) return [p, []];
+                const r = await fetch(`/api/goals/${p.id}/progress`);
+                if (!r.ok) return [p, []];
+                const d = await r.json();
+                return [p, d.daily_burn || []];
+            });
+            const pairs = await Promise.all(burnPromises);
+            $('goalsBox').innerHTML = pairs.map(([p, burn]) => renderGoalCard(p, burn)).join('');
+            document.querySelectorAll('.goal-card').forEach((card) => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('button')) return;
+                    const id = card.getAttribute('data-id');
+                    openGoalModal(id);
+                });
+            });
+        }
+
+        function renderGoalCard(p, burn) {
+            const cap = paceClass(p.status);
+            const fill = fillClass(p);
+            const target = p.target;
+            let actualText, ofText;
+            if (p.kind === 'frequency') {
+                actualText = `${p.actual ?? 0}`;
+                ofText = `<span class="of"> of ${target ?? '—'} days</span>`;
+            } else if (p.kind === 'streak') {
+                actualText = `${p.actual ?? 0}`;
+                ofText = `<span class="of"> of ${target ?? '—'} periods (cap ${money(p.cap_per_period)})</span>`;
+            } else {
+                actualText = money(p.actual);
+                ofText = `<span class="of"> of ${money(target)}</span>`;
+            }
+            const pct = Math.max(0, Math.min(100, p.percent ?? 0));
+            const projected = (p.projected_end_of_period != null && p.kind !== 'streak')
+                ? `Projected: ${p.kind === 'frequency' ? p.projected_end_of_period : money(p.projected_end_of_period)}`
+                : '';
+            const pending = p.pending_amount > 0 ? ` · ${money(p.pending_amount)} pending` : '';
+            const offCur = p.off_currency_count > 0 ? ` · ${p.off_currency_count} off-currency` : '';
+            const sparkle = sparklineSvg(burn, p.period, p.kind === 'frequency' ? null : target, p.kind);
+            const expected = (p.expected_to_date != null && p.kind !== 'streak')
+                ? `Expected by today: ${p.kind === 'frequency' ? p.expected_to_date : money(p.expected_to_date)}`
+                : '';
+            return `
+                <div class="goal-card" data-id="${p.id}" title="Click to edit">
+                    <div class="goal-head">
+                        <div>
+                            <div class="goal-name">${escapeHtml(p.name)}</div>
+                            <div class="goal-period">${escapeHtml(p.period.label)}${p.tag_label ? ' · ' + escapeHtml(p.tag_label) : ''}</div>
+                        </div>
+                        <span class="pace-pill ${cap}">${paceLabel(p)}</span>
+                    </div>
+                    <div class="goal-numbers"><span class="actual">${actualText}</span>${ofText}</div>
+                    <div class="bar-track"><div class="bar-fill ${fill}" style="width:${pct.toFixed(1)}%"></div></div>
+                    <div class="goal-meta">
+                        <span>${escapeHtml(expected)}${pending}${offCur}</span>
+                        <span>${escapeHtml(projected)}</span>
+                    </div>
+                    ${sparkle}
+                </div>`;
+        }
+
+        async function loadInbox() {
+            const res = await fetch('/api/transactions?untagged_only=1&limit=15');
+            if (!res.ok) return;
+            const data = await res.json();
+            const rows = data.transactions || [];
+            $('inboxCount').textContent = data.total ? `${data.total} untagged` : '';
+            if (!rows.length) {
+                $('inboxBox').innerHTML = '<p class="muted" style="padding:0.5rem 0.6rem;margin:0">All caught up. No untagged transactions.</p>';
+                return;
+            }
+            $('inboxBox').innerHTML = rows.map((t) => {
+                const desc = t.merchant_name || t.name || '—';
+                const cls = t.amount > 0 ? 'out' : 'in';
+                const merchVal = t.merchant_name || t.name || '';
+                return `
+                    <div class="inbox-row" data-tid="${escapeHtml(t.transaction_id)}" data-merchant="${escapeHtml(merchVal)}">
+                        <span class="muted">${t.date}</span>
+                        <span class="name" title="${escapeHtml(desc)}">${escapeHtml(desc)}</span>
+                        <span class="txn-amt ${cls}">${money(t.amount)}</span>
+                        <span class="controls">
+                            <select class="inbox-tag">${tagOptionsHtml('')}</select>
+                            <label class="always"><input type="checkbox" class="inbox-always"> Always tag like this</label>
+                            <button type="button" class="icon-btn inbox-apply">Apply</button>
+                        </span>
+                    </div>`;
+            }).join('');
+            document.querySelectorAll('.inbox-apply').forEach((btn) => {
+                btn.addEventListener('click', async () => {
+                    const row = btn.closest('.inbox-row');
+                    const tid = row.getAttribute('data-tid');
+                    const merchant = row.getAttribute('data-merchant');
+                    const tagId = row.querySelector('.inbox-tag').value;
+                    const always = row.querySelector('.inbox-always').checked;
+                    if (!tagId) { flash('Pick a tag first.', false); return; }
+                    const body = { tag_id: Number(tagId) };
+                    if (always && merchant) {
+                        body.create_rule = true;
+                        body.rule_field = 'merchant_name';
+                        body.rule_op = 'equals';
+                        body.rule_value = merchant;
+                    }
+                    const r = await fetch(`/api/transactions/${encodeURIComponent(tid)}/tag`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body),
+                    });
+                    if (!r.ok) {
+                        const err = await r.json().catch(() => ({}));
+                        flash(err.error || 'Tagging failed', false);
+                        return;
+                    }
+                    flash(`Tagged as ${TAGS_BY_ID[tagId]?.label || 'tag'}.`, true);
+                    await Promise.all([loadInbox(), loadGoals(), loadAllTransactions(false), loadDashboard()]);
+                });
+            });
+        }
+
+        function refreshGoalForm() {
+            const kind = $('goalKind').value;
+            const hint = $('goalHint');
+            $('goalAmountRow').style.display = kind === 'frequency' ? 'none' : '';
+            $('goalCountRow').style.display = (kind === 'frequency' || kind === 'streak') ? '' : 'none';
+            if (kind === 'spend_cap') hint.textContent = 'Stay under target_amount per period for the chosen tag (e.g. coffee).';
+            else if (kind === 'spend_floor') hint.textContent = 'Spend at least target_amount per period (e.g. groceries).';
+            else if (kind === 'frequency') hint.textContent = 'Limit number of days you spend on this tag (e.g. ≤ 2 dinners out / week).';
+            else if (kind === 'savings_target') hint.textContent = 'Target inflow per period from a savings tag plus manual contributions.';
+            else if (kind === 'streak') hint.textContent = 'Cap per period + how many consecutive periods you want to hit it.';
+        }
+
+        function openGoalModal(goalId) {
+            $('goalForm').reset();
+            $('goalId').value = '';
+            $('goalDeleteBtn').style.display = 'none';
+            $('goalDialogTitle').textContent = goalId ? 'Edit lifestyle goal' : 'New lifestyle goal';
+            $('goalTag').innerHTML = tagOptionsHtml('');
+            refreshGoalForm();
+
+            if (goalId) {
+                fetch(`/api/goals/${goalId}`).then(r => r.json()).then((d) => {
+                    const g = d.goal;
+                    if (!g) return;
+                    $('goalId').value = g.id;
+                    $('goalName').value = g.name || '';
+                    $('goalKind').value = g.kind;
+                    $('goalPeriod').value = g.period || 'month';
+                    $('goalTag').innerHTML = tagOptionsHtml(g.tag_id);
+                    $('goalAmount').value = g.target_amount ?? '';
+                    $('goalCount').value = g.target_count ?? '';
+                    $('goalNotes').value = g.notes || '';
+                    $('goalDeleteBtn').style.display = 'inline-block';
+                    refreshGoalForm();
+                });
+            }
+            $('goalDialog').showModal();
+        }
+
+        async function saveGoal() {
+            const id = $('goalId').value;
+            const kind = $('goalKind').value;
+            const body = {
+                name: $('goalName').value.trim(),
+                kind,
+                period: $('goalPeriod').value,
+                tag_id: $('goalTag').value ? Number($('goalTag').value) : null,
+                notes: $('goalNotes').value || null,
+            };
+            if (kind === 'frequency') {
+                body.target_count = Number($('goalCount').value) || null;
+            } else if (kind === 'streak') {
+                body.target_amount = Number($('goalAmount').value) || null;
+                body.target_count = Number($('goalCount').value) || null;
+            } else {
+                body.target_amount = Number($('goalAmount').value) || null;
+            }
+            if (!body.name) { flash('Goal name required.', false); return; }
+            const url = id ? `/api/goals/${id}` : '/api/goals';
+            const method = id ? 'PATCH' : 'POST';
+            const r = await fetch(url, {
+                method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+            });
+            if (!r.ok) {
+                const err = await r.json().catch(() => ({}));
+                flash(err.error || 'Could not save goal', false);
+                return;
+            }
+            flash(id ? 'Goal updated.' : 'Goal created.', true);
+            $('goalDialog').close();
+            await Promise.all([loadGoals(), loadDashboard()]);
+        }
+
+        async function deleteGoal() {
+            const id = $('goalId').value;
+            if (!id) return;
+            if (!confirm('Delete this goal?')) return;
+            const r = await fetch(`/api/goals/${id}`, { method: 'DELETE' });
+            if (!r.ok) { flash('Could not delete', false); return; }
+            $('goalDialog').close();
+            flash('Goal deleted.', true);
+            await Promise.all([loadGoals(), loadDashboard()]);
+        }
+
+        $('newGoalBtn').addEventListener('click', () => openGoalModal(null));
+        $('goalKind').addEventListener('change', refreshGoalForm);
+        $('goalCancelBtn').addEventListener('click', () => $('goalDialog').close());
+        $('goalSaveBtn').addEventListener('click', saveGoal);
+        $('goalDeleteBtn').addEventListener('click', deleteGoal);
+
         $('refreshBtn').addEventListener('click', async () => {
             await loadDashboard();
             await loadAllTransactions(false);
+            await loadGoals();
+            await loadInbox();
         });
         $('syncBtn').addEventListener('click', syncTx);
         $('linkBtn').addEventListener('click', () => linkHandler && linkHandler.open());
@@ -482,8 +1009,9 @@
             } catch (e) {
                 flash('Plaid Link init failed: ' + e.message, false);
             }
+            await loadTags();
             await loadDashboard();
-            await loadAllTransactions(false);
+            await Promise.all([loadAllTransactions(false), loadGoals(), loadInbox()]);
         });
     </script>
 </body>

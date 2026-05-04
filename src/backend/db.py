@@ -91,6 +91,80 @@ def init_db() -> None:
             CREATE INDEX IF NOT EXISTS idx_transactions_item ON transactions(item_id);
             CREATE INDEX IF NOT EXISTS idx_transactions_date ON transactions(date);
             CREATE INDEX IF NOT EXISTS idx_transactions_account ON transactions(account_id);
+
+            CREATE TABLE IF NOT EXISTS tags (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                key TEXT NOT NULL UNIQUE,
+                label TEXT NOT NULL,
+                kind TEXT NOT NULL DEFAULT 'spend',
+                color TEXT,
+                created_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS tag_rules (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                tag_id INTEGER NOT NULL,
+                priority INTEGER NOT NULL DEFAULT 100,
+                match_field TEXT NOT NULL,
+                match_op TEXT NOT NULL,
+                match_value TEXT NOT NULL,
+                min_amount REAL,
+                max_amount REAL,
+                enabled INTEGER NOT NULL DEFAULT 1,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_tag_rules_tag ON tag_rules(tag_id, priority);
+            CREATE INDEX IF NOT EXISTS idx_tag_rules_priority ON tag_rules(enabled, priority);
+
+            CREATE TABLE IF NOT EXISTS transaction_tags (
+                transaction_id TEXT PRIMARY KEY,
+                tag_id INTEGER NOT NULL,
+                source TEXT NOT NULL DEFAULT 'rule',
+                rule_id INTEGER,
+                confidence REAL,
+                updated_at TEXT NOT NULL,
+                FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id) ON DELETE CASCADE,
+                FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE,
+                FOREIGN KEY (rule_id) REFERENCES tag_rules(id) ON DELETE SET NULL
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_transaction_tags_tag ON transaction_tags(tag_id);
+            CREATE INDEX IF NOT EXISTS idx_transaction_tags_source ON transaction_tags(source);
+
+            CREATE TABLE IF NOT EXISTS goals (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                kind TEXT NOT NULL,
+                tag_id INTEGER,
+                account_id TEXT,
+                period TEXT NOT NULL DEFAULT 'month',
+                period_start TEXT,
+                target_amount REAL,
+                target_count INTEGER,
+                currency TEXT NOT NULL DEFAULT 'USD',
+                rollover INTEGER NOT NULL DEFAULT 0,
+                active INTEGER NOT NULL DEFAULT 1,
+                notes TEXT,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE SET NULL
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_goals_active_kind ON goals(active, kind);
+
+            CREATE TABLE IF NOT EXISTS goal_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                goal_id INTEGER NOT NULL,
+                event_date TEXT NOT NULL,
+                amount REAL NOT NULL DEFAULT 0,
+                kind TEXT NOT NULL DEFAULT 'contribution',
+                note TEXT,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (goal_id) REFERENCES goals(id) ON DELETE CASCADE
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_goal_events_goal ON goal_events(goal_id, event_date);
             """
         )
 
@@ -257,36 +331,52 @@ def fetch_transactions(
     since: Optional[str] = None,
     until: Optional[str] = None,
     q: Optional[str] = None,
+    tag_id: Optional[int] = None,
+    untagged_only: bool = False,
 ) -> tuple[list[dict[str, Any]], int]:
     clauses: list[str] = []
     params: list[Any] = []
     if account_id:
-        clauses.append("account_id = ?")
+        clauses.append("t.account_id = ?")
         params.append(account_id)
     if since:
-        clauses.append("date >= ?")
+        clauses.append("t.date >= ?")
         params.append(since)
     if until:
-        clauses.append("date <= ?")
+        clauses.append("t.date <= ?")
         params.append(until)
     if q:
-        clauses.append("(LOWER(name) LIKE ? OR LOWER(COALESCE(merchant_name,'')) LIKE ?)")
+        clauses.append("(LOWER(t.name) LIKE ? OR LOWER(COALESCE(t.merchant_name,'')) LIKE ?)")
         like = f"%{q.lower()}%"
         params.extend([like, like])
+    if tag_id is not None:
+        clauses.append("tt.tag_id = ?")
+        params.append(tag_id)
+    if untagged_only:
+        clauses.append("tt.tag_id IS NULL")
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
 
     with connection() as conn:
         total = conn.execute(
-            f"SELECT COUNT(*) AS n FROM transactions{where}", params
+            f"""
+            SELECT COUNT(*) AS n FROM transactions t
+            LEFT JOIN transaction_tags tt ON tt.transaction_id = t.transaction_id
+            {where}
+            """,
+            params,
         ).fetchone()["n"]
         rows = conn.execute(
             f"""
-            SELECT transaction_id, item_id, account_id, amount, iso_currency_code,
-                   date, authorized_date, name, merchant_name, pending,
-                   primary_category, detailed_category, payment_channel
-            FROM transactions
+            SELECT t.transaction_id, t.item_id, t.account_id, t.amount, t.iso_currency_code,
+                   t.date, t.authorized_date, t.name, t.merchant_name, t.pending,
+                   t.primary_category, t.detailed_category, t.payment_channel,
+                   tt.tag_id AS tag_id, tt.source AS tag_source,
+                   tg.key AS tag_key, tg.label AS tag_label, tg.color AS tag_color
+            FROM transactions t
+            LEFT JOIN transaction_tags tt ON tt.transaction_id = t.transaction_id
+            LEFT JOIN tags tg ON tg.id = tt.tag_id
             {where}
-            ORDER BY date DESC, transaction_id DESC
+            ORDER BY t.date DESC, t.transaction_id DESC
             LIMIT ? OFFSET ?
             """,
             [*params, limit, offset],
@@ -298,6 +388,635 @@ def fetch_transactions(
         d["pending"] = bool(d["pending"])
         out.append(d)
     return out, total
+
+
+def list_tags() -> list[dict[str, Any]]:
+    with connection() as conn:
+        rows = conn.execute(
+            "SELECT id, key, label, kind, color FROM tags ORDER BY label"
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def get_tag(tag_id: int) -> Optional[dict[str, Any]]:
+    with connection() as conn:
+        row = conn.execute(
+            "SELECT id, key, label, kind, color FROM tags WHERE id = ?", (tag_id,)
+        ).fetchone()
+    return dict(row) if row else None
+
+
+def get_tag_by_key(key: str) -> Optional[dict[str, Any]]:
+    with connection() as conn:
+        row = conn.execute(
+            "SELECT id, key, label, kind, color FROM tags WHERE key = ?", (key,)
+        ).fetchone()
+    return dict(row) if row else None
+
+
+def insert_tag(
+    key: str, label: str, kind: str = "spend", color: Optional[str] = None
+) -> int:
+    now = datetime.now(timezone.utc).isoformat()
+    with connection() as conn:
+        cur = conn.execute(
+            """
+            INSERT INTO tags (key, label, kind, color, created_at)
+            VALUES (?, ?, ?, ?, ?)
+            ON CONFLICT(key) DO UPDATE SET
+                label = excluded.label,
+                kind = excluded.kind,
+                color = COALESCE(excluded.color, tags.color)
+            RETURNING id
+            """,
+            (key, label, kind, color, now),
+        )
+        row = cur.fetchone()
+    return int(row["id"])
+
+
+def update_tag(
+    tag_id: int,
+    label: Optional[str] = None,
+    kind: Optional[str] = None,
+    color: Optional[str] = None,
+) -> None:
+    sets: list[str] = []
+    params: list[Any] = []
+    if label is not None:
+        sets.append("label = ?")
+        params.append(label)
+    if kind is not None:
+        sets.append("kind = ?")
+        params.append(kind)
+    if color is not None:
+        sets.append("color = ?")
+        params.append(color)
+    if not sets:
+        return
+    params.append(tag_id)
+    with connection() as conn:
+        conn.execute(f"UPDATE tags SET {', '.join(sets)} WHERE id = ?", params)
+
+
+def delete_tag(tag_id: int) -> None:
+    with connection() as conn:
+        conn.execute("DELETE FROM tags WHERE id = ?", (tag_id,))
+
+
+def list_tag_rules(tag_id: Optional[int] = None) -> list[dict[str, Any]]:
+    clauses: list[str] = []
+    params: list[Any] = []
+    if tag_id is not None:
+        clauses.append("r.tag_id = ?")
+        params.append(tag_id)
+    where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
+    with connection() as conn:
+        rows = conn.execute(
+            f"""
+            SELECT r.id, r.tag_id, t.key AS tag_key, t.label AS tag_label,
+                   r.priority, r.match_field, r.match_op, r.match_value,
+                   r.min_amount, r.max_amount, r.enabled
+            FROM tag_rules r
+            JOIN tags t ON t.id = r.tag_id
+            {where}
+            ORDER BY r.priority, r.id
+            """,
+            params,
+        ).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["enabled"] = bool(d["enabled"])
+        out.append(d)
+    return out
+
+
+def insert_tag_rule(
+    tag_id: int,
+    match_field: str,
+    match_op: str,
+    match_value: str,
+    *,
+    priority: int = 100,
+    min_amount: Optional[float] = None,
+    max_amount: Optional[float] = None,
+    enabled: bool = True,
+) -> int:
+    now = datetime.now(timezone.utc).isoformat()
+    with connection() as conn:
+        cur = conn.execute(
+            """
+            INSERT INTO tag_rules (
+                tag_id, priority, match_field, match_op, match_value,
+                min_amount, max_amount, enabled, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            RETURNING id
+            """,
+            (
+                tag_id,
+                priority,
+                match_field,
+                match_op,
+                match_value,
+                min_amount,
+                max_amount,
+                1 if enabled else 0,
+                now,
+            ),
+        )
+        row = cur.fetchone()
+    return int(row["id"])
+
+
+def update_tag_rule(rule_id: int, **fields: Any) -> None:
+    allowed = {
+        "tag_id",
+        "priority",
+        "match_field",
+        "match_op",
+        "match_value",
+        "min_amount",
+        "max_amount",
+        "enabled",
+    }
+    sets: list[str] = []
+    params: list[Any] = []
+    for k, v in fields.items():
+        if k not in allowed:
+            continue
+        if k == "enabled":
+            v = 1 if v else 0
+        sets.append(f"{k} = ?")
+        params.append(v)
+    if not sets:
+        return
+    params.append(rule_id)
+    with connection() as conn:
+        conn.execute(f"UPDATE tag_rules SET {', '.join(sets)} WHERE id = ?", params)
+
+
+def delete_tag_rule(rule_id: int) -> None:
+    with connection() as conn:
+        conn.execute("DELETE FROM tag_rules WHERE id = ?", (rule_id,))
+
+
+def get_tag_rule(rule_id: int) -> Optional[dict[str, Any]]:
+    with connection() as conn:
+        row = conn.execute(
+            "SELECT * FROM tag_rules WHERE id = ?", (rule_id,)
+        ).fetchone()
+    return dict(row) if row else None
+
+
+def get_transaction_tag(transaction_id: str) -> Optional[dict[str, Any]]:
+    with connection() as conn:
+        row = conn.execute(
+            "SELECT * FROM transaction_tags WHERE transaction_id = ?",
+            (transaction_id,),
+        ).fetchone()
+    return dict(row) if row else None
+
+
+def upsert_transaction_tag(
+    transaction_id: str,
+    tag_id: int,
+    source: str,
+    rule_id: Optional[int] = None,
+    confidence: Optional[float] = None,
+    *,
+    overwrite_manual: bool = False,
+) -> None:
+    """Idempotent tag write. Manual tags survive rule re-runs unless overwrite_manual."""
+    now = datetime.now(timezone.utc).isoformat()
+    with connection() as conn:
+        if not overwrite_manual:
+            existing = conn.execute(
+                "SELECT source FROM transaction_tags WHERE transaction_id = ?",
+                (transaction_id,),
+            ).fetchone()
+            if existing and existing["source"] == "manual" and source != "manual":
+                return
+        conn.execute(
+            """
+            INSERT INTO transaction_tags (
+                transaction_id, tag_id, source, rule_id, confidence, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?)
+            ON CONFLICT(transaction_id) DO UPDATE SET
+                tag_id = excluded.tag_id,
+                source = excluded.source,
+                rule_id = excluded.rule_id,
+                confidence = excluded.confidence,
+                updated_at = excluded.updated_at
+            """,
+            (transaction_id, tag_id, source, rule_id, confidence, now),
+        )
+
+
+def clear_transaction_tag(transaction_id: str) -> None:
+    with connection() as conn:
+        conn.execute(
+            "DELETE FROM transaction_tags WHERE transaction_id = ?",
+            (transaction_id,),
+        )
+
+
+def fetch_transactions_for_tagging(
+    transaction_ids: Optional[list[str]] = None,
+) -> list[dict[str, Any]]:
+    """Return rows used for rule evaluation (id, fields rules can match on)."""
+    with connection() as conn:
+        if transaction_ids is None:
+            rows = conn.execute(
+                """
+                SELECT t.transaction_id, t.account_id, t.amount, t.name,
+                       t.merchant_name, t.primary_category, t.detailed_category,
+                       t.payment_channel, t.iso_currency_code,
+                       tt.source AS tag_source
+                FROM transactions t
+                LEFT JOIN transaction_tags tt ON tt.transaction_id = t.transaction_id
+                """
+            ).fetchall()
+        elif not transaction_ids:
+            return []
+        else:
+            placeholders = ",".join("?" for _ in transaction_ids)
+            rows = conn.execute(
+                f"""
+                SELECT t.transaction_id, t.account_id, t.amount, t.name,
+                       t.merchant_name, t.primary_category, t.detailed_category,
+                       t.payment_channel, t.iso_currency_code,
+                       tt.source AS tag_source
+                FROM transactions t
+                LEFT JOIN transaction_tags tt ON tt.transaction_id = t.transaction_id
+                WHERE t.transaction_id IN ({placeholders})
+                """,
+                transaction_ids,
+            ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def tag_summary_counts() -> dict[str, int]:
+    with connection() as conn:
+        row = conn.execute(
+            """
+            SELECT
+                (SELECT COUNT(*) FROM transactions) AS total,
+                (SELECT COUNT(*) FROM transaction_tags) AS tagged,
+                (SELECT COUNT(*) FROM transaction_tags WHERE source = 'manual') AS manual
+            """
+        ).fetchone()
+    return {
+        "total": int(row["total"] or 0),
+        "tagged": int(row["tagged"] or 0),
+        "manual": int(row["manual"] or 0),
+        "untagged": int((row["total"] or 0) - (row["tagged"] or 0)),
+    }
+
+
+def list_goals(active_only: bool = False) -> list[dict[str, Any]]:
+    clauses = []
+    if active_only:
+        clauses.append("g.active = 1")
+    where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
+    with connection() as conn:
+        rows = conn.execute(
+            f"""
+            SELECT g.*, t.key AS tag_key, t.label AS tag_label, t.color AS tag_color
+            FROM goals g
+            LEFT JOIN tags t ON t.id = g.tag_id
+            {where}
+            ORDER BY g.active DESC, g.created_at DESC
+            """
+        ).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["active"] = bool(d["active"])
+        d["rollover"] = bool(d["rollover"])
+        out.append(d)
+    return out
+
+
+def get_goal(goal_id: int) -> Optional[dict[str, Any]]:
+    with connection() as conn:
+        row = conn.execute(
+            """
+            SELECT g.*, t.key AS tag_key, t.label AS tag_label, t.color AS tag_color
+            FROM goals g
+            LEFT JOIN tags t ON t.id = g.tag_id
+            WHERE g.id = ?
+            """,
+            (goal_id,),
+        ).fetchone()
+    if not row:
+        return None
+    d = dict(row)
+    d["active"] = bool(d["active"])
+    d["rollover"] = bool(d["rollover"])
+    return d
+
+
+def insert_goal(
+    *,
+    name: str,
+    kind: str,
+    tag_id: Optional[int] = None,
+    account_id: Optional[str] = None,
+    period: str = "month",
+    period_start: Optional[str] = None,
+    target_amount: Optional[float] = None,
+    target_count: Optional[int] = None,
+    currency: str = "USD",
+    rollover: bool = False,
+    active: bool = True,
+    notes: Optional[str] = None,
+) -> int:
+    now = datetime.now(timezone.utc).isoformat()
+    with connection() as conn:
+        cur = conn.execute(
+            """
+            INSERT INTO goals (
+                name, kind, tag_id, account_id, period, period_start,
+                target_amount, target_count, currency, rollover, active,
+                notes, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            RETURNING id
+            """,
+            (
+                name,
+                kind,
+                tag_id,
+                account_id,
+                period,
+                period_start,
+                target_amount,
+                target_count,
+                currency,
+                1 if rollover else 0,
+                1 if active else 0,
+                notes,
+                now,
+            ),
+        )
+        row = cur.fetchone()
+    return int(row["id"])
+
+
+def update_goal(goal_id: int, **fields: Any) -> None:
+    allowed = {
+        "name",
+        "kind",
+        "tag_id",
+        "account_id",
+        "period",
+        "period_start",
+        "target_amount",
+        "target_count",
+        "currency",
+        "rollover",
+        "active",
+        "notes",
+    }
+    sets: list[str] = []
+    params: list[Any] = []
+    for k, v in fields.items():
+        if k not in allowed:
+            continue
+        if k in ("rollover", "active"):
+            v = 1 if v else 0
+        sets.append(f"{k} = ?")
+        params.append(v)
+    if not sets:
+        return
+    params.append(goal_id)
+    with connection() as conn:
+        conn.execute(f"UPDATE goals SET {', '.join(sets)} WHERE id = ?", params)
+
+
+def delete_goal(goal_id: int) -> None:
+    with connection() as conn:
+        conn.execute("DELETE FROM goals WHERE id = ?", (goal_id,))
+
+
+def insert_goal_event(
+    goal_id: int,
+    event_date: str,
+    amount: float,
+    kind: str = "contribution",
+    note: Optional[str] = None,
+) -> int:
+    now = datetime.now(timezone.utc).isoformat()
+    with connection() as conn:
+        cur = conn.execute(
+            """
+            INSERT INTO goal_events (goal_id, event_date, amount, kind, note, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+            RETURNING id
+            """,
+            (goal_id, event_date, amount, kind, note, now),
+        )
+        row = cur.fetchone()
+    return int(row["id"])
+
+
+def list_goal_events(
+    goal_id: int,
+    since: Optional[str] = None,
+    until: Optional[str] = None,
+) -> list[dict[str, Any]]:
+    clauses = ["goal_id = ?"]
+    params: list[Any] = [goal_id]
+    if since:
+        clauses.append("event_date >= ?")
+        params.append(since)
+    if until:
+        clauses.append("event_date <= ?")
+        params.append(until)
+    where = " WHERE " + " AND ".join(clauses)
+    with connection() as conn:
+        rows = conn.execute(
+            f"""
+            SELECT id, goal_id, event_date, amount, kind, note, created_at
+            FROM goal_events
+            {where}
+            ORDER BY event_date DESC, id DESC
+            """,
+            params,
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def sum_tagged_for_period(
+    tag_id: int,
+    since: str,
+    until: str,
+    *,
+    account_id: Optional[str] = None,
+    direction: str = "outflow",
+    include_pending: bool = True,
+    exclude_transfers: bool = True,
+    currency: Optional[str] = None,
+) -> dict[str, Any]:
+    """Aggregate tagged transactions inside [since, until].
+
+    Off-currency rows (iso_currency_code present and != currency) are excluded from
+    the signed/magnitude/pending sums and from row_count/distinct_days, but reported
+    via off_currency_count so the UI can surface them.
+    """
+    clauses = ["tt.tag_id = ?", "t.date >= ?", "t.date <= ?"]
+    params: list[Any] = [tag_id, since, until]
+    if account_id:
+        clauses.append("t.account_id = ?")
+        params.append(account_id)
+    if not include_pending:
+        clauses.append("t.pending = 0")
+    if exclude_transfers:
+        clauses.append(
+            "(t.primary_category IS NULL OR t.primary_category NOT LIKE 'TRANSFER_%')"
+        )
+    where = " WHERE " + " AND ".join(clauses)
+
+    cur_match_expr = (
+        "(t.iso_currency_code IS NULL OR t.iso_currency_code = ?)"
+        if currency
+        else "1"
+    )
+    cur_off_expr = (
+        "(t.iso_currency_code IS NOT NULL AND t.iso_currency_code != ?)"
+        if currency
+        else "0"
+    )
+
+    if direction == "outflow":
+        amount_expr = "CASE WHEN t.amount > 0 THEN t.amount ELSE -t.amount END"
+        signed_expr = "t.amount"
+    elif direction == "inflow":
+        amount_expr = "CASE WHEN t.amount < 0 THEN -t.amount ELSE 0 END"
+        signed_expr = "CASE WHEN t.amount < 0 THEN -t.amount ELSE 0 END"
+    else:
+        amount_expr = "ABS(t.amount)"
+        signed_expr = "t.amount"
+
+    extra_params: list[Any] = []
+    if currency:
+        # Each conditional appears 5 times below (signed, magnitude, pending, count, distinct).
+        extra_params = [currency, currency, currency, currency, currency, currency]
+
+    sql = f"""
+        SELECT
+            COALESCE(SUM(CASE WHEN {cur_match_expr} THEN {signed_expr} ELSE 0 END), 0) AS signed_total,
+            COALESCE(SUM(CASE WHEN {cur_match_expr} THEN {amount_expr} ELSE 0 END), 0) AS magnitude_total,
+            COALESCE(SUM(CASE WHEN {cur_match_expr} AND t.pending = 1 THEN {amount_expr} ELSE 0 END), 0) AS pending_amount,
+            COUNT(CASE WHEN {cur_match_expr} THEN 1 END) AS row_count,
+            COUNT(DISTINCT CASE WHEN {cur_match_expr} THEN t.date END) AS distinct_days,
+            SUM(CASE WHEN {cur_off_expr} THEN 1 ELSE 0 END) AS off_currency_count
+        FROM transactions t
+        JOIN transaction_tags tt ON tt.transaction_id = t.transaction_id
+        {where}
+    """
+
+    if currency:
+        # Order of placeholders in SELECT (5 cur_match + 1 cur_off), then WHERE params.
+        bound = [currency] * 6 + params
+    else:
+        bound = list(params)
+
+    with connection() as conn:
+        row = conn.execute(sql, bound).fetchone()
+    return {
+        "signed_total": float(row["signed_total"] or 0.0),
+        "magnitude_total": float(row["magnitude_total"] or 0.0),
+        "pending_amount": float(row["pending_amount"] or 0.0),
+        "row_count": int(row["row_count"] or 0),
+        "distinct_days": int(row["distinct_days"] or 0),
+        "off_currency_count": int(row["off_currency_count"] or 0),
+    }
+
+
+def list_supporting_transactions(
+    tag_id: int,
+    since: str,
+    until: str,
+    *,
+    account_id: Optional[str] = None,
+    limit: int = 50,
+    exclude_transfers: bool = True,
+) -> list[dict[str, Any]]:
+    clauses = ["tt.tag_id = ?", "t.date >= ?", "t.date <= ?"]
+    params: list[Any] = [tag_id, since, until]
+    if account_id:
+        clauses.append("t.account_id = ?")
+        params.append(account_id)
+    if exclude_transfers:
+        clauses.append(
+            "(t.primary_category IS NULL OR t.primary_category NOT LIKE 'TRANSFER_%')"
+        )
+    where = " WHERE " + " AND ".join(clauses)
+    with connection() as conn:
+        rows = conn.execute(
+            f"""
+            SELECT t.transaction_id, t.date, t.amount, t.name, t.merchant_name,
+                   t.iso_currency_code, t.pending,
+                   tt.source AS tag_source
+            FROM transactions t
+            JOIN transaction_tags tt ON tt.transaction_id = t.transaction_id
+            {where}
+            ORDER BY t.date DESC, t.transaction_id DESC
+            LIMIT ?
+            """,
+            [*params, limit],
+        ).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["pending"] = bool(d["pending"])
+        out.append(d)
+    return out
+
+
+def daily_tagged_totals(
+    tag_id: int,
+    since: str,
+    until: str,
+    *,
+    account_id: Optional[str] = None,
+    exclude_transfers: bool = True,
+) -> list[dict[str, Any]]:
+    clauses = ["tt.tag_id = ?", "t.date >= ?", "t.date <= ?"]
+    params: list[Any] = [tag_id, since, until]
+    if account_id:
+        clauses.append("t.account_id = ?")
+        params.append(account_id)
+    if exclude_transfers:
+        clauses.append(
+            "(t.primary_category IS NULL OR t.primary_category NOT LIKE 'TRANSFER_%')"
+        )
+    where = " WHERE " + " AND ".join(clauses)
+    with connection() as conn:
+        rows = conn.execute(
+            f"""
+            SELECT t.date AS d,
+                   SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END) AS outflow,
+                   SUM(CASE WHEN t.amount < 0 THEN -t.amount ELSE 0 END) AS inflow,
+                   COUNT(*) AS n
+            FROM transactions t
+            JOIN transaction_tags tt ON tt.transaction_id = t.transaction_id
+            {where}
+            GROUP BY t.date
+            ORDER BY t.date
+            """,
+            params,
+        ).fetchall()
+    return [
+        {
+            "date": r["d"],
+            "outflow": float(r["outflow"] or 0.0),
+            "inflow": float(r["inflow"] or 0.0),
+            "count": int(r["n"] or 0),
+        }
+        for r in rows
+    ]
 
 
 def spending_inflow_totals(
