@@ -304,11 +304,32 @@
             try {
                 const res = await fetch('/api/sync_transactions', { method: 'POST' });
                 const data = await res.json();
+                const notion = data.notion_worker;
+                const notionOk = notion && notion.attempted && notion.ok;
+                const notionFailed = notion && notion.attempted && !notion.ok;
+                const notionSkipped = notion && notion.skipped;
+
                 if (data.summary) {
-                    flash(`Synced ${data.summary.ok}/${data.summary.items} institutions; ` +
-                        `${data.summary.transactions_added} new/updated rows this run.`, true);
+                    let msg = `Synced ${data.summary.ok}/${data.summary.items} institutions; ` +
+                        `${data.summary.transactions_added} new/updated rows this run.`;
+                    if (notionOk) {
+                        msg += ` Notion worker updated (${notion.item_count} linked items).`;
+                    } else if (notionFailed) {
+                        msg += ` Local sync succeeded, but Notion worker update failed: ${notion.message || 'unknown error'}.`;
+                    } else if (notionSkipped) {
+                        msg += ` Notion worker skipped: ${notion.message}.`;
+                    }
+                    flash(msg, !notionFailed);
                 } else {
-                    flash(data.message || 'Done', true);
+                    let msg = data.message || 'Done';
+                    if (notionOk) {
+                        msg += ` Notion worker updated (${notion.item_count} linked items).`;
+                    } else if (notionFailed) {
+                        msg += ` Notion worker update failed: ${notion.message || 'unknown error'}.`;
+                    } else if (notionSkipped) {
+                        msg += ` Notion worker skipped: ${notion.message}.`;
+                    }
+                    flash(msg, !notionFailed);
                 }
                 txnOffset = 0;
                 await loadDashboard();

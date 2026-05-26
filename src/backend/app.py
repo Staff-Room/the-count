@@ -8,8 +8,11 @@ import csv
 import io
 import json
 import os
+import shutil
+import subprocess
 from calendar import monthrange
 from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 
 import plaid
 from dotenv import load_dotenv
@@ -70,6 +73,126 @@ def _month_start(d: date | None = None) -> date:
     if d is None:
         d = date.today()
     return date(d.year, d.month, 1)
+
+
+def _env_bool(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _notion_worker_dir() -> Path:
+    configured = os.getenv("NOTION_WORKER_DIR", "").strip()
+    if configured:
+        return Path(configured).expanduser()
+    return Path(__file__).resolve().parents[2] / "notion-worker"
+
+
+def _linked_items_payload() -> list[dict[str, str]]:
+    payload = []
+    for row in db.iter_items_with_tokens():
+        entry = {
+            "item_id": row["item_id"],
+            "access_token": row["access_token"],
+        }
+        if row.get("institution_name"):
+            entry["institution_name"] = row["institution_name"]
+        payload.append(entry)
+    return payload
+
+
+def _run_ntn_command(
+    ntn_bin: str, args: list[str], *, cwd: Path, description: str
+) -> None:
+    proc = subprocess.run(
+        [ntn_bin, *args],
+        cwd=str(cwd),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"{description} failed (exit {proc.returncode})")
+
+
+def _sync_notion_worker_from_linked_items() -> dict:
+    """
+    Push linked Plaid items to Notion worker env and trigger syncs.
+    This keeps dashboard-linked institutions in lockstep with the worker.
+    """
+    if not _env_bool("NOTION_WORKER_AUTO_SYNC", True):
+        return {
+            "attempted": False,
+            "ok": False,
+            "skipped": True,
+            "message": "NOTION_WORKER_AUTO_SYNC is disabled",
+        }
+
+    worker_dir = _notion_worker_dir()
+    if not worker_dir.exists():
+        return {
+            "attempted": False,
+            "ok": False,
+            "skipped": True,
+            "message": f"Notion worker directory not found: {worker_dir}",
+        }
+
+    ntn_bin = shutil.which("ntn")
+    if not ntn_bin:
+        return {
+            "attempted": False,
+            "ok": False,
+            "skipped": True,
+            "message": "ntn CLI is not installed or not on PATH",
+        }
+
+    items_payload = _linked_items_payload()
+    accounts_sync_key = os.getenv(
+        "NOTION_WORKER_ACCOUNTS_SYNC_KEY", "plaidAccountsSync"
+    ).strip()
+    transactions_sync_key = os.getenv(
+        "NOTION_WORKER_TRANSACTIONS_SYNC_KEY", "plaidTransactionsSync"
+    ).strip()
+
+    try:
+        _run_ntn_command(
+            ntn_bin,
+            [
+                "workers",
+                "env",
+                "set",
+                f"PLAID_ITEMS_JSON={json.dumps(items_payload, separators=(',', ':'))}",
+            ],
+            cwd=worker_dir,
+            description="ntn workers env set PLAID_ITEMS_JSON",
+        )
+
+        triggered = []
+        for sync_key in (accounts_sync_key, transactions_sync_key):
+            if not sync_key:
+                continue
+            _run_ntn_command(
+                ntn_bin,
+                ["workers", "sync", "trigger", sync_key],
+                cwd=worker_dir,
+                description=f"ntn workers sync trigger {sync_key}",
+            )
+            triggered.append(sync_key)
+
+        return {
+            "attempted": True,
+            "ok": True,
+            "item_count": len(items_payload),
+            "triggered": triggered,
+        }
+    except Exception as e:
+        return {
+            "attempted": True,
+            "ok": False,
+            "item_count": len(items_payload),
+            "message": str(e),
+        }
 
 
 @app.route("/")
@@ -201,7 +324,10 @@ def sync_transactions():
     """Pull latest transactions from Plaid for all linked items."""
     items = db.iter_items_with_tokens()
     if not items:
-        return jsonify({"synced": [], "message": "No linked accounts"})
+        notion_worker = _sync_notion_worker_from_linked_items()
+        return jsonify(
+            {"synced": [], "message": "No linked accounts", "notion_worker": notion_worker}
+        )
 
     results = []
     for row in items:
@@ -223,7 +349,8 @@ def sync_transactions():
         "ok": sum(1 for r in results if r.get("ok")),
         "transactions_added": sum(r.get("added", 0) for r in results if r.get("ok")),
     }
-    return jsonify({"summary": summary, "details": results})
+    notion_worker = _sync_notion_worker_from_linked_items()
+    return jsonify({"summary": summary, "details": results, "notion_worker": notion_worker})
 
 
 @app.route("/api/accounts", methods=["GET"])
