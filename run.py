@@ -16,9 +16,15 @@ sys.path.insert(0, str(src_path))
 from app import app
 
 if __name__ == "__main__":
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    plaid_env = os.getenv("PLAID_ENVIRONMENT", "sandbox")
+
     print("🧛 Starting The Count development server...")
+    print(f"🏦 Plaid environment: {plaid_env}")
     print("📊 Open the dashboard: http://localhost:5001/dashboard")
-    print("📝 Set up .env with Plaid credentials, then connect accounts and sync")
+    print("📝 Connect accounts via Plaid Link, then sync to SQLite / Notion worker")
     print("-" * 50)
     
     app.run(debug=True, host="0.0.0.0", port=5001)

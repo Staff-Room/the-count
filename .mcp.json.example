@@ -6,7 +6,7 @@
       "env": {
         "PLAID_CLIENT_ID": "your-plaid-client-id",
         "PLAID_SECRET": "your-plaid-secret",
-        "PLAID_ENVIRONMENT": "sandbox"
+        "PLAID_ENVIRONMENT": "development"
       }
     }
   }

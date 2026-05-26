@@ -8,9 +8,34 @@ This package is a **Notion Worker** that keeps two managed databases in sync wit
 - **Node**: 22+ (see `package.json` engines).
 - **`ntn` CLI**: [Notion CLI](https://developers.notion.com/cli/get-started/overview); authenticate with `ntn login`.
 
+## Plaid environments
+
+| `PLAID_ENVIRONMENT` / `PLAID_ENV` | Use case |
+|-----------------------------------|----------|
+| `sandbox` | Fake data, no real banks (`https://sandbox.plaid.com`) |
+| `production` | Real institutions (`https://production.plaid.com`) |
+
+Plaid no longer operates a separate **Development** API host (`development.plaid.com`). The middle step for real bank data is a **Trial** (or Limited Production) plan on **Production** — free for up to ~10 Items until you fully launch. Request it from the [Plaid Dashboard](https://dashboard.plaid.com/) (“Test with Real Data” / Trial).
+
+Each environment uses a **different secret** from [Plaid Dashboard → Keys](https://dashboard.plaid.com/developers/keys). Sandbox `access_token`s do not work in production. Setting `development` in config is treated as `production` for backward compatibility.
+
+Verify local credentials after updating `.env`:
+
+```bash
+venv/bin/python scripts/verify_plaid_env.py
+```
+
+Before switching away from sandbox, disconnect old items (uses current `.env` Plaid host):
+
+```bash
+venv/bin/python scripts/disconnect_all_plaid_items.py
+# or, if you already changed PLAID_ENVIRONMENT:
+PLAID_ENVIRONMENT=sandbox venv/bin/python scripts/disconnect_all_plaid_items.py
+```
+
 ## One-time: link bank accounts (The Count app)
 
-1. Run the Flask app (`python run.py` from the repo root with `.env` containing `PLAID_CLIENT_ID`, `PLAID_SECRET`, `PLAID_ENVIRONMENT`).
+1. Run the Flask app (`python run.py` from the repo root with `.env` containing `PLAID_CLIENT_ID`, `PLAID_SECRET`, and `PLAID_ENVIRONMENT=production` after Trial access is approved (use `sandbox` until then).
 2. Use **Plaid Link** on the dashboard to connect institutions (stores `item_id` + `access_token` in SQLite).
 
 ## Push secrets to the hosted worker
@@ -29,7 +54,7 @@ Set worker environment (replace values). If your `ntn` version rejects `--yes`, 
 
 ```bash
 cd notion-worker
-ntn workers env set PLAID_CLIENT_ID="your-id" PLAID_SECRET="your-secret" PLAID_ENV="sandbox"
+ntn workers env set PLAID_CLIENT_ID="your-id" PLAID_SECRET="your-production-secret" PLAID_ENV="production"
 ntn workers env set PLAID_ITEMS_JSON="$(cat /tmp/plaid-items.json)"
 ```
 

@@ -33,11 +33,22 @@ app = Flask(__name__)
 
 PLAID_CLIENT_ID = os.getenv("PLAID_CLIENT_ID")
 PLAID_SECRET = os.getenv("PLAID_SECRET")
-PLAID_ENV = os.getenv("PLAID_ENVIRONMENT", "sandbox")
+_raw_plaid_env = os.getenv("PLAID_ENVIRONMENT", "sandbox").lower()
+# Plaid retired development.plaid.com; real-data testing uses production (Trial plan).
+if _raw_plaid_env == "development":
+    import warnings
+
+    warnings.warn(
+        "PLAID_ENVIRONMENT=development is deprecated (host removed). Using production. "
+        "Request a Trial plan in the Plaid Dashboard for free real-data testing.",
+        stacklevel=1,
+    )
+    PLAID_ENV = "production"
+else:
+    PLAID_ENV = _raw_plaid_env
 
 PLAID_ENVIRONMENTS = {
     "sandbox": plaid.Environment.Sandbox,
-    "development": plaid.Environment.Development,
     "production": plaid.Environment.Production,
 }
 

@@ -20,9 +20,10 @@ type TxSyncState = {
 };
 
 function plaidBaseUrl(): string {
-	const env = (process.env.PLAID_ENV ?? process.env.PLAID_ENVIRONMENT ?? "sandbox").toLowerCase();
+	let env = (process.env.PLAID_ENV ?? process.env.PLAID_ENVIRONMENT ?? "sandbox").toLowerCase();
+	// Plaid retired development.plaid.com; real-data testing uses production (Trial plan).
+	if (env === "development") env = "production";
 	if (env === "sandbox") return "https://sandbox.plaid.com";
-	if (env === "development") return "https://development.plaid.com";
 	return "https://production.plaid.com";
 }
 
