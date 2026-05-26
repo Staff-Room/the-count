@@ -116,10 +116,13 @@ def _run_ntn_command(
         raise RuntimeError(f"{description} failed (exit {proc.returncode})")
 
 
-def _sync_notion_worker_from_linked_items() -> dict:
+def _sync_notion_worker_from_linked_items(*, reset_sync_state: bool = False) -> dict:
     """
     Push linked Plaid items to Notion worker env and trigger syncs.
     This keeps dashboard-linked institutions in lockstep with the worker.
+
+    When reset_sync_state is True, clears worker cursors first (use after
+    deleting Notion databases or when Plaid/Notion are out of sync).
     """
     if not _env_bool("NOTION_WORKER_AUTO_SYNC", True):
         return {
@@ -168,10 +171,24 @@ def _sync_notion_worker_from_linked_items() -> dict:
             description="ntn workers env set PLAID_ITEMS_JSON",
         )
 
+        sync_keys = [
+            k
+            for k in (accounts_sync_key, transactions_sync_key)
+            if k
+        ]
+        reset_keys: list[str] = []
+        if reset_sync_state:
+            for sync_key in sync_keys:
+                _run_ntn_command(
+                    ntn_bin,
+                    ["workers", "sync", "state", "reset", sync_key],
+                    cwd=worker_dir,
+                    description=f"ntn workers sync state reset {sync_key}",
+                )
+                reset_keys.append(sync_key)
+
         triggered = []
-        for sync_key in (accounts_sync_key, transactions_sync_key):
-            if not sync_key:
-                continue
+        for sync_key in sync_keys:
             _run_ntn_command(
                 ntn_bin,
                 ["workers", "sync", "trigger", sync_key],
@@ -184,6 +201,8 @@ def _sync_notion_worker_from_linked_items() -> dict:
             "attempted": True,
             "ok": True,
             "item_count": len(items_payload),
+            "reset_sync_state": reset_sync_state,
+            "reset": reset_keys,
             "triggered": triggered,
         }
     except Exception as e:
@@ -319,15 +338,34 @@ def _sync_one_item(item_id: str, access_token: str) -> dict:
     return total_stats
 
 
+def _parse_sync_full_flag() -> bool:
+    body = request.get_json(force=True, silent=True) or {}
+    if body.get("full") is True:
+        return True
+    raw = request.args.get("full", "")
+    return str(raw).lower() in ("1", "true", "yes")
+
+
 @app.route("/api/sync_transactions", methods=["POST"])
 def sync_transactions():
     """Pull latest transactions from Plaid for all linked items."""
+    full = _parse_sync_full_flag()
     items = db.iter_items_with_tokens()
     if not items:
-        notion_worker = _sync_notion_worker_from_linked_items()
-        return jsonify(
-            {"synced": [], "message": "No linked accounts", "notion_worker": notion_worker}
+        notion_worker = _sync_notion_worker_from_linked_items(
+            reset_sync_state=full
         )
+        return jsonify(
+            {
+                "synced": [],
+                "message": "No linked accounts",
+                "full": full,
+                "notion_worker": notion_worker,
+            }
+        )
+
+    if full:
+        db.reset_all_sync_cursors()
 
     results = []
     for row in items:
@@ -344,13 +382,20 @@ def sync_transactions():
             db.set_cursor(item_id, db.get_cursor(item_id), error=str(e))
             results.append({"item_id": item_id, "ok": False, "error": str(e)})
 
+    ok_results = [r for r in results if r.get("ok")]
     summary = {
         "items": len(results),
-        "ok": sum(1 for r in results if r.get("ok")),
-        "transactions_added": sum(r.get("added", 0) for r in results if r.get("ok")),
+        "ok": len(ok_results),
+        "transactions_added": sum(r.get("added", 0) for r in ok_results),
+        "transactions_modified": sum(r.get("modified", 0) for r in ok_results),
+        "full": full,
     }
-    notion_worker = _sync_notion_worker_from_linked_items()
-    return jsonify({"summary": summary, "details": results, "notion_worker": notion_worker})
+    notion_worker = _sync_notion_worker_from_linked_items(
+        reset_sync_state=full
+    )
+    return jsonify(
+        {"summary": summary, "details": results, "notion_worker": notion_worker}
+    )
 
 
 @app.route("/api/accounts", methods=["GET"])

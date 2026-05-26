@@ -190,6 +190,15 @@ def set_cursor(item_id: str, cursor: Optional[str], error: Optional[str] = None)
         )
 
 
+def reset_all_sync_cursors() -> int:
+    """Clear Plaid /transactions/sync cursors so the next sync replays history."""
+    with connection() as conn:
+        cur = conn.execute(
+            "UPDATE sync_cursors SET cursor = NULL, last_error = NULL"
+        )
+        return cur.rowcount
+
+
 def upsert_transaction_row(t: dict[str, Any]) -> None:
     now = datetime.now(timezone.utc).isoformat()
     with connection() as conn:
