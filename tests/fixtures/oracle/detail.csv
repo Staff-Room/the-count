@@ -1,0 +1,936 @@
+Date,Description,Notes,Source Category,Debit,Credit,Sch C Line,GL Account,Biz %,Deductible $,Flag,Rationale
+2025-03-03,External Deposit VENMO  - CASHOUT,,Business Income,0,1149.48,Line 1,4000 Gross Sales / Revenue,1,1149.48,,Confirmed business income
+2025-06-06,External Deposit ZW CONSULTING LL  - ZW CONSULT  ST-X9Y9S0Q9V3Y4,,Business Income,0,2941.04,Line 1,4000 Gross Sales / Revenue,1,2941.04,,Confirmed business income
+2025-09-15,Payout Steven Atkin in paypal,,Business Expense,175,0,Line 11,6030 Contract Labor,1,175,,Contractor: Steve / Steven Atkin
+2025-11-19,DANIEL CANOSA QUEJIDO,deposit for daniel,Business Expense,1500,0,Line 11,6030 Contract Labor,1,1500,,Contractor: Daniel Canosa Quejido
+2025-12-04,External Withdrawal PAYPAL INSTANT TRANSFER - INST XFER,paying out Steve,Business Expense,1500,0,Line 11,6030 Contract Labor,1,1500,,Contractor: Steve / Steven Atkin
+2025-12-04,External Withdrawal VENMO - PAYMENT,paying out ruben,Business Expense,250,0,Line 11,6030 Contract Labor,1,250,,Contractor: Ruben
+2025-12-04,DANIEL CANOSA QUEJIDO,payout Daniel,Business Expense,1500,0,Line 11,6030 Contract Labor,1,1500,,Contractor: Daniel Canosa Quejido
+2025-04-02,External Withdrawal VENMO  - PAYMENT,Rozella hernandez tax fee,Business Expense,50,0,Line 17,6080 Legal & Professional Services,1,50,,Accountant fee (Rozella)
+2025-10-09,"VBP LAW, PLLC",Legal retainer for AI contract,Business Expense,250,0,Line 17,6080 Legal & Professional Services,1,250,,Legal retainer for AI contract
+2025-01-03,WWW.PERPLEXITY.AI,AI credits,AI Credits,5,0,Line 18,6095 Software & Subscriptions,1,5,,100% business SaaS
+2025-01-10,PADDLE.NET* N8N CLOUD1,,Cloud Services,24,0,Line 18,6095 Software & Subscriptions,1,24,,100% business SaaS
+2025-01-26,"NOTION LABS, INC.",Crazy notion bill ,Cloud Services,70.36,0,Line 18,6095 Software & Subscriptions,1,70.36,,100% business SaaS
+2025-02-09,PADDLE.NET* N8N CLOUD1,,Cloud Services,24,0,Line 18,6095 Software & Subscriptions,1,24,,100% business SaaS
+2025-02-27,"NOTION LABS, INC.",,Cloud Services,25.58,0,Line 18,6095 Software & Subscriptions,1,25.58,,100% business SaaS
+2025-03-05,Point Of Sale Withdrawal OPENAI 548 Market StreetPMSAN FRANCISCO  CAUS,,AI Credits,42.56,0,Line 18,6095 Software & Subscriptions,1,42.56,,100% business SaaS
+2025-03-09,PADDLE.NET* N8N CLOUD1,,AI Service,24,0,Line 18,6095 Software & Subscriptions,1,24,,100% business SaaS
+2025-03-26,"NOTION LABS, INC.",,Cloud Services,25.58,0,Line 18,6095 Software & Subscriptions,1,25.58,,100% business SaaS
+2025-04-09,PADDLE.NET* N8N CLOUD1,,Cloud Services,24,0,Line 18,6095 Software & Subscriptions,1,24,,100% business SaaS
+2025-04-26,"NOTION LABS, INC.",,Cloud Services,25.58,0,Line 18,6095 Software & Subscriptions,1,25.58,,100% business SaaS
+2025-04-28,WINDSURF,,AI Service,15,0,Line 18,6095 Software & Subscriptions,1,15,,100% business SaaS
+2025-05-05,OPENAI *CHATGPT SUBSCR,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-05-09,PADDLE.NET* N8N CLOUD1,,Cloud Services,24,0,Line 18,6095 Software & Subscriptions,1,24,,100% business SaaS
+2025-05-26,"NOTION LABS, INC.",,Cloud Services,25.58,0,Line 18,6095 Software & Subscriptions,1,25.58,,100% business SaaS
+2025-05-26,"NOTION LABS, INC.",,Cloud Services,25.58,0,Line 18,6095 Software & Subscriptions,1,25.58,,100% business SaaS
+2025-05-28,WINDSURF,,AI Service,15,0,Line 18,6095 Software & Subscriptions,1,15,,100% business SaaS
+2025-05-28,Lucid Software Inc.,,Business Expense,12,0,Line 18,6095 Software & Subscriptions,1,12,,Business software / domains / hosting
+2025-05-28,WINDSURF,,AI Service,15,0,Line 18,6095 Software & Subscriptions,1,15,,100% business SaaS
+2025-05-28,Lucid Software Inc.,,Business Expense,12,0,Line 18,6095 Software & Subscriptions,1,12,,Business software / domains / hosting
+2025-06-05,OPENAI *CHATGPT SUBSCR,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-06-09,PADDLE.NET* N8N CLOUD1,,Cloud Services,24,0,Line 18,6095 Software & Subscriptions,1,24,,100% business SaaS
+2025-06-09,Microsoft-G095802582,,Cloud Services,4.65,0,Line 18,6095 Software & Subscriptions,1,4.65,,100% business SaaS
+2025-06-18,"GITHUB, INC.",,Cloud Services,8.53,0,Line 18,6095 Software & Subscriptions,1,8.53,,100% business SaaS
+2025-06-26,"NOTION LABS, INC.",,Cloud Services,25.58,0,Line 18,6095 Software & Subscriptions,1,25.58,,100% business SaaS
+2025-06-26,"NOTION LABS, INC.",,Cloud Services,25.58,0,Line 18,6095 Software & Subscriptions,1,25.58,,100% business SaaS
+2025-06-28,WINDSURF,,Cloud Services,15,0,Line 18,6095 Software & Subscriptions,1,15,,100% business SaaS
+2025-07-05,OPENAI *CHATGPT SUBSCR,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-07-09,PADDLE.NET* N8N CLOUD1,,Cloud Services,24,0,Line 18,6095 Software & Subscriptions,1,24,,100% business SaaS
+2025-07-09,Microsoft-G101692162,,Cloud Services,31.37,0,Line 18,6095 Software & Subscriptions,1,31.37,,100% business SaaS
+2025-07-18,"GITHUB, INC.",Staff Room Org,Cloud Services,8.53,0,Line 18,6095 Software & Subscriptions,1,8.53,,100% business SaaS
+2025-07-26,"NOTION LABS, INC.",,Cloud Services,12.79,0,Line 18,6095 Software & Subscriptions,1,12.79,,100% business SaaS
+2025-07-28,WINDSURF,,AI Service,15,0,Line 18,6095 Software & Subscriptions,1,15,,100% business SaaS
+2025-08-01,"NOTION LABS, INC.",,Cloud Services,15.24,0,Line 18,6095 Software & Subscriptions,1,15.24,,100% business SaaS
+2025-08-05,OPENAI *CHATGPT SUBSCR,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-08-09,PADDLE.NET* N8N CLOUD1,,Cloud Services,60,0,Line 18,6095 Software & Subscriptions,1,60,,100% business SaaS
+2025-08-09,Microsoft-G106700169,,Cloud Services,30.95,0,Line 18,6095 Software & Subscriptions,1,30.95,,100% business SaaS
+2025-08-13,APPLE.COM/US,airpods,Business Expense,197.8,0,Line 18,6095 Software & Subscriptions,1,197.8,,AirPods (office equipment)
+2025-08-14,CLAUDE.AI SUBSCRIPTION,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-08-14,APPLE.COM/US,New Macbook,Business Expense,2031.68,0,Line 18,6095 Software & Subscriptions,1,2031.68,"MacBook $2,031.68 qualifies for §1.263(a)-1(f) de minimis safe harbor election. Rozella to attach.",New MacBook
+2025-08-18,"GITHUB, INC.",,Cloud Services,8.53,0,Line 18,6095 Software & Subscriptions,1,8.53,,100% business SaaS
+2025-08-25,ANTHROPIC,,AI Credits,5,0,Line 18,6095 Software & Subscriptions,1,5,,100% business SaaS
+2025-08-27,ELEVENLABS.IO,,AI Credits,5,0,Line 18,6095 Software & Subscriptions,1,5,,100% business SaaS
+2025-08-30,"CURSOR, AI POWERED IDE",,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-09-01,ANTHROPIC,,AI Credits,10,0,Line 18,6095 Software & Subscriptions,1,10,,100% business SaaS
+2025-09-01,"NOTION LABS, INC.",,Cloud Services,25.58,0,Line 18,6095 Software & Subscriptions,1,25.58,,100% business SaaS
+2025-09-05,OPENAI *CHATGPT SUBSCR,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-09-05,OPENAI *CHATGPT SUBSCR,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-09-09,Microsoft-G112594864,,Cloud Services,41.87,0,Line 18,6095 Software & Subscriptions,1,41.87,,100% business SaaS
+2025-09-09,PADDLE.NET* N8N CLOUD1,,Cloud Services,60,0,Line 18,6095 Software & Subscriptions,1,60,,100% business SaaS
+2025-09-12,Point Of Sale Withdrawal VERCEL INC. 440 N Barranca Ave COVINA   CAUS,,Cloud Services,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-09-14,CLAUDE.AI SUBSCRIPTION,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-09-18,"GITHUB, INC.",,Cloud Services,8.53,0,Line 18,6095 Software & Subscriptions,1,8.53,,100% business SaaS
+2025-09-19,CLAUDE.AI SUBSCRIPTION,calude max,AI Service,183.39,0,Line 18,6095 Software & Subscriptions,1,183.39,,100% business SaaS
+2025-09-29,"CURSOR, AI POWERED IDE",,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-10-01,"NOTION LABS, INC.",,Cloud Services,25.58,0,Line 18,6095 Software & Subscriptions,1,25.58,,100% business SaaS
+2025-10-01,ANTHROPIC,,Cloud Services,25.15,0,Line 18,6095 Software & Subscriptions,1,25.15,,100% business SaaS
+2025-10-05,OPENAI *CHATGPT SUBSCR,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-10-07,HYPERFY* TRIAL OVER,,AI Service,35,0,Line 18,6095 Software & Subscriptions,1,35,,100% business SaaS
+2025-10-08,LOOM SUBSCRIPTION,,AI Service,24,0,Line 18,6095 Software & Subscriptions,1,24,,100% business SaaS
+2025-10-09,PADDLE.NET* N8N CLOUD1,,Cloud Services,60,0,Line 18,6095 Software & Subscriptions,1,60,,100% business SaaS
+2025-10-09,Microsoft-G117814482,,Cloud Services,17.23,0,Line 18,6095 Software & Subscriptions,1,17.23,,100% business SaaS
+2025-10-11,Point Of Sale Withdrawal VERCEL INC. 440 N Barranca Ave COVINA   CAUS,,Cloud Services,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-10-18,"GITHUB, INC.",,Cloud Services,8.53,0,Line 18,6095 Software & Subscriptions,1,8.53,,100% business SaaS
+2025-10-20,DNH*GODADDY.COM,executivestylelab.com,Business Expense,12.19,0,Line 18,6095 Software & Subscriptions,1,12.19,,Business software / domains / hosting
+2025-10-20,CLAUDE.AI SUBSCRIPTION,,AI Service,100,0,Line 18,6095 Software & Subscriptions,1,100,,100% business SaaS
+2025-10-20,DNH*GODADDY.COM,Jannalee gondaran's domain,Business Expense,12.19,0,Line 18,6095 Software & Subscriptions,1,12.19,,Business software / domains / hosting
+2025-10-21,"GITHUB, INC.",,Cloud Services,3.85,0,Line 18,6095 Software & Subscriptions,1,3.85,,100% business SaaS
+2025-10-24,WISPR,,AI Service,15,0,Line 18,6095 Software & Subscriptions,1,15,,100% business SaaS
+2025-11-05,OPENAI *CHATGPT SUBSCR,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-11-08,LOOM SUBSCRIPTION,,Cloud Services,24,0,Line 18,6095 Software & Subscriptions,1,24,,100% business SaaS
+2025-11-09,PADDLE.NET* N8N CLOUD1,,Cloud Services,60,0,Line 18,6095 Software & Subscriptions,1,60,,100% business SaaS
+2025-11-09,Microsoft-G122676297,cloud hosting,Business Expense,5.16,0,Line 18,6095 Software & Subscriptions,1,5.16,,Business software / domains / hosting
+2025-11-13,ANTHROPIC,,AI Credits,25,0,Line 18,6095 Software & Subscriptions,1,25,,100% business SaaS
+2025-11-18,"GITHUB, INC.",,Cloud Services,12.79,0,Line 18,6095 Software & Subscriptions,1,12.79,,100% business SaaS
+2025-11-19,CLAUDE.AI SUBSCRIPTION,,AI Service,100,0,Line 18,6095 Software & Subscriptions,1,100,,100% business SaaS
+2025-11-24,ANTHROPIC,,AI Credits,21.41,0,Line 18,6095 Software & Subscriptions,1,21.41,,100% business SaaS
+2025-12-01,YNP VALLEY LODGE RETAI,charging block for my devices,Business Expense,40.08,0,Line 18,6095 Software & Subscriptions,1,40.08,,Charging block for devices
+2025-12-05,OPENAI *CHATGPT SUBSCR,,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-12-08,Point Of Sale Withdrawal INFRANODUS* INF 60 Rue Francois-IerPARIS FRFR,,AI Service,10.51,0,Line 18,6095 Software & Subscriptions,1,10.51,,100% business SaaS
+2025-12-08,LOOM SUBSCRIPTION,,Cloud Services,24,0,Line 18,6095 Software & Subscriptions,1,24,,100% business SaaS
+2025-12-09,PADDLE.NET* N8N CLOUD1,,Cloud Services,60,0,Line 18,6095 Software & Subscriptions,1,60,,100% business SaaS
+2025-12-11,Point Of Sale Withdrawal VERCEL INC. 440 N Barranca Ave COVINA  CAUS,,Cloud Services,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-12-11,ANTHROPIC,,AI Credits,10.06,0,Line 18,6095 Software & Subscriptions,1,10.06,,100% business SaaS
+2025-12-17,"CURSOR, AI POWERED IDE",,AI Service,20,0,Line 18,6095 Software & Subscriptions,1,20,,100% business SaaS
+2025-12-18,"GITHUB, INC.",,Cloud Services,12.79,0,Line 18,6095 Software & Subscriptions,1,12.79,,100% business SaaS
+2025-12-19,CLAUDE.AI SUBSCRIPTION,,AI Service,100,0,Line 18,6095 Software & Subscriptions,1,100,,100% business SaaS
+2025-01-12,REGUS MANAGEMENT GROU,,Coworking Space,732.38,0,Line 20b,6110 Rent — Other Property,1,732.38,,Regus coworking rental
+2025-02-04,Point Of Sale Withdrawal REGUS MANAGEMEN 15305 Dallas ParkwaADDISON  TXUS,,Coworking Space,253.96,0,Line 20b,6110 Rent — Other Property,1,253.96,,Regus coworking rental
+2025-03-03,REGUS MANAGEMENT GROU,,Coworking Space,245.44,0,Line 20b,6110 Rent — Other Property,1,245.44,,Regus coworking rental
+2025-04-17,External Withdrawal REGUS MANAGEMENT  - INVOICEPAY  RMR*IV*6113-5645**236.92\ 15464134ZARUBA-,,Coworking Space,236.92,0,Line 20b,6110 Rent — Other Property,1,236.92,,Regus coworking rental
+2025-05-02,REGUS MANAGEMENT GROU,,Coworking Space,245.44,0,Line 20b,6110 Rent — Other Property,1,245.44,,Regus coworking rental
+2025-06-23,External Withdrawal Regus Management EDI - EDI PYMNTS  XGRWNMUBYFOQZWU,,Coworking Space,245.44,0,Line 20b,6110 Rent — Other Property,1,245.44,,Regus coworking rental
+2025-07-18,External Withdrawal Regus Management EDI - EDI PYMNTS  UVCPCQNMKNEBRTB,,Coworking Space,47.5,0,Line 20b,6110 Rent — Other Property,1,47.5,,Regus coworking rental
+2025-09-07,REGUS MANAGEMENT GROU,,Coworking Space,1384.46,0,Line 20b,6110 Rent — Other Property,1,1384.46,,Regus coworking rental
+2025-10-05,REGUS MANAGEMENT GROU,,Coworking Space,916.84,0,Line 20b,6110 Rent — Other Property,1,916.84,,Regus coworking rental
+2025-11-06,REGUS MANAGEMENT GROU,,Coworking Space,460.84,0,Line 20b,6110 Rent — Other Property,1,460.84,,Regus coworking rental
+2025-12-02,REGUS MANAGEMENT GROU,,Coworking Space,460.84,0,Line 20b,6110 Rent — Other Property,1,460.84,,Regus coworking rental
+2025-12-20,REGUS MANAGEMENT GROU,,Coworking Space,6.64,0,Line 20b,6110 Rent — Other Property,1,6.64,,Regus coworking rental
+2025-07-15,AMAZON MKTPL*4Q7JJ2LZ3,ink cartridges,Business Expense,8.73,0,Line 22,6130 Supplies,1,8.73,,Office supplies (ink)
+2025-07-02,TST* LOS MOLES - EMERY,Dinner with Erik Edwards,Business Expense,63.96,0,Line 24b,6160 Meals (50%),0.5,31.98,,Business meal — 50% deductible per §274(n)
+2025-10-17,SQ *OAKLAND UNITED BEE,beers with sid and aaron,Business Expense,12,0,Line 24b,6160 Meals (50%),0.5,6,,Business meal — 50% deductible per §274(n)
+2025-10-31,TST*SAILING GOAT,dinner w aaron at the sailing goat,Business Expense,97.12,0,Line 24b,6160 Meals (50%),0.5,48.56,,Business meal — 50% deductible per §274(n)
+2025-02-09,STARLINK INTERNET,,Utilities,128,0,Line 25,6170 Utilities,0.75,96,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-03-09,STARLINK INTERNET,,Utilities,50,0,Line 25,6170 Utilities,0.75,37.5,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-04-09,STARLINK INTERNET,,Utilities,50,0,Line 25,6170 Utilities,0.75,37.5,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-05-09,STARLINK INTERNET,,Utilities,50,0,Line 25,6170 Utilities,0.75,37.5,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-06-09,STARLINK INTERNET,,Utilities,50,0,Line 25,6170 Utilities,0.75,37.5,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-07-09,STARLINK INTERNET,,Utilities,50,0,Line 25,6170 Utilities,0.75,37.5,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-08-09,STARLINK INTERNET,,Utilities,85,0,Line 25,6170 Utilities,0.75,63.75,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-09-09,Starlink,,Utilities,50,0,Line 25,6170 Utilities,0.75,37.5,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-10-09,Starlink,,Utilities,50,0,Line 25,6170 Utilities,0.75,37.5,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-11-09,STARLINK INTERNET,,Business Expense,91,0,Line 25,6170 Utilities,0.75,68.25,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-12-09,Starlink,,Business Expense,50,0,Line 25,6170 Utilities,0.75,37.5,Home internet at 75% biz use per Pub 535/Topic 509 (user estimate),Starlink (75% biz)
+2025-01-04,Point Of Sale Withdrawal CLIPPER SYSTEMS 1800 SUTTER ST STE CONCORD  CAUS,,Public Transit,5,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,1.25,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-01-16,Point Of Sale Withdrawal LIME*RIDE IUAF 85 2nd Street  SAN FRANCISCO  CAUS,scooter,Public Transit,6.39,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,1.5975,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-01-16,Point Of Sale Withdrawal LYFT  *BAYWHEE 548 Market St. Ste SAN FRANCISCO  CAUS,scooter,Public Transit,7.58,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,1.895,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-01-18,Point Of Sale Withdrawal CLIPPER SYSTEMS 1800 SUTTER ST STE CONCORD  CAUS,BART cash,Public Transit,10,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,2.5,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-01-27,Point Of Sale Withdrawal CLIPPER SYSTEMS 1800 SUTTER ST STE CONCORD CAUS,BART money,Public Transit,20,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,5,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-02-20,Point Of Sale Withdrawal LYFT  *BAYWHEE 548 Market St. Ste SAN FRANCISCO  CAUS,,Public Transit,4.33,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,1.0825,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-02-20,Point Of Sale Withdrawal LIME*2 RIDES IU 85 2nd Street  SAN FRANCISCO  CAUS,,Public Transit,9.19,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,2.2975,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-02-22,Point Of Sale Deposit LIME*2 RIDES IU 85 2nd Street  SAN FRANCISCO  CAUS,,Public Transit,0,2.8,Line 9,6010 Car & Truck Expenses (local biz),0.25,-0.7,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-03-03,Point Of Sale Withdrawal CLIPPER SYSTEMS 1800 SUTTER ST STE CONCORD  CAUS,,Public Transit,20,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,5,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-03-04,Point Of Sale Withdrawal MASABI_RTD 1600 Blake St  303-299-6000  COUS,,Public Transit,10,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,2.5,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-04-21,Point Of Sale Withdrawal CLIPPER SYSTEMS 1800 SUTTER ST STE CONCORD  CAUS,,Public Transit,20,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,5,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-06-15,AMTRAK .CO1660601644917,,Public Transit,27,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,6.75,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-06-17,LIME*PAYOFF IUAF,,Public Transit,6.39,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,1.5975,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-06-19,LIME*RIDE IUAF,,Public Transit,9.97,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,2.4925,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-08-07,LIME*2 RIDES IUAF,,Public Transit,10.98,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,2.745,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-08-10,CLIPPER SYSTEMS MOBILE,,Public Transit,10,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,2.5,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-08-11,WAYMO,,Public Transit,16.89,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,4.2225,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-08-11,WAYMO,,Public Transit,35.22,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,8.805,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-08-12,LIME*RIDE IUAF,,Public Transit,6.09,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,1.5225,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-08-29,LYFT   *1 RIDE 08-28,,Public Transit,25.97,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,6.4925,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-09-14,PAYPAL *NATIONALRAI,train ticket,Public Transit,27,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,6.75,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-09-20,Point Of Sale Withdrawal LIME*6 RIDES IU 85 2nd Street  SAN FRANCISCO  CAUS,,Public Transit,34.16,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,8.54,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-09-22,Point Of Sale Withdrawal LIME*RIDE IUAF 85 2nd Street  SAN FRANCISCO  CAUS,,Public Transit,6.74,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,1.685,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-09-27,Point Of Sale Withdrawal LYFT   *RIDE TH 548 Market St. Ste SAN FRANCISCO  CAUS,,Public Transit,14.87,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,3.7175,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-09-28,MBTA-550027490048,,Public Transit,2.4,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,0.6,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-09-29,Point Of Sale Withdrawal CLIPPER SYSTEMS 1800 SUTTER ST STE CONCORD  CAUS,,Public Transit,5,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,1.25,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-09-30,Point Of Sale Withdrawal LYFT   *3 RIDES 548 Market St. Ste SAN FRANCISCO  CAUS,,Public Transit,57.88,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,14.47,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-09-30,Point Of Sale Withdrawal LYFT   *1 RIDE 548 Market St. Ste SAN FRANCISCO  CAUS,,Public Transit,11.4,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,2.85,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-12-07,AMTRAK MOBILE,,Public Transit,27,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,6.75,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-12-07,LYFT  *BAYWHEELS BIKE,,Public Transit,4.36,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,1.09,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-12-08,Point Of Sale Withdrawal UBER  *TRIP 706 MISSION ST  8005928996  CAUS,,Public Transit,11.94,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,2.985,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-12-15,Point Of Sale Withdrawal UBER  *TRIP 706 MISSION ST  8005928996  CAUS,santa con,Public Transit,2,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,0.5,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-12-15,Point Of Sale Withdrawal UBER  *TRIP 706 MISSION ST  8005928996  CAUS,,Public Transit,7.96,0,Line 9,6010 Car & Truck Expenses (local biz),0.25,1.99,"Public Transit @ 25% non-commute per user estimate. Per Pub 463 Topic 511, commute to coworking = not deductible.",25% non-commute
+2025-01-02,Point Of Sale Withdrawal SOLSTICE PO BOX 19199  FORT LAUDERDA  FLUS,,Health Insurance,8.13,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-01-31,Point Of Sale Withdrawal KAISER FOUNDAT 1 KAISER PLAZA  OAKLAND  CAUS,,Health Insurance,16.03,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-02-03,Point Of Sale Withdrawal SOLSTICE PO BOX 19199  FORT LAUDERDA  FLUS,,Health Insurance,8.13,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-02-28,Point Of Sale Withdrawal KAISER FOUNDAT 1 KAISER PLAZA  OAKLAND  CAUS,,Health Insurance,16.03,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-03-31,Point Of Sale Withdrawal KAISER FOUNDAT 1 KAISER PLAZA  OAKLAND  CAUS,,Health Insurance,16.03,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-04-11,BLUE SHIELD CALIFORNIA,,Health Insurance,13.2,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-04-11,BLUE SHIELD CALIFORNIA,,Health Insurance,13.2,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-04-30,Point Of Sale Withdrawal KAISER FOUNDAT 1 KAISER PLAZA  OAKLAND  CAUS,,Health Insurance,16.03,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-05-31,BLUE SHIELD CALIFORNIA,,Health Insurance,13.2,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-06-30,BLUE SHIELD CALIFORNIA,,Health Insurance,13.2,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-07-31,BLUE SHIELD CALIFORNIA,,Health Insurance,13.2,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-08-31,BLUE SHIELD CALIFORNIA,,Health Insurance,13.2,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-11-14,External Withdrawal BLUESHIELDCA - BILL PAY,,Health Insurance,26.4,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-12-01,External Withdrawal BLUESHIELDCA - BILL PAY,,Health Insurance,13.2,0,FLAG,— Schedule 1 L17 candidate,0,0,SE health ins: user on Medi-Cal but paid private premiums. Rozella to determine Form 7206 / Sch 1 L17 amount.,SE Health Ins
+2025-01-01,CHIPOTLE 5168,,Dining out,13.87,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-02,MI TIERRA FOODS,,Groceries,62.92,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-01-02,TRADER JOE S #072,,Groceries,29.13,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-01-02,AMAZON MKTPL*ZE6104WN1,replacement watch charger,Recreation,7.57,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-01-02,TARGET 00027672,tissues and whatnot,Home goods,10.65,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-01-02,Check,vehichle reg sticker,Maintenance,6.5,0,PERSONAL,— excluded,0,0,,Boat maintenance (MARGARITA)
+2025-01-03,BERKELEY IRONWORKS,gym membership,Recreation,100.58,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-01-03,Deposit January slip rental,,Rent,0,1500,PERSONAL,— excluded,0,0,,Rent: personal
+2025-01-04,AMAZON MKTPL*ZP72D7SI0,12v wire and crimp connectors,Boat parts,50.14,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-01-05,LITTLE CAESARS 1488-00,,Dining out,17.77,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-05,LA BURRITA.,,Dining out,16.18,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-06,External Withdrawal Richard H Kulka 510-428-0505 - WEB PMTS,,Rent,1500,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-01-06,External Withdrawal E-payments Fee 310-593-4833 - WEB PMTS,,Rent,1.95,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-01-09,TST*DELAH COFFEE - OAK,,Dining out,12.72,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-09,TRADER JOE S #072,,Groceries,53.02,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-01-10,External Withdrawal PROG DIRECT INS BRANCH01DEBIT ACH - INS PREM,Progressive insurance final payemnt,Boat insurance,164.62,0,PERSONAL,— excluded,0,0,,Boat insurance: personal
+2025-01-10,IN-N-OUT FAIRFIELD,,Dining out,3.31,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-11,LE CHAMOIS & THE LOFT,,Drinking and Smoking,11.5,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-01-11,SOUTHWES 5262598620069,Flights to denver for ski trip,Travel ,236.97,0,PERSONAL,— excluded,0,0,,User: not business travel
+2025-01-14,AUTHENTIC TACOS JALISC,tacos on the way back from skiing,Dining out,13.78,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-15,RANDY S MARKET,sandwich,Dining out,10,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-16,Nyx*NAYAX VENDING 6,coffee,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-16,"SQ *KABOB TROLLEY, LLC",kebab food truck in North beach,Dining out,18.25,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-17,Amazon.com*Z55IT1DA0,Nellimed packets ,Health and Wellness,14.35,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-01-17,SQ *THE HIDDEN CAFE,coffee,Dining out,6.89,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-17,SQ *THE HIDDEN CAFE,cafe,Dining out,2,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-17,TRADER JOE S #072,,Groceries,39.77,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-01-18,Point Of Sale Withdrawal Kindle Svcs*Z58 440 Terry Ave N  888-802-3080  WAUS,flawless consulting book,Education,69.28,0,PERSONAL,— excluded,0,0,Kindle books — Rozella may reclass to Line 17 if professional development per §162,Personal (could reclass)
+2025-01-18,THE CHEESE BOARD COOPE,breakfast on the way to novato,Dining out,7.1,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-18,TRADER JOE S #072,,Groceries,52.65,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-01-18,Point Of Sale Withdrawal Kindle Svcs*Z58 440 Terry Ave N 888-802-3080  WAUS,flawless consulting,Education,69.28,0,PERSONAL,— excluded,0,0,Kindle books — Rozella may reclass to Line 17 if professional development per §162,Personal (could reclass)
+2025-01-19,SEABREEZE MARKET AND D,Post-sandwich sailing ,Dining out,20.19,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-19,BRAIN.FM* TRIAL OVER,tech music 1yr sub,Subscription,69.99,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-01-20,RANDY S MARKET,laundry pods,Home goods,6.62,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-01-20,TRADER JOE S #072,,Groceries,17.56,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-01-21,Amazon.com*Z585T5QV1,Space heater,Home goods,33.13,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-01-21,External Withdrawal PAYPAL INSTANT TRANSFER - INST XFER,CSC membership,Recreation,150,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-01-24,TST* PROPER FOOD - 525,overprices SF food,Dining out,19.36,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-01-25,THE HOME DEPOT #0627,Spina cable replacement,Boat parts,9.33,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-01-25,TRADER JOE S #072,,Groceries,29.42,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-01-25,AMAZON MKTPL*ZG69S9XZ1,LEDs for running lights,Boat parts,10.93,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-01-25,Amazon.com*ZG21S3AK1,Batteries fr the car remote,Maintenance,7.92,0,PERSONAL,— excluded,0,0,,Boat maintenance (MARGARITA)
+2025-01-25,Point Of Sale Withdrawal SPOTIFY 4 WORLD TRACE CENTE8777781161  NYUS,sub,Subscription,12.98,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-01-27,SQ *GRIFFIN S UNIQUE S,Haircut,Health and Wellness,45,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-01-27,THE HOME DEPOT #0627,,Boat parts,9.33,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-01-27,TRADER JOE S #072,,Groceries,29.42,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-01-31,TRADER JOE S #072,groceries,Groceries,32.51,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-01-31,AMAZON MKTPL*ZC4AR57W0,"notebook, razor bl;ades and a guard",Health and Wellness,66.8,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-01-31,USTA NORCAL,,Recreation,5,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-01-31,SQ *GRIFFIN S UNIQUE S,,Health and Wellness,5,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-02-02,Too Good To Go Too Good To Go Inc.7876184541  DEUS,some bread i hope,Groceries,5.99,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-03,"Point Of Sale Withdrawal Groupon, Inc. 600 W. Chicago Ave 312-288-6424  ILUS",,Dining out,32,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-03,Point Of Sale Withdrawal  TRADER JOES 0725700EMERYVILLE  CAUS,,Groceries,53.04,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-03,Point Of Sale Withdrawal SQ *THE HIDDEN 1250 Addison St.  Berkeley  CAUS,,Dining out,8.25,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-04,Point Of Sale Withdrawal Kindle Svcs*Z74 440 Terry Ave N  888-802-3080  WAUS,,Education,16.23,0,PERSONAL,— excluded,0,0,Kindle books — Rozella may reclass to Line 17 if professional development per §162,Personal (could reclass)
+2025-02-04,External Withdrawal E-payments Fee 310-593-4833 - WEB PMTS,,Rent,1.95,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-02-04,External Withdrawal Richard H Kulka 510-428-0505 - WEB PMTS,,Rent,1200,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-02-04,Point Of Sale Withdrawal BERKELEY IRONWO 800 POTTER STREET  BERKELEY  CAUS,,Recreation,107,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-02-07,"Point Of Sale Withdrawal Too Good To Go 394 Broadway, 3rd F7876184541  DEUS",,Groceries,3.99,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-07,Point Of Sale Withdrawal  TRADER JOES 0725700EMERYVILLE  CAUS,,Groceries,19.13,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-08,TRADER JOE S #072,,Groceries,37.01,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-08,TST* TPSY PUTT RBS DEN,,Drinking and Smoking,37.12,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-02-10,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-11,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-11,TRADER JOE S #072,,Groceries,41.23,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-12,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-13,TRADER VICS,,Dining out,58.81,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-13,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-13,TCB*MTA METER MTA MCK,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-13,USTA NORCAL,,Recreation,5,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-02-17,THE HOME DEPOT #0627,,Boat parts,45.68,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-02-17,TRADER JOE S #072,,Groceries,16.76,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-17,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-17,SQ *ROAMING BEAN COFFE,,Dining out,4.02,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-18,Point Of Sale Withdrawal  TRADER JOES 0725700EMERYVILLE  CAUS,,Groceries,12.67,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-18,Point Of Sale Withdrawal TST*RUDYS - EME 4081 Hollis St  Emeryville  CAUS,,Dining out,28.87,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-18,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-19,TRADER JOE S #072,,Groceries,24.6,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-19,TARGET  00027672,contraception,Health and Wellness,14.75,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-02-20,TRADER JOE S #072,,Groceries,7.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-20,Nyx*NAYAX VENDING 6,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-24,NIC ANGEL ISLAND STAT,mooring fee,Recreation,30,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-02-24,SQ *ROTTEN CITY PIZZA,pizza for me and Sofia,Dining out,36.39,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-24,TRADER JOE S #072,,Groceries,44.21,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-24,PY *CAFFE STRADA,,Dining out,4.26,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-25,Point Of Sale Withdrawal SPOTIFY 4 WORLD TRACE CENTE8777781161  NYUS,,Subscription,12.98,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-02-26,TRADER JOE S #072,,Groceries,36.42,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-02-26,NCAL BERKELEY MOB,STI test co pay,Health and Wellness,20,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-02-26,TCKTWEB*MOLOWDATHEHUMB,,Tickets/Events,33.43,0,PERSONAL,— excluded,0,0,,Tickets/Events: personal
+2025-02-26,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-26,SQ *STANDARD FARE: KIT,cafe scone and coffee,Dining out,11.1,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-26,SQ *MI TIERRA FOODS,taco tuesday,Dining out,8.27,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-27,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-02-28,MAGIC CITY HIPPIES,MCH hoodie,Apparell,70,0,PERSONAL,— excluded,0,0,,Apparell: personal
+2025-02-28,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-03,BERKELEY IRONWORKS,,Recreation,107,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-03-03,TST*THE RED LION,374.09 - 333.60 received in payments = $40.49 for my meal,Dining out,40.49,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-03,SQ *DOWNHILL DUKE'S,Drinks for me and carson,Drinking and Smoking,38.07,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-03-03,SQ *YETI'S GRIND,vail coffee,Dining out,6.46,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-03,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-03,TRADER JOE S #072,,Groceries,23.95,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-03,SQ *TACOS EL REY OAKLA,,Dining out,4.13,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-04,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-04,TRADER JOE S #072,,Groceries,39.16,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-04,External Withdrawal E-payments Fee 310-593-4833 - WEB PMTS,,Rent,1.95,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-03-04,External Withdrawal Richard H Kulka 510-428-0505 - WEB PMTS,,Rent,1318.86,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-03-05,SHELL OIL 57444216501,,Dining out,2.49,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-05,TRADER JOE S #072,,Groceries,13.85,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-05,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-06,Nyx*NAYAX VENDING 40,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-06,SQ *WONDROUS BREWING C,,Drinking and Smoking,21.6,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-03-07,CHEVRON 0388090,,Dining out,4.64,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-10,SQ *DART COFFEE CO AT,,Dining out,5.75,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-13,TRADER JOE S #072,,Groceries,9.48,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-13,UST*USTA MEMBERSHIP,,Recreation,44,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-03-13,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-14,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-16,TRADER JOE S #072,,Groceries,12.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-16,RANDY S MARKET,,Home goods,2.2,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-03-17,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-18,REI #12 BERKELEY,,Boat parts,1.17,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-03-19,usta northern californ,,Recreation,33,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-03-19,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-19,Point Of Sale Withdrawal TRADER JOES 0725700EMERYVILLE CAUS,,Groceries,42.87,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-20,WHOLEFDS TCL#10708,,Groceries,19.28,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-20,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-21,TRADER VICS,,Drinking and Smoking,43.79,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-03-22,TRADER JOE S #072,,Groceries,76.55,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-23,SQ *GHOST TOWN BREWING,,Dining out,22.72,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-24,TRADER JOE S #072,,Groceries,17.97,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-24,Point Of Sale Withdrawal TM *TASH SULTAN 7060 HOLLYWOOD BLVD800-653-8000 CAUS,,Tickets/Events,64,0,PERSONAL,— excluded,0,0,,Tickets/Events: personal
+2025-03-25,AMAZON MKTPL*171FS79J3,,Boat parts,22.09,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-03-25,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-25,Point Of Sale Withdrawal SPOTIFY 4 WORLD TRACE CENTE8777781161 NYUS,,Subscription,12.98,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-03-25,RANDY S MARKET,,Health and Wellness,5.29,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-03-26,AMAZON MKTPL*Y55QZ7BO3,,Boat parts,34.27,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-03-27,INTACT INSURANCE,,Boat insurance,472.67,0,PERSONAL,— excluded,0,0,,Boat insurance: personal
+2025-03-28,SQ *GHOST TOWN BREWING,,Drinking and Smoking,10,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-03-28,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-28,DENNY'S #7727,,Dining out,7.66,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-28,TRADER JOE S #072,,Groceries,35.39,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-30,AUTHENTIC TACOS JALISC,,Dining out,13.83,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-03-31,TRADER JOE S #072,,Groceries,25.36,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-03-31,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-01,BERKELEY IRONWORKS,,Recreation,10,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-04-01,TRADER JOE S #072,,Groceries,7.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-02,TRADER JOE S #072,,Groceries,15.47,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-02,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-03,TRADER VICS,,Dining out,80.18,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-04,TRADER JOE S #072,,Groceries,27.23,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-04,RANDY S MARKET,,Groceries,15.51,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-04,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-05,TRADER JOE S #072,,Groceries,10.48,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-08,NIC*HEARST CASTLE,,Tickets/Events,35,0,PERSONAL,— excluded,0,0,,Tickets/Events: personal
+2025-04-08,Point Of Sale Withdrawal Kindle Svcs*7O1 440 Terry Ave N  888-802-3080  WAUS,,Education,14.06,0,PERSONAL,— excluded,0,0,Kindle books — Rozella may reclass to Line 17 if professional development per §162,Personal (could reclass)
+2025-04-09,TRADER JOE S #072,,Groceries,24.75,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-09,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-10,TRADER JOE S #072,,Groceries,11.47,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-10,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-10,TRADER JOE S #072,,Groceries,11.47,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-10,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-11,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-11,NABIQ EMERYVILLE,lunch w Jeremy,Dining out,23.22,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-11,RANDY S MARKET,,Home goods,3.99,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-04-11,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-13,TRADER JOE S #072,,Groceries,24.62,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-14,TRADER JOE S #072,,Groceries,7.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-14,INTACT INSURANCE,,Boat insurance,475,0,PERSONAL,— excluded,0,0,,Boat insurance: personal
+2025-04-14,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-15,TRADER JOE S #072,,Groceries,18.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-16,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-18,Point Of Sale Withdrawal H-E-B #269 AUSTIN  AUSTIN  TXUS,,Groceries,12.58,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-21,SQ *CUPPA AUSTIN COFFE,,Dining out,5.15,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-22,TST* LUSTRE PEARL - EA,,Dining out,6.1,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-22,TST* LUSTRE PEARL - EA,,Dining out,13.82,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-22,TRADER JOE S #072,,Groceries,41.82,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-23,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-24,CITY OF BERKELEY,,Recreation,7,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-04-24,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-25,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-25,AMAZON MKTPL*N283C49W2,,Home goods,24.25,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-04-25,Point Of Sale Withdrawal SPOTIFY 4 WORLD TRACE CENTE8777781161  NYUS,,Subscription,12.98,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-04-26,RANDY S MARKET,,Home goods,5.51,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-04-26,TRADER JOE S #072,,Groceries,45.48,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-26,TRADER JOE S #072,,Groceries,4.28,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-26,TRADER JOE S #072,,Groceries,11.96,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-28,RANDY S MARKET,,Recreation,6.62,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-04-28,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-28,Wilson Sporting Goods,,Recreation,66.29,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-04-29,TRADER JOE S #072,,Groceries,10.97,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-04-29,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-04-30,TRADER VICS,,Dining out,36.64,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-01,BERKELEY IRONWORKS,,Recreation,10,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-05-01,TRADER VICS,,Dining out,39.82,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-01,TRADER JOE S #072,,Groceries,21.55,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-01,usta northern californ,,Recreation,33,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-05-01,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-02,POTTERY BEYOND,,Home goods,24.31,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-05-02,TARGET 00027672,,Health and Wellness,10.24,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-05-02,TRADER JOE S #072,,Groceries,15.36,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-03,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-03,TST*TPSY PUTT RBS DENV,,Drinking and Smoking,10.6,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-05-03,SQ *PHILZ COFFEE,,Dining out,5.9,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-05,External Withdrawal IRS - USATAXPYMT,2024 Taxes,Fees,797,0,PERSONAL,— excluded,0,0,IRS payment + member fees — generally non-deductible. Rozella to confirm if CapOne card is biz.,Personal/non-deductible
+2025-05-05,RANDY S MARKET,,Groceries,54.46,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-05,TRADER JOE S #072,,Groceries,35.32,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-05,TST* FIELDWORK BREWING,,Drinking and Smoking,11.11,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-05-05,AMAZON MKTPL*NB9EH7X31,Solar panels and power station,Boat parts,70.58,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-05-05,> Credit card points redemption $750,Solar panels and power station,Boat parts,750,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-05-06,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-07,TRADER VICS,Date with Gillian,Drinking and Smoking,73.28,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-05-07,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-08,TRADER JOE S #072,,Groceries,6.49,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-09,CHICK-FIL-A #04932,,Dining out,14.05,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-09,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-10,Point Of Sale Withdrawal TARGET 0 1555 40TH ST EMERYVILLE CAUS,,Health and Wellness,16.2,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-05-10,SNACK* PUNJABI DHABA,Food Ghetto with Hoff,Dining out,15.51,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-10,Lightspeed a8369927-bb,,Home goods,6.72,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-05-10,Deepak racket stringing,,Recreation,45,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-05-11,THE HOME DEPOT #0627,,Boat parts,37.5,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-05-11,TRADER JOE S #072,,Groceries,10.53,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-11,TRADER JOE S #072,,Groceries,9.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-13,External Withdrawal Richard H Kulka 510-428-0505 - WEB PMTS,,Rent,1350,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-05-13,External Withdrawal E-payments Fee 310-593-4833 - WEB PMTS,,Rent,0.95,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-05-14,"Point Of Sale Withdrawal Too Good To Go 394 Broadway, 3rd F7876184541 DEUS",,Dining out,7.71,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-14,TRADER JOE S #072,,Groceries,17.75,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-15,TRADER JOE S #072,,Groceries,57,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-16,BEVERAGES & MORE #116,Bev mo booze,Drinking and Smoking,18.88,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-05-16,LS WATERSIDE WORKSHOPS,Bike repair,Maintenance,123.05,0,PERSONAL,— excluded,0,0,,Boat maintenance (MARGARITA)
+2025-05-16,CHEVRON 0208478,propane,Utilities,14.49,0,PERSONAL,— excluded,0,0,Chevron propane — boat/personal,Personal
+2025-05-16,TRADER JOE S #072,,Groceries,2.29,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-16,BEVERAGES & MORE #116,,Drinking and Smoking,18.88,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-05-17,OAKTOWN MARKET,gatorades for the team,Recreation,25.16,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-05-19,CITY OF BERKELEY,,Recreation,7,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-05-20,TRADER JOE S #072,,Groceries,36.28,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-20,TRADER JOE S #072,,Groceries,14.47,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-20,TRADER JOE S #072,,Groceries,8.78,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-22,TRADER VICS,i need 40$ from Aaron Culich,Dining out,80.14,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-23,IN-N-OUT DAVIS,,Dining out,3.28,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-23,TST*GUADS TACOS & BEER,,Dining out,33.55,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-23,SQ *CLOUD FOREST CAFE,,Dining out,7.48,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-23,IN-N-OUT DAVIS,,Dining out,3.28,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-23,TST*GUADS TACOS & BEER,,Dining out,33.55,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-23,SQ *CLOUD FOREST CAFE,,Dining out,7.48,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-24,FIRESIDE PIZZA CO,,Dining out,5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-24,PALISADES TAHOE ROCKER,,Dining out,20.19,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-24,FIRESIDE PIZZA CO,,Dining out,5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-24,PALISADES TAHOE ROCKER,,Dining out,20.19,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-26,AUTHENTIC TACOS JALISC,,Dining out,23.37,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-26,LITTLE BEAR CAFE MASHG,,Dining out,23.35,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-26,TRADER JOE S #072,,Groceries,33.22,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-26,AUTHENTIC TACOS JALISC,,Dining out,23.37,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-26,LITTLE BEAR CAFE MASHG,,Dining out,23.35,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-26,TRADER JOE S #072,,Groceries,33.22,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-27,Point Of Sale Withdrawal SPOTIFY 4 WORLD TRACE CENTE8777781161 NYUS,spotify,Subscription,12.98,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-05-27,BERKELEY IRONWORKS,,Recreation,17.12,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-05-27,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-27,BERKELEY IRONWORKS,,Recreation,17.12,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-05-27,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-05-27,Point Of Sale Withdrawal SPOTIFY 4 WORLD TRACE CENTE8777781161  NYUS,,Subscription,12.98,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-05-29,RANDY S MARKET,,Groceries,11.81,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-29,TRADER JOE S #072,,Groceries,34.24,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-29,RANDY S MARKET,,Groceries,11.81,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-29,TRADER JOE S #072,,Groceries,34.24,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-31,TRADER JOE S #072,,Groceries,11.18,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-05-31,SPORTS BASEMENT BERKEL,,Recreation,20.4,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-06-01,BERKELEY IRONWORKS,,Recreation,107,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-06-01,TRADER JOE S #072,,Groceries,17.45,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-01,INTACT INSURANCE,,Boat insurance,380,0,PERSONAL,— excluded,0,0,,Boat insurance: personal
+2025-06-02,TST*RALEIGHS - MEZZO,,Dining out,22.45,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-03,TRADER JOE S #072,,Groceries,3.99,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-04,TRADER JOE S #072,,Groceries,13.35,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-04,SP SMALL TOWN BOATS,,Boat parts,117.98,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-06-04,External Withdrawal Richard H Kulka 510-428-0505 - WEB PMTS,,Rent,0,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-06-06,TRADER JOE S #072,,Groceries,69.96,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-06,TST*RUDYS - EMERYVILLE,,Dining out,14.3,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-06,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-08,TRADER JOE S #072,,Groceries,3.13,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-09,BAY PADEL LLC,,Recreation,35,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-06-09,AMAZON MKTPL*NH7YI1051,airhorn,Boat parts,16.56,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-06-10,BAY PADEL LLC,,Dining out,35,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-10,HANSHIN POCHA - OAKLAN,,Dining out,34.59,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-10,TRADER JOE S #072,,Groceries,17.14,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-10,IN *DAVID ROGERS,repairing my broken car window,Maintenance,265.38,0,PERSONAL,— excluded,0,0,,Boat maintenance (MARGARITA)
+2025-06-10,External Withdrawal VENMO  - PAYMENT,lost coast shuttle,Recreation,98,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-06-11,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-12,TRADER JOE S #072,,Groceries,14.96,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-12,RECREATION.GOV,,Recreation,10,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-06-13,TRADER JOE S #072,,Groceries,11.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-13,GLOBAL GOURMET CATERIN,,Dining out,14.99,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-15,SQ *DAVIS VARSITY THEA,gelato with Gillian,Dining out,11.2,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-15,SQ *BELLA FAMILIA,,Dining out,26.78,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-16,SOUTH BEACH CAFE,,Dining out,6.52,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-16,SOUTH BEACH CAFE,,Dining out,8.69,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-16,TRADER JOE S #072,,Groceries,11,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-16,PORT OF SAN FRANCISCO,South beach berth,Rent,40.88,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-06-16,TST* MOONRAKER BREWING,,Drinking and Smoking,33.09,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-06-17,SOUTH BEACH CAFE,,Dining out,9.78,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-19,TRADER VICS,,Dining out,33.21,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-19,RANDY S MARKET,,Groceries,8.86,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-19,TRADER JOE S #072,,Groceries,77.06,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-20,TRADER JOE S #072,,Groceries,8.03,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-23,TRADER JOE S #072,,Groceries,42.32,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-24,RANDY S MARKET,,Home goods,4.41,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-06-24,TRADER JOE S #072,,Groceries,6.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-24,SPOTIFY,,Subscription,11.99,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-06-24,WEST MARINE #300,,Home goods,112.94,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-06-25,TRADER JOE S #072,,Groceries,5.29,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-25,TST* LOS MOLES - EMERY,,Dining out,96.6,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-26,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-26,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-27,RECREATION.GOV,,Recreation,10,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-06-27,AMAZON MKTPL*N35FY8C82,Danfoss Thermostat,Boat parts,23.53,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-06-28,RANDY S MARKET,,Dining out,10,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-28,TRADER JOE S #072,,Groceries,80.89,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-06-29,TST* SAN FRANCISCO BRE,"beers and lunch with Gilly, Erik and Ewelina",Dining out,52.7,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-29,TST*CIOPPINOS ON THE W,nice italian with Gilly,Dining out,124.57,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-06-29,Amazon.com*NQ4912QA0,Shaving supplies,Health and Wellness,17.32,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-06-30,PORT OF SAN FRANCISCO,Guest slip,Rent,41.25,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-06-30,AMAZON MKTPL*N39QX6M52,Noctua fridge fan,Boat parts,33.09,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-06-30,SQ *BLUE BOTTLE COFFEE,,Dining out,6.2,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-01,BERKELEY IRONWORKS,,Recreation,10,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-07-01,CAFFE CENTRO SP,,Dining out,14.03,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-01,CAFFE CENTRO SP,,Dining out,11.34,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-02,TRADER JOE S #072,,Groceries,22.94,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-03,SQ *111 MINNA GALLERY,A drink at first thursday,Drinking and Smoking,14.34,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-07-04,MI TIERRA FOODS,groceries for 4th of july,Groceries,88.53,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-05,TARGET  00027672,treats,Groceries,5.99,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-06,TRADER JOE S #072,,Groceries,13.48,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-07,CHICK-FIL-A #04932,,Dining out,7.71,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-07,TST* NICK'S PIZZA - OA,"pizza with Gilly, Kelly, Javi after pickleball",Dining out,18.08,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-08,THE HOME DEPOT #0627,"O-rings, etc.",Boat parts,77.45,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-07-08,REI #12 BERKELEY,"Drybag, sleeping pad, camping meals and prep items",Recreation,198.69,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-07-08,TRADER JOE S #072,,Groceries,33.82,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-09,SPORTS BASEMENT U107,,Recreation,12,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-07-10,LS SHELTER COVE CAMPG,,Dining out,22.61,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-10,STARBUCKS 800-782-7282,,Dining out,3.45,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-13,BERKELEY IRONWORKS,,Recreation,97,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-07-13,TRADER JOE S #072,,Groceries,6.48,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-14,TRADER JOE S #072,,Groceries,36.96,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-15,SPORTS BASEMENT BERKEL,soccer cleats and socks,Recreation,49.61,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-07-15,CHIPOTLE 4110,,Dining out,12.24,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-15,OUTDOOR SUPPLY BERKELE,insulation tape,Boat parts,11.01,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-07-15,WHARF TO WHARF RACE 20,,Recreation,4.4,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-07-15,AMAZON MKTPL*GQ8E67IK3,Pax chargers,Home goods,20.54,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-07-16,External Withdrawal VENMO  - PAYMENT,Wharf to Wharf bib,Recreation,35,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-07-17,TRADER VICS,AI Tiki hour,Dining out,128.55,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-17,RANDY S MARKET,,Dining out,3.99,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-18,MAYAS AUTHENTIC MEXICA,,Dining out,36.42,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-19,TST* THE FLAMINGO HOUS,,Drinking and Smoking,13.05,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-07-19,TST* THE FLAMINGO HOUS,,Drinking and Smoking,13.05,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-07-19,TST* THE FLAMINGO HOUS,,Drinking and Smoking,20,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-07-20,BERKELEY IRONWORKS,,Recreation,4,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-07-20,HIGH TIDE,,Dining out,4.47,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-20,BURGER BOARD,,Dining out,19.91,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-21,TRADER JOE S #072,,Groceries,5.99,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-21,TRADER JOE S #072,,Groceries,14.13,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-22,CHICK-FIL-A #04932,,Dining out,7.55,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-23,TRADER JOE S #072,,Groceries,50.88,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-23,TRADER JOE S #072,,Groceries,18.47,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-23,STUBHUB INC,Outside lands tickets x2 with Gilly,Tickets/Events,477.64,0,PERSONAL,— excluded,0,0,,Tickets/Events: personal
+2025-07-24,Spotify P38E0095F3,,Subscription,11.99,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-07-24,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-26,CKE*MONSOON HIMALAYAN,lunchin HMB,Dining out,30.35,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-26,"NOTION LABS, INC.",personal plus plan,Subscription,12.79,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-07-26,CKE*MONSOON HIMALAYAN,,Dining out,30.35,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-27,SQ *ARCANGELI GROCERY,Special treats with Gilly and Maya,Groceries,20.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-27,SQ *LEFT COAST SAUSAGE,hot dog lunch w Gilly,Dining out,22.56,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-27,SQ *ARCANGELI GROCERY,,Groceries,20.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-27,SQ *LEFT COAST SAUSAGE,,Dining out,22.56,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-28,PY *BEACH BREAK BY MAR,Ice cream w Gilly,Dining out,15.6,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-28,Rent to Emery cove YH,,Rent,976.3,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-07-28,TRADER JOE S #072,,Groceries,18.36,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-28,PY *BEACH BREAK BY MAR,,Dining out,15.6,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-07-30,SAFEWAY #3132,,Groceries,58.06,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-30,SAFEWAY #3132,,Groceries,10.25,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-07-30,SQ *IM MOMENT KAFFEE,,Dining out,4.41,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-01,BERKELEY IRONWORKS,,Recreation,107,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-08-02,COT*FLT,Capital one Travel,Travel ,9.09,0,PERSONAL,— excluded,0,0,,User: not business travel
+2025-08-03,TRADER JOE S #072,,Groceries,26.92,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-03,TST*CAFE BERNARDO - DA,nice brecky wi Gilly,Dining out,51.04,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-03,SQ *RUHSTALLER FARM,,Dining out,41.65,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-04,TARGET  00027672,,Home goods,37.76,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-08-06,SOUTH BEACH CAFE,,Dining out,9.46,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-06,SOUTH BEACH CAFE,,Dining out,3.91,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-07,COT*FLT,Flights to Boston/RI,Travel ,258.98,0,PERSONAL,— excluded,0,0,,User: not business travel
+2025-08-07,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-08,TRADER JOE S #072,,Groceries,5.59,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-08,TRADER JOE S #072,,Groceries,50.94,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-09,BERKELEY IRONWORKS,,Dining out,4.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-09,CHICK-FIL-A #04932,,Dining out,36.18,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-09,TRADER JOE S #072,,Groceries,22.23,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-10,OUTSIDE LANDS (BEV),,Drinking and Smoking,21.86,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-08-10,VILLAGE MARKET,,Groceries,7.21,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-11,TST*RAMEN HIROSHI - EM,,Dining out,20.08,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-11,SOUTH BEACH CAFE,,Dining out,19.12,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-11,SOUTH BEACH CAFE,,Dining out,4.56,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-11,Ghirardelli Square,,Dining out,20.19,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-12,TRADER JOE S #072,,Groceries,11.57,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-13,TRADER JOE S #072,,Groceries,45.24,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-13,TRADER JOE S #072,,Groceries,11.59,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-13,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-14,RANDYS,,Groceries,12.69,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-15,STARBUCKS 05601,,Dining out,4.95,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-15,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-16,TRADER JOE S #072,,Groceries,21.53,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-16,Vans Emeryville,,Apparell,38.68,0,PERSONAL,— excluded,0,0,,Apparell: personal
+2025-08-16,TST*HONOR KITCHEN & CO,dinner w Gilly at Honor!,Dining out,69.95,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-18,TRADER JOE S #072,,Groceries,10.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-19,TRADER JOE S #203,,Groceries,4.95,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-19,TRADER JOE S #203,,Groceries,27.45,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-19,SQ *PHILZ COFFEE,,Dining out,6.75,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-19,Too Good To Go Inc.,,Groceries,7.71,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-19,Too Good To Go Inc.,,Groceries,7.71,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-20,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-21,RANDYS,,Groceries,10.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-21,RANDYS,,Groceries,3.3,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-21,IKEA EAST BAY,,Home goods,3.3,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-08-22,PIER 39 MARINA,,Recreation,50,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-08-22,SPO*GAMBINO'SNEWYORKSU,,Dining out,17.37,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-22,TST*EL PORTENO - FERRY,,Dining out,7.61,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-23,TRADER JOE S #226,,Groceries,24.83,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-23,BISCOFF COFFEE CORNER,,Dining out,5.58,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-23,SQ *CAFE FRANCISCO,,Dining out,10.8,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-23,SQ *CAFE FRANCISCO,,Dining out,11.18,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-24,Spotify P39D90B0EA,,Subscription,11.99,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-08-25,RANDYS,,Groceries,20,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-25,Nayax **California,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-25,Nayax **California,,Dining out,2.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-26,PALO ALTO CAFE,,Dining out,12.12,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-27,TRADER JOE S #072,,Groceries,5.99,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-08-27,SQ *CLOUD9 COFFEE LLC,,Dining out,24.61,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-28,BERKELEY IRONWORKS,,Dining out,2.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-08-30,SQ *LEFT COAST LIBATIO,,Dining out,4.65,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-01,SONIC DRIVE IN #6555,,Dining out,5.07,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-01,BERKELEY IRONWORKS,,Recreation,107,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-09-01,TRADER JOE S #072,,Groceries,11.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-02,TRADER JOE S #072,,Groceries,29.31,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-02,THREE LADIES CAFE,,Dining out,19.83,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-02,THREE LADIES CAFE,,Dining out,8.09,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-03,WHY COOK,,Dining out,3.63,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-03,Richard H Kulha or something (Emery cove rent),,Rent,1020.14,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-09-04,RANDYS,,Groceries,14.07,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-05,SQ *PHILZ COFFEE,,Dining out,4.9,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-05,CHICK-FIL-A #04932,,Dining out,12.29,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-05,STARBUCKS STORE 10801,,Dining out,8.95,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-05,SQ *PHILZ COFFEE,,Dining out,4.9,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-07,TRADER JOE S #072,,Groceries,55.67,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-09,COURTSIDE TENNIS & PIC,pickleballs for gilly,Gifts,14.99,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-09-09,COURTSIDE TENNIS & PIC,tennis shoes,Apparell,148.79,0,PERSONAL,— excluded,0,0,,Apparell: personal
+2025-09-10,External Withdrawal PAYPAL INSTANT TRANSFER - INST XFER,,Health and Wellness,60,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-09-12,Point Of Sale Withdrawal Nayax **Califor Unnamed Road   Emeryville   CAUS,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-13,Point Of Sale Withdrawal AMAZON MKTPL*A9 440 Terry Ave N  Amzn.com/bill  WAUS,,Boat parts,59.65,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-09-13,Point Of Sale Withdrawal TST* FIELDWORK 1160 6TH ST  BERKELEY   CAUS,,Dining out,28.7,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-15,Point Of Sale Withdrawal RANDYS 2390 POWELL STREET EMERYVILLE   CAUS,,Groceries,16,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-15,Point Of Sale Withdrawal TRADER JOE S #0 5700 CHRISTIE AVENUEMERYVILLE   CAUS,,Groceries,84.64,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-15,Point Of Sale Withdrawal THE POSH BAGEL 1687 INDUSTRIAL PKWHAYWARD  CAUS,,Dining out,10.38,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-15,Point Of Sale Withdrawal TRADER JOE S #0 5700 CHRISTIE AVENUEMERYVILLE   CAUS,,Groceries,50.41,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-17,Point Of Sale Withdrawal TST*RALEIGHS - 2442 Telegraph Ave Berkeley   CAUS,,Dining out,8.62,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-18,Point Of Sale Withdrawal RECREATION.GOV 4000 MASTHEAD ST NEALBUQUERQUE  NMUS,aquatic park rent,Recreation,20,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-09-18,Point Of Sale Withdrawal Nayax **Califor South Susana Road  Long Beach   CAUS,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-19,"Point Of Sale Withdrawal BOUDIN BAKERY, 160 JEFFERSON ST LOSAN FRANCISCO  CAUS",,Dining out,7.74,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-19,Point Of Sale Withdrawal Ghirardelli Squ 900 North Point  San Francisco  CAUS,ice cream w aaron after make,Dining out,40.02,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-20,Point Of Sale Withdrawal SQ *HARDWARE CO 900 N Point St Ste San Francisco  CAUS,,Dining out,5.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-22,RANDYS,,Groceries,8.82,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-22,AMAZON MKTPL*N11AW18K3,lithium battery charger,Boat parts,125.86,0,PERSONAL,— excluded,0,0,,Boat parts: personal
+2025-09-22,External Withdrawal PAYPAL INSTANT TRANSFER - INST XFER,,Health and Wellness,60,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-09-22,Point Of Sale Withdrawal IN-N-OUTFISHERM 333 JEFFERSON ST   SAN FRANCISCO  CAUS,,Dining out,11.41,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-22,Point Of Sale Withdrawal SQ *MAMAS LUNCH 3006 Buchanan StreeSan Francisco  CAUS,,Dining out,22.81,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-23,WHOLEFDS HAR 10221,snacks and drinks for pool night with javi and jeremy,Gifts,23.01,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-09-23,TRADER JOE S #072,,Groceries,15.77,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-23,Point Of Sale Withdrawal TRADER JOE S #0 5700 CHRISTIE AVENUEMERYVILLE   CAUS,,Groceries,13.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-23,Point Of Sale Withdrawal MI TIERRA FOODS 2082 San Pablo Ave BERKELEY   CAUS,,Groceries,12.71,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-23,Point Of Sale Withdrawal Nayax **Califor Unnamed Road   Emeryville   CAUS,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-24,TRADER JOE S #072,,Groceries,6.68,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-24,SQ *TACOS EL REY OAKLA,,Dining out,16.81,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-25,TST*RITUAL COFFEE AT S,,Dining out,25.35,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-25,SQ *GATESIDE MARKET,,Dining out,17.15,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-26,DUNKIN #339394 Q35,,Dining out,9.36,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-27,EAST SIDE POCKETS,,Dining out,41.78,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-27,SQ *ATOMIC BLONDE ICEC,,Dining out,15.24,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-27,DUNKIN #300244 Q35,,Dining out,7.85,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-27,LSU The Sandwich Hut,,Dining out,11.34,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-27,Point Of Sale Withdrawal HEADSPACE 2415 MICHIGAN AVE  855-432-3822   CAUS,,Health and Wellness,9.99,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-09-28,BRICKWAY ON WICKENDEN,,Dining out,44.25,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-28,SQ *STAR SELECT HOLDIN,,Dining out,4.59,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-29,BELL IN HAND TAVERN,,Dining out,51.77,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-29,BOS HUDSON ST1943,,Dining out,5.99,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-29,TST*SOUTH END BUTTERY,,Dining out,11.26,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-29,TST*SOUTH END BUTTERY,,Dining out,26.68,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-29,Point Of Sale Withdrawal NNT POKE CITY M 1722 MASSACHUSETTS CAMBRIDGE  MAUS,,Dining out,14.39,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-29,ATM Withdrawal CITIZENS BANK 315 HANOVER STREET BOSTON   MAUS,,Dining out,203.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-09-30,TRADER JOE S #072,pre-made meals,Groceries,86.12,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-09-30,Point Of Sale Withdrawal DUNKIN #334916 100 GROSSMAN DR STEBRAINTREE  MAUS,,Dining out,6.26,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-02,SPORTS BASEMENT BERKEL,gifts for gilly,Gifts,124.57,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-10-02,Richard H Kulha or something (Emery cove rent),,Rent,1031.74,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-10-03,DAVIS WINE BAR,Date night w Gilly,Dining out,120.61,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-03,TARGET  00027672,card for gilly birthday,Gifts,4.09,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-10-03,TST* FIELDWORK BREWING,beer for gilly,Gifts,22.24,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-10-04,SAFEWAY #1205,,Groceries,8.73,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-04,SAFEWAY #1205,,Groceries,3.27,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-04,FSP*FLEET FEET - DAVIS,,Apparell,142.03,0,PERSONAL,— excluded,0,0,,Apparell: personal
+2025-10-04,SQ *YOLOBERRY YOGURT,,Dining out,6.18,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-05,WOODSTOCKS PIZZA - DAV,,Dining out,22.37,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-05,TRADER JOE S #182,,Groceries,26.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-05,SQ *CLOUD FOREST CAFE,,Dining out,10.22,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-06,SPOTIFY,,Subscription,11.99,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-10-07,BERKELEY IRONWORKS,,Recreation,107,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-10-07,TRADER JOE S #072,,Groceries,11.37,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-07,Point Of Sale Withdrawal TRADER JOE S #0 5700 CHRISTIE AVENUEMERYVILLE   CAUS,,Groceries,36.3,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-09,Point Of Sale Withdrawal RANDYS MARKET 2390 POWELL ST   EMERYVILLE   CAUS,,Groceries,3.09,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-10,TRADER JOE S #072,,Groceries,16.47,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-11,THE BUENA VISTA CAFE,nice dinner SF on fleet week saturday with gilly,Dining out,102.45,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-11,"Point Of Sale Withdrawal Too Good To Go 394 Broadway, 3rd F7876184541   DEUS",,Groceries,3.3,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-11,"Point Of Sale Withdrawal Too Good To Go 394 Broadway, 3rd F7876184541   DEUS",,Groceries,5.25,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-11,Point Of Sale Withdrawal CHICK-FIL-A #04 EAST BAY BRIDGE SHOOAKLAND  CAUS,,Dining out,14.04,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-11,Point Of Sale Withdrawal RANDYS MARKET 2390 POWELL ST   EMERYVILLE   CAUS,,Dining out,10.35,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-12,CSP*Red Door Escape Ro,datenight ,Tickets/Events,78.18,0,PERSONAL,— excluded,0,0,,Tickets/Events: personal
+2025-10-12,SQ *LIN JIA ASIAN KITC,soup for sick andrew,Gifts,14.4,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-10-12,SQ *ROAMING BEAN COFFE,,Dining out,4.48,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-12,Randys Market 2390 POWELL ST   Emeryville   CAUS,,Groceries,7.23,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-12,PRIZEFIGHTER BAR,,Drinking and Smoking,28.67,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-10-13,TRADER JOE S #072,,Groceries,41.41,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-13,WHY COOK,,Dining out,5.94,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-14,SQ *PHILZ COFFEE,,Dining out,5.88,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-15,TRADER JOE S #072,,Groceries,26.45,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-16,TRADER JOE S #072,,Groceries,11.48,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-16,SQ *BATTERY ROADIE LLC,,Maintenance,286.25,0,PERSONAL,— excluded,0,0,,Boat maintenance (MARGARITA)
+2025-10-17,SQ *JACK LONDON MARKET,,Dining out,18.78,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-18,THE HOME DEPOT #0627,,Home goods,52.42,0,PERSONAL,— excluded,0,0,,Home goods: personal
+2025-10-18,TRADER JOE S #072,,Groceries,27.83,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-18,CAPITAL ONE MEMBER FEE,,Fees,95,0,PERSONAL,— excluded,0,0,IRS payment + member fees — generally non-deductible. Rozella to confirm if CapOne card is biz.,Personal/non-deductible
+2025-10-21,TRADER JOE S #072,,Groceries,33.74,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-22,CHIPOTLE 5168,,Dining out,11.93,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-22,UBER   *EATS,Hyphy burger,Dining out,13.28,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-22,SNACK* HYPHY BURGER 89,,Dining out,7.2,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-23,TRADER JOE S #072,,Groceries,9.48,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-24,TRADER JOE S #203,,Groceries,86.75,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-27,TRADER JOE S #072,,Groceries,21.26,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-29,TRADER JOE S #072,,Groceries,13.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-30,RANDYS MARKET,,Groceries,6.73,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-10-30,WHY COOK,,Dining out,4.91,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-10-31,ACME BAR & COMPANY,BOTS & THOTS,Drinking and Smoking,14.36,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-10-31,TST* FIELDWORK BREWING,BOTS & THOTS,Drinking and Smoking,22.14,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-11-01,BERKELEY IRONWORKS,,Recreation,107,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-11-02,VILLAGE BAKERY,,Dining out,6.9,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-02,SQ *JOURNEY VACAVILLE,coffee w gilly on the way to the airport,Dining out,29.55,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-03,CHICK-FIL-A #03750,girls dinner,Gifts,25.07,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-11-05,STARBUCKS STORE 22121,starbs w grace,Gifts,14.42,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-11-05,TCBY #9174404,girls froyo,Gifts,16.68,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-11-06,TRAVIS VEHREG,vehichle registration,Maintenance,72.5,0,PERSONAL,— excluded,0,0,,Boat maintenance (MARGARITA)
+2025-11-06,TOM THUMB #3311,lunch + topthbruch,Health and Wellness,24.79,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-11-06,TX.GOV*SERVICEFEE-DIR,,Fees,2,0,PERSONAL,— excluded,0,0,IRS payment + member fees — generally non-deductible. Rozella to confirm if CapOne card is biz.,Personal/non-deductible
+2025-11-06,Spotify P3C2BB5A61,,Subscription,11.99,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-11-07,External Withdrawal Richard H Kulka 510-428-0505 - WEB PMTS,,Rent,1050.65,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-11-07,PY *TACODELI - WALNUT,girls tacos,Gifts,41.41,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-11-07,COBBLESTONE SHOE HOSPI,Jess shoes,Gifts,47.53,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-11-07,MOVEMENT THE HILL,girls climbing,Gifts,72.54,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-11-07,SQ *WELL GROUNDED CASA,din,Dining out,4.33,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-07,TST* LDU COFFEE - WHIT,din,Dining out,4,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-08,DAL WHATABURGER,Dal airport whataburger,Dining out,12.02,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-08,EINSTEIN BROS BAGELS28,breakfast -> grace,Gifts,10.3,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-11-09,SPORTS BASEMENT BERKEL,climbing shoes,Recreation,51.76,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-11-09,GRUBHUB*CHICKFILA,Jess,Gifts,18.42,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-11-09,LYFT   *1 RIDE 11-08,dallas -> airport,Gifts,25.79,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-11-10,TRADER JOE S #072,,Groceries,35.22,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-12,SQ *BURLAP COFFEE,,Dining out,5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-14,Point Of Sale Withdrawal Nayax **Califor South Susana Road Long Beach  CAUS,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-14,Point Of Sale Withdrawal Nayax **Califor South Susana Road Long Beach  CAUS,,Dining out,2.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-15,"Point Of Sale Withdrawal Too Good To Go 394 Broadway, 3rd F7876184541  DEUS",,Dining out,15.42,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-15,"Point Of Sale Withdrawal BI-RITE LIQUOR, 2495 SACRAMENTO ST BERKELEY  CAUS",,Drinking and Smoking,12.93,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-11-15,TRADER JOE S #072,,Groceries,26.54,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-15,SQ *HUMPHRY SLOCOMBE I,ice cream w gilly,Dining out,17.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-15,SQ *DOS CORAZONES CAFE,,Dining out,7.76,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-16,TARGET 00019265,,Groceries,16.6,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-17,External Withdrawal PAYPAL INSTANT TRANSFER - INST XFER,,Health and Wellness,60,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-11-17,Point Of Sale Withdrawal BLACK DIAMOND C 6399 CHRISTIE AVE SEMERYVILLE  CAUS,breakfast,Dining out,18.99,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-17,Point Of Sale Withdrawal RANDYS MARKET 2390 POWELL ST  EMERYVILLE  CAUS,,Groceries,4.14,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-17,Point Of Sale Withdrawal SQ *DOS CORAZON 1366 Powell St  Emeryville  CAUS,empanadas waiting for gillly from the train station,Dining out,8.1,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-17,Point Of Sale Withdrawal SQ *DOS CORAZON 1366 Powell St  Emeryville  CAUS,,Dining out,9.75,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-17,TST* NATION'S GIANT BU,nations after soccer w hoff and gilly,Dining out,37.39,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-18,RANDYS MARKET,,Groceries,7.23,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-18,TRADER JOE S #072,,Groceries,103.2,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-20,BERKELEY IRONWORKS,,Dining out,3.1,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-20,TRADER JOE S #072,,Groceries,12.47,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-20,TRADER JOE S #072,,Groceries,16.57,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-23,SPO*GARLICWORLD,,Groceries,33.96,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-23,SQ *H. CHEVAL COFFEE,,Dining out,5.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-24,TRADER JOE S #072,,Groceries,21.75,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-25,RANDYS MARKET,,Groceries,10.34,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-11-28,TST*PRIEST STATION CAF,top of the hill on the way to yosemite,Dining out,17.15,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-11-29,RECREATION.GOV,camping fee ,Recreation,60,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-11-30,CURRY VILLAGE GROCERY,,Groceries,12.4,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-12-01,BERKELEY IRONWORKS,,Recreation,107,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-12-01,CURRY VILLAGE GROCERY,annie shoulder bag,Gifts,54.16,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-12-01,YOSEMITE LAKES RESOR,,Dining out,2.13,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-01,YNP BASECAMP EATERY,,Dining out,5.95,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-01,YNP BASECAMP EATERY,,Dining out,15.16,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-02,TRADER JOE S #072,,Groceries,7.78,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-12-03,TRADER VICS,treating allison in the bay,Dining out,110.47,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-03,External Withdrawal Richard H Kulka 510-428-0505 - WEB PMTS,,Rent,1064.44,0,PERSONAL,— excluded,0,0,,Rent: personal
+2025-12-03,RANDYS MARKET,,Groceries,31.02,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-12-04,TRADER JOE S #072,,Groceries,7.98,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-12-05,RANDYS MARKET,,Groceries,13.87,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-12-05,TRADER JOE S #072,,Groceries,34.04,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-12-06,Spotify P3D27878E7,,Subscription,11.99,0,PERSONAL,— excluded,0,0,,"Consumer subs (Spotify, Brain.fm)"
+2025-12-07,VILLAGE BAKERY,,Dining out,3.85,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-07,Tipsy Yeti,,Dining out,44.29,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-08,External Withdrawal PAYPAL INSTANT TRANSFER - INST XFER,therapy,Health and Wellness,60,0,PERSONAL,— excluded,0,0,,Health and Wellness: personal
+2025-12-08,RANDYS MARKET,,Groceries,8.27,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-12-09,WHY COOK,,Dining out,16.65,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-10,BERKELEY BOWL WEST,,Dining out,14.32,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-11,TRADER JOE S #072,,Groceries,58.26,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-12-14,RANDYS MARKET,,Groceries,15.49,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-12-14,GOLDEN STAR RESTAURANT,,Dining out,6.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-14,GOLDEN STAR RESTAURANT,santacon recovery ramen,Dining out,40.89,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-15,CHICK-FIL-A #04932,,Dining out,7.74,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-16,ATM Withdrawal East Bay Therap 5770 Peladeau StreeEmeryville  CAUS,$83 but ben paid it back tho so ,Gifts,0,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-12-16,External Withdrawal VENMO - PAYMENT,skeet shooting i believe or to nate ,Recreation,28,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-12-16,RANDYS MARKET,,Groceries,4.18,0,PERSONAL,— excluded,0,0,,Groceries: personal
+2025-12-16,TST*MIDDLE EAST MARKET,,Dining out,22.14,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-16,SQ *BEERYLAND,,Drinking and Smoking,17.13,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-12-17,SP PARKSPROJECT,socks and calendar gifts,Gifts,56.28,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-12-17,"RUBY'S CAFE, LLC",,Dining out,18.82,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-17,TST*DRAKES DEALERSHIP,,Drinking and Smoking,22.15,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-12-17,TST*DRAKES DEALERSHIP,,Drinking and Smoking,27.68,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-12-17,TST*DRAKES DEALERSHIP,,Drinking and Smoking,8.86,0,PERSONAL,— excluded,0,0,,Drinking and Smoking: personal
+2025-12-18,Nayax **Texas,,Dining out,2.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-19,Nayax **Texas,,Dining out,1.5,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-20,BERKELEY IRONWORKS,snacks w gills,Dining out,9,0,PERSONAL,— excluded,0,0,,Dining out: personal
+2025-12-20,ACADEMY SPORTS #27,skeet shoting,Recreation,56.27,0,PERSONAL,— excluded,0,0,,Recreation: personal
+2025-12-24,WHOLEFDS GWY 10036,card for mom,Gifts,6.48,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-12-24,REI #32 AUSTIN,sticker for mom,Gifts,6.44,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-12-24,SP US PARK PASS,pass for mom,Gifts,89.99,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-12-27,GlobalE /Logitech,ipad keyboard for mom and dad. got paid back,Gifts,140.38,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-12-27,AMAZON MKTPL*3A1VC4SV3,"paper for gilly and pen for Jess, returning",Gifts,28.65,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-12-28,Paper Place,grace and trevor gifts,Gifts,33.01,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-12-29,BARNES & NOBLE #2536,gilly etc. gifts,Gifts,70.86,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-12-31,TERRA TOYS,avery squish,Gifts,16.24,0,PERSONAL,— excluded,0,0,,Gifts: personal
+2025-01-03,BERKELEY IRONWORKS,,(uncat),100.58,0,REVIEW,(uncategorized),0,0,Uncategorized: BERKELEY IRONWORKS,Flagged
+2025-01-28,Deposit new phone again,,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: Deposit new phone again,Flagged
+2025-01-28,Deposit January credit card bill,,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: Deposit January credit card bill,Flagged
+2025-01-31,Returned Online ACH Payme,returned payment,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: Returned Online ACH Payme,Flagged
+2025-02-03,Deposit February rent,,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: Deposit February rent,Flagged
+2025-02-03,Deposit SPACES office,,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: Deposit SPACES office,Flagged
+2025-02-03,External Deposit PROG DIRECT INS BRANCH01CREDIT ACH - INS PREM,,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: External Deposit PROG DIRECT INS BRANCH01CREDIT ACH - INS PREM,Flagged
+2025-02-03,External Deposit PROG DIRECT INS BRANCH01CREDIT ACH - INS PREM,,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: External Deposit PROG DIRECT INS BRANCH01CREDIT ACH - INS PREM,Flagged
+2025-02-03,External Deposit PROG DIRECT INS BRANCH01CREDIT ACH - INS PREM,,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: External Deposit PROG DIRECT INS BRANCH01CREDIT ACH - INS PREM,Flagged
+2025-03-02,TST*NANAS DUMPLINGS -,,(uncat),15.75,0,REVIEW,(uncategorized),0,0,Uncategorized: TST*NANAS DUMPLINGS -,Flagged
+2025-03-17,ATM Withdrawal RANDYS MARKE-71 2390 POWELL STREET EMERYVILLE  CAUS,cash withdrawl,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: ATM Withdrawal RANDYS MARKE-71 2390 POWELL STREET EMERYVILLE  CAUS,Flagged
+2025-03-18,NCAL BERKELEY MOB,,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: NCAL BERKELEY MOB,Flagged
+2025-04-02,External Withdrawal VENMO  - PAYMENT,,Business Expense,300,0,REVIEW,(uncategorized Venmo),0,0,Unmemoed Venmo PAYMENT $300.00 on 2025-04-02 — needs identification,Loose Venmo
+2025-05-15,EMERYVILLE MARINA,,(uncat),113.2,0,REVIEW,(uncategorized),0,0,Uncategorized: EMERYVILLE MARINA,Flagged
+2025-05-16,LS WATERSIDE WORKSHOPS,,(uncat),123.05,0,REVIEW,(uncategorized),0,0,Uncategorized: LS WATERSIDE WORKSHOPS,Flagged
+2025-05-16,CHEVRON 0208478,,(uncat),14.49,0,REVIEW,(uncategorized),0,0,Uncategorized: CHEVRON 0208478,Flagged
+2025-06-10,Deposit Auto glass replacement,,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: Deposit Auto glass replacement,Flagged
+2025-06-25,SHELL OIL 57444216501,,(uncat),99.79,0,REVIEW,(uncategorized),0,0,Uncategorized: SHELL OIL 57444216501,Flagged
+2025-07-09,Descriptive Deposit Mobile Deposit,,(uncat),0,9.67,REVIEW,(uncategorized),0,0,Uncategorized: Descriptive Deposit Mobile Deposit,Flagged
+2025-07-16,Deposit Google cloud storage 100gb,,(uncat),0,21.31,REVIEW,(uncategorized),0,0,Uncategorized: Deposit Google cloud storage 100gb,Flagged
+2025-08-15,MWNTEST,????,(uncat),124.5,0,REVIEW,(uncategorized),0,0,Uncategorized: MWNTEST,Flagged
+2025-08-15,PURCHASE ADJUSTMENT,,(uncat),0,124.5,REVIEW,(uncategorized),0,0,Uncategorized: PURCHASE ADJUSTMENT,Flagged
+2025-09-30,ATM Fee Rebate,,(uncat),0,0,REVIEW,(uncategorized),0,0,Uncategorized: ATM Fee Rebate,Flagged
+2025-11-17,Point Of Sale Withdrawal AMAZON MKTPL*B8 440 Terry Ave N SEATTLE WAUS,,(uncat),33.14,0,REVIEW,(uncategorized),0,0,Uncategorized: Point Of Sale Withdrawal AMAZON MKTPL*B8 440 Terry Ave N SEATTLE WAUS,Flagged
+2025-11-20,External Deposit VENMO - CASHOUT,,(uncat),0,1019.58,REVIEW,(uncategorized Venmo),0,0,Unmemoed Venmo CASHOUT $1019.58 on 2025-11-20 — possibly biz income,Loose Venmo cashout
+2025-12-04,Overdraft Protection Deposit,,(uncat),0,45.7,REVIEW,(uncategorized),0,0,Uncategorized: Overdraft Protection Deposit,Flagged
+2025-12-31,ATM Fee Rebate,,(uncat),0,3,REVIEW,(uncategorized),0,0,Uncategorized: ATM Fee Rebate,Flagged
+2025-01-02,CAPITAL ONE MOBILE PYMT,,(uncat),0,1932.15,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-01-02,Deposit Internet Transfer from D. Walker *4950 CK,,(uncat),0,60,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-01-02,Deposit Rent Assistance,,(uncat),0,500,TRANSFER,— personal transfer,0,0,,Personal gift/transfer from family
+2025-01-03,Point Of Sale Withdrawal LYFT  *1 RIDE 548 Market St. Ste SAN FRANCISCO  CAUS,,Transportation,11.59,0,TRANSFER,— deferred (mileage method),0,0,Transportation: deferred until mileage method reconstructed,Deferred to mileage method
+2025-01-15,Deposit Internet Transfer from D. Walker *4950 CK,,(uncat),0,0,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-01-18,Point Of Sale Withdrawal CLIPPER SYSTEMS 1800 SUTTER ST STE CONCORD CAUS,BART money,Road tolls,10,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-01-21,Point Of Sale Withdrawal SHELL OIL 57444 1800 1/2 POWELL ST EMERYVILLE  CAUS,gas,Gas,100.97,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-01-21,Point Of Sale Withdrawal FASTRAK CSC 375 BEALE ST STE 21SAN FRANCISCO CAUS,tolls,Road tolls,25,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-01-28,CAPITAL ONE ONLINE PYMT,,(uncat),0,0,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-01-31,CHEVRON 0208478,,Gas,17.3,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-02-01,Withdrawal Internet Transfer to *0100 SAV,,(uncat),2500,0,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-02-01,Deposit Internet Transfer from D. Walker *4950 CK,,(uncat),0,0,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-02-01,Deposit Rent Assistance,,(uncat),0,0,TRANSFER,— personal transfer,0,0,,Personal gift/transfer from family
+2025-02-01,CAPITAL ONE MOBILE PYMT,,(uncat),0,0,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-02-01,TCB*MTA METER MTA MCK,parking at the AI Tinkerers event,Parking,1.15,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-02-10,Point Of Sale Withdrawal TCB*MTA METER M 1 SOUTH VAN NESS 8TSAN FRANCISCO  CAUS,,Parking,1.45,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-02-11,TCB*MTA METER MTA MCK,,Parking,3.5,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-02-12,Point Of Sale Withdrawal FASTRAK CSC 375 BEALE ST STE 21SAN FRANCISCO  CAUS,,Road tolls,25,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-02-15,Deposit Internet Transfer from D. Walker *4950 CK,,(uncat),0,60,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-02-22,SHELL OIL 57444216501,,Gas,106.89,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-03-01,Deposit Internet Transfer from D. Walker *4950 CK,,(uncat),0,60,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-03-01,Deposit Rent Assistance,,(uncat),0,500,TRANSFER,— personal transfer,0,0,,Personal gift/transfer from family
+2025-03-02,MASABI_RTD 1600 Blake St  303-299-6000  COUS,,Transportation,10,0,TRANSFER,— deferred (mileage method),0,0,Transportation: deferred until mileage method reconstructed,Deferred to mileage method
+2025-03-03,LYFT  *TEMP AU LYFT  *TEMP AUTH H+18552800278  CAUS,,Transportation,43.85,0,TRANSFER,— deferred (mileage method),0,0,Transportation: deferred until mileage method reconstructed,Deferred to mileage method
+2025-03-03,Point Of Sale Withdrawal LYFT  *RIDE FR 548 Market St. Ste SAN FRANCISCO  CAUS,,Transportation,15.98,0,TRANSFER,— deferred (mileage method),0,0,Transportation: deferred until mileage method reconstructed,Deferred to mileage method
+2025-03-05,Point Of Sale Withdrawal LYFT  *1 RIDE 548 Market St. Ste SAN FRANCISCO  CAUS,,Transportation,45.99,0,TRANSFER,— deferred (mileage method),0,0,Transportation: deferred until mileage method reconstructed,Deferred to mileage method
+2025-03-07,CAPITAL ONE AUTOPAY PYMT,,(uncat),0,0,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-04-25,Point Of Sale Withdrawal FASTRAK CSC 375 BEALE ST STE 21SAN FRANCISCO  CAUS,,Road tolls,25,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-04-29,CAPITAL ONE MOBILE PYMT,,(uncat),0,0,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-05-01,Deposit Rent Assistance,,(uncat),0,500,TRANSFER,— personal transfer,0,0,,Personal gift/transfer from family
+2025-05-04,MARATHON PETRO227488,,Gas,87.58,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-05-15,EMERYVILLE MARINA,Diesel fill up,Gas,113.2,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-05-27,Point Of Sale Withdrawal KWIK SERV OLIVE FAIRFIELD FAIRFIELD CAUS,gas on the way back form tahoe,Gas,84.87,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-05-27,Point Of Sale Withdrawal KWIK SERV OLIVE FAIRFIELD  FAIRFIELD  CAUS,,Gas,84.87,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-06-01,SHELL OIL 57444216501,,Gas,20.07,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-06-01,CAPITAL ONE MOBILE PYMT,,(uncat),0,0,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-06-02,Withdrawal Internet Transfer to *0100 SAV,,(uncat),0,0,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-06-02,Deposit Rent Assistance,,(uncat),0,500,TRANSFER,— personal transfer,0,0,,Personal gift/transfer from family
+2025-06-04,FASTRAK CSC,,Road tolls,25,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-06-09,Withdrawal Internet Transfer to *1251 SAV,,(uncat),0,0,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-06-14,FASTRAK CSC,,Road tolls,25,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-06-19,TCB*MTA METER MTA MCK,,Parking,1.65,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-06-25,SHELL OIL 57444216501,,Gas,99.79,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-06-26,CAPITAL ONE MOBILE PYMT,,(uncat),0,0,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-07-01,Deposit Rent Assistance,,(uncat),0,500,TRANSFER,— personal transfer,0,0,,Personal gift/transfer from family
+2025-07-04,TCB*MTA METER MTA MCK,,Parking,2.1,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-07-04,SHELL OIL 57444216501,,Gas,4.24,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-07-04,FASTRAK CSC,,Road tolls,25,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-07-12,CHEVRON 0090137,,Gas,4.74,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-07-15,OAKLAND PARK METER IPS,,Parking,6,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-07-15,OAKLAND PARK METER IPS,,Parking,6,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-07-20,ARCO#82619PAUL & PAQPS,,Gas,84.4,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-07-20,CAPITAL ONE MOBILE PYMT,Credit card payment,(uncat),0,0,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-07-21,FASTRAK CSC,,Road tolls,25,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-07-26,SHELL OIL 57444216501,Gas to santa cruz,Gas,60.83,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-07-26,SHELL OIL 57444216501,,Gas,60.83,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-08-02,76 - CRUZTHRU 8,,Gas,14.3,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-08-05,PORT OF SAN FRANCISCO,south beach for fun,Parking,41.25,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-08-08,TCB*MTA METER MTA MCK,,Parking,1.43,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-08-08,FASTRAK CSC,,Road tolls,25,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-08-09,SHELL OIL 57444216501,,Gas,97.69,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-08-09,SHELL OIL 57444216501,,Gas,33.46,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-08-09,CAPITAL ONE MOBILE PYMT,,(uncat),0,1703.5,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-08-10,PORT OF SAN FRANCISCO,South beach Outsidelands,Parking,41.25,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-08-12,CAPITAL ONE MOBILE PYMT,,(uncat),0,595.59,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-08-15,CAPITAL ONE MOBILE PYMT,,(uncat),0,1000,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-08-30,CAPITAL ONE MOBILE PYMT,,(uncat),0,1962.27,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-09-02,76 - LEISURE TOWN 76,,Gas,85.65,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-09-05,PARKSMART-BAYST,,Parking,4.5,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-09-06,FASTRAK CSC,,Road tolls,25,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-09-09,TCB*MTA METER MTA MCK,parking,Parking,3.91,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-09-09,CAPITAL ONE MOBILE PYMT,,(uncat),0,1902.3,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-09-22,PARKING CIT-WEB,oakland parking ticket,Parking,74,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-10-01,CAPITAL ONE MOBILE PYMT,,(uncat),0,948.17,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-10-01,Deposit Rent Assistance,,(uncat),0,0,TRANSFER,— personal transfer,0,0,,Personal gift/transfer from family
+2025-10-09,CAPITAL ONE MOBILE PYMT,,(uncat),0,1675.11,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-10-09,Withdrawal Internet Transfer to *0100 SAV,,(uncat),0,0,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-10-09,Point Of Sale Withdrawal SHELL OIL 57444 1800 1/2 POWELL ST EMERYVILLE   CAUS,,Gas,98.58,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-10-17,TCB*MTA METER MTA MCK,parking downtown,Business Expense,5.95,0,TRANSFER,— deferred (mileage method),0,0,Parking — deferred until mileage reconstructed,Excluded for V1
+2025-11-01,CAPITAL ONE MOBILE PYMT,,(uncat),0,800,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-11-06,CAPITAL ONE MOBILE PYMT,,(uncat),0,456.07,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-11-10,CAPITAL ONE MOBILE PYMT,,(uncat),0,200,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-11-15,CAPITAL ONE ONLINE PYMT,,(uncat),0,2083.52,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-11-24,Point Of Sale Withdrawal TERA INVESTMENTS  DAVIS CAUS,gas,Gas,92.64,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-11-28,ARCO#82619PAUL & PAQPS,,Gas,10.9,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-12-01,Deposit Rent Assistance,,(uncat),0,500,TRANSFER,— personal transfer,0,0,,Personal gift/transfer from family
+2025-12-03,Deposit Internet Transfer from *0100 SAV,,(uncat),0,200,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-12-04,Point Of Sale Withdrawal DOUGLAS PARKING 3100 San Pablo Ave Berkeley  CAUS,,Parking,6,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-12-05,Deposit Internet Transfer from *0100 SAV,,(uncat),0,200,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-12-10,CAPITAL ONE MOBILE PYMT,,(uncat),0,2083.52,TRANSFER,— credit card payment,0,0,,CC payment transfer
+2025-12-11,TCB*MTA METER MTA MCK,,Parking,1.1,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-12-14,IMPARK00270137A,,Parking,4,0,TRANSFER,— deferred (mileage method),0,0,Parking: deferred until mileage method reconstructed,Deferred to mileage method
+2025-12-16,Deposit Internet Transfer from *0100 SAV,,(uncat),0,100,TRANSFER,— internal transfer,0,0,,Internal transfer
+2025-12-16,63049 4866 SPEEDWAY,,Gas,80,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-12-19,CIRCLE K # 40966,,Gas,6.72,0,TRANSFER,— deferred (mileage method),0,0,Gas: deferred until mileage method reconstructed,Deferred to mileage method
+2025-12-19,FASTRAK CSC,,Road tolls,35,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-12-19,FASTRAK CSC,,Road tolls,35,0,TRANSFER,— deferred (mileage method),0,0,Road tolls: deferred until mileage method reconstructed,Deferred to mileage method
+2025-10-31,APPLE STORE  #R057,temp iPad (purchased) ,Business Expense,389.65,0,WASH,— return/refund,0,0,,iPad purchased (returned same period)
+2025-11-14,APPLE STORE #R057,,Business Expense,0,389.65,WASH,— return/refund,0,0,,iPad return wash (credit)
+2025-11-14,APPLE STORE #R057,,(uncat),0,389.65,WASH,— return/refund,0,0,,iPad return wash

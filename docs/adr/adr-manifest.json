@@ -1,0 +1,119 @@
+{
+  "$comment": "Read-only mirror of the canonical Notion Decisions database. Do not hand-edit; re-sync from Notion. See README.md.",
+  "source": {
+    "database_url": "https://www.notion.so/e9e3ef6cafd5821bbb280180222335f2",
+    "data_source": "collection://4253ef6c-afd5-82e0-bf55-0724d6469b00",
+    "view": "All Decisions"
+  },
+  "last_synced": "2026-05-28",
+  "decisions": [
+    {
+      "title": "Five-stage data pipeline architecture",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36e3ef6c-afd5-814d-9855-f1640adb16d4",
+      "notion_url": "https://www.notion.so/36e3ef6cafd5814d9855f1640adb16d4",
+      "file": "five-stage-data-pipeline.md"
+    },
+    {
+      "title": "Use Plaid for automated source connection",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36e3ef6c-afd5-81b8-a438-cdce286102a2",
+      "notion_url": "https://www.notion.so/36e3ef6cafd581b8a438cdce286102a2",
+      "file": "use-plaid-for-source-connection.md"
+    },
+    {
+      "title": "Seed transaction classification from card-issuer codes",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36e3ef6c-afd5-8101-8ceb-caa2f4690752",
+      "notion_url": "https://www.notion.so/36e3ef6cafd581018cebcaa2f4690752",
+      "file": "seed-classification-from-card-issuer-codes.md"
+    },
+    {
+      "title": "Dual-code transactions to GL account type and Schedule C category at ingestion",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36e3ef6c-afd5-8101-a49c-c10e604129cc",
+      "notion_url": "https://www.notion.so/36e3ef6cafd58101a49cc10e604129cc",
+      "file": "dual-code-gl-account-type-and-schedule-c.md"
+    },
+    {
+      "title": "Support custom subcategories nested under Schedule C primary categories",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36e3ef6c-afd5-8170-a04f-ed2603928169",
+      "notion_url": "https://www.notion.so/36e3ef6cafd58170a04fed2603928169",
+      "file": "custom-subcategories-under-schedule-c.md"
+    },
+    {
+      "title": "Capture personal-vs-business and client-assignment coding dimensions",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36e3ef6c-afd5-81ab-b637-f8ffd77ef888",
+      "notion_url": "https://www.notion.so/36e3ef6cafd581abb637f8ffd77ef888",
+      "file": "personal-vs-business-and-client-assignment.md"
+    },
+    {
+      "title": "Keep books on a cash basis, not accrual",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36e3ef6c-afd5-8107-8f79-eaf6679db4b5",
+      "notion_url": "https://www.notion.so/36e3ef6cafd581078f79eaf6679db4b5",
+      "file": "cash-basis-not-accrual.md"
+    },
+    {
+      "title": "Record transactions as a single-entry coded listing, not double-entry journal entries",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36f3ef6c-afd5-81e2-a1a1-c3737e1c0e85",
+      "notion_url": "https://www.notion.so/36f3ef6cafd581e2a1a1c3737e1c0e85",
+      "file": "single-entry-coded-listing.md",
+      "supersedes": "36e3ef6c-afd5-819e-9006-d1c8e1573528"
+    },
+    {
+      "title": "Storage ledger artifact is the coded transaction listing (retire 'modified general ledger')",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36f3ef6c-afd5-8151-b699-ea1cebeea0ba",
+      "notion_url": "https://www.notion.so/36f3ef6cafd58151b699ea1cebeea0ba",
+      "file": "storage-ledger-is-coded-transaction-listing.md",
+      "supersedes": "36e3ef6c-afd5-8105-9253-e88f66d59b96"
+    },
+    {
+      "title": "Recognize on cash-movement date; receivables and payables out of scope",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36f3ef6c-afd5-813a-a261-e830cc1e269d",
+      "notion_url": "https://www.notion.so/36f3ef6cafd5813aa261e830cc1e269d",
+      "file": "recognize-on-cash-movement-date.md"
+    },
+    {
+      "title": "Validation gates after ingestion and processing, with a flag-don't-assume prompt rule",
+      "status": "Accepted",
+      "date": "2026-05-28",
+      "notion_id": "36e3ef6c-afd5-81fa-b559-e9207d6c4c0d",
+      "notion_url": "https://www.notion.so/36e3ef6cafd581fab559e9207d6c4c0d",
+      "file": "validation-gates-after-ingestion-and-processing.md"
+    },
+    {
+      "title": "Storage layer = monthly modified ledger, balance sheet, and income statement",
+      "status": "Superseded",
+      "date": "2026-05-28",
+      "notion_id": "36e3ef6c-afd5-8105-9253-e88f66d59b96",
+      "notion_url": "https://www.notion.so/36e3ef6cafd581059253e88f66d59b96",
+      "file": "storage-monthly-modified-ledger.md",
+      "superseded_by": "36f3ef6c-afd5-8151-b699-ea1cebeea0ba"
+    },
+    {
+      "title": "The journal-entry event is the system's core record (double-entry, both legs)",
+      "status": "Superseded",
+      "date": "2026-05-28",
+      "notion_id": "36e3ef6c-afd5-819e-9006-d1c8e1573528",
+      "notion_url": "https://www.notion.so/36e3ef6cafd5819e9006d1c8e1573528",
+      "file": "journal-entry-event-core-record.md",
+      "superseded_by": "36f3ef6c-afd5-81e2-a1a1-c3737e1c0e85"
+    }
+  ]
+}
