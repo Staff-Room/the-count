@@ -1,6 +1,6 @@
 # The Count ↔ Notion Worker: integration contracts (worker view)
 
-> Last audited: 2026-06-09. Sibling docs:
+> Last audited: 2026-06-11. Sibling docs:
 > - `the-count/docs/integrations/staff-room-ai.md` (relative: `../../../docs/integrations/staff-room-ai.md`)
 > - `v0-staff-room-ai/docs/integrations/the-count.md`
 
@@ -38,7 +38,8 @@ databases. It holds no Plaid credentials and no item list; `PLAID_ITEMS_JSON` is
 ## What this worker DOES NOT consume
 
 - Plaid — zero direct API usage (the-count owns the pull)
-- the-count's SQLite or Flask HTTP endpoints — no calls
+- the-count's HTTP endpoints (the two Vercel functions) — no calls; this worker
+  reads Supabase only
 - The website's HTTP API — no references
 
 ## Notion targets
@@ -65,20 +66,26 @@ databases. It holds no Plaid credentials and no item list; `PLAID_ITEMS_JSON` is
 |---|---|---|
 | M1 | `PLAID_ENV` vs `PLAID_ENVIRONMENT` naming | All three systems now read `PLAID_ENV` first (`PLAID_ENVIRONMENT` kept as a fallback in the-count + worker). |
 | M2 | Three Plaid-item stores | Supabase `plaid_items` is the single canonical store, env-tagged (`env='sandbox'\|'production'`). the-count reads it in `BACKEND_STORE=supabase` mode; the worker reads the Supabase mirror tables; `PLAID_ITEMS_JSON` is deleted. |
-| M3 | Three Plaid Link flows | Website Link is canonical: it writes `plaid_items` (with `env`) then triggers the-count's `POST /api/sync/item`. The backend's local Link flow remains for sqlite dev mode only; the worker never links. |
-| M4 (was O9) | No cloud scheduler for the Plaid pull | Vercel project `the-count` (`the-count-rho.vercel.app`) runs `GET /api/cron-sync` daily at 08:00 UTC (`vercel.json` cron, `CRON_SECRET` bearer auth). Only that one function is deployed — the Flask app stays local (O3 still open). The 07:15 launchd job remains as a redundant local runner. |
+| M3 | Three Plaid Link flows | Website Link is canonical: it writes `plaid_items` (with `env`) then triggers the-count's `POST /api/sync/item`. Amended 2026-06-11: the backend's local Link flow was deleted with the Flask app — linking is website-only. The worker never links. |
+| M4 (was O9) | No cloud scheduler for the Plaid pull | Vercel project `the-count` (`the-count-rho.vercel.app`) runs `GET /api/cron-sync` daily at 08:00 UTC (`vercel.json` cron, `CRON_SECRET` bearer auth). Amended 2026-06-11: the 07:15 launchd redundant runner is retired (see M10). |
+
+### Resolved 2026-06-11 (cloud migration — Flask retired)
+
+| # | Was | Resolution |
+|---|---|---|
+| M5 (was O3) | Unauthenticated Flask surface blocked cloud deploy | The Flask app is deleted. the-count's entire HTTP surface is two authenticated Vercel functions: `GET /api/cron-sync` (Bearer `CRON_SECRET`) and `POST /api/sync/item` (`X-Sync-Secret`, fail-closed, constant-time). |
+| M6 (was O1) | `/the-count` dashboard reads static JSON/CSV | Stale claim — the page reads live Supabase (`app/(app)/the-count/_lib/live.ts` querying `plaid_transactions_coded`). No static data dir remains. |
+| M7 (was O2) | `/api/transactions` had no documented caller | Deleted with the Flask app. Agent queries go through the website MCP tools; human UI is the website dashboard. |
+| M8 (was O6) | `PLAID_WEBHOOK_URL` dead code | Deleted with the Flask app. |
+| M9 (was O7) | `ntn` CLI silently no-ops in backend | The backend's worker-trigger path is deleted; the worker self-schedules (accounts 1h, transactions 5m) reading Supabase. |
+| M10 | 07:15 launchd job (redundant local runner) | Retired after cloud verification. Vercel cron is the sole scheduler; manual ops / full resync: `BACKEND_STORE=supabase python scripts/sync_plaid_now.py [--full]`. |
 
 ### Unresolved (waiting on a decision)
 
 | # | Open contract | Decision needed |
 |---|---|---|
-| O1 | `/the-count` Schedule C dashboard reads static JSON/CSV | Replace with live Supabase reads (same query as `schedule_c_summary`) or keep as a month-end snapshot? |
-| O2 | the-count's `/api/transactions` has no documented caller | The MCP tools now cover agent queries; is this Flask endpoint still needed beyond the local dashboard? |
-| O3 | Backend auth is only a shared secret on `/api/sync/item` | Other Flask endpoints are unauthenticated localhost-only; a real auth model is a blocker for the phase 4 cloud deploy. |
 | O4 | Notion DB IDs are opaque (auto-created on first deploy) | If anything outside the worker references those DBs, IDs must be exported somewhere. |
 | O5 | `NOTION_API_TOKEN` setup is manual | Worker requires it; backend doesn't help configure it; not in any onboarding doc. |
-| O6 | `PLAID_WEBHOOK_URL` is dead code in the-count backend | Either implement a webhook receiver, or remove the env var. |
-| O7 | `ntn` CLI silently no-ops if missing in backend | Should fail loudly, or detect once at startup and log a warning. |
 | O8 | Plaid token rotation | Website assumes tokens stay valid; no refresh logic anywhere. |
 | O10 | Worker rollout pending | The Supabase-reading worker is committed but not deployed. Needs `ntn workers env set SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... PLAID_ENV=...` then `ntn workers deploy`, then one manual `plaidTransactionsBackfill` trigger. Until then the old direct-Plaid build keeps running (de-facto fallback). |
 | O11 | Historical backfill into `plaid_transactions` | the-count's SQLite holds existing history. One-shot import into Supabase (`env='production'`), or re-pull from Plaid with `--full` (limited to ~24 months)? |

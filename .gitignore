@@ -6,6 +6,7 @@
 # Audit logs and encrypted data (paths under repo root, if ever created)
 .thecount/
 *.enc
+logs/
 
 # Local tooling / agent artifacts (not part of source)
 .codeboarding/

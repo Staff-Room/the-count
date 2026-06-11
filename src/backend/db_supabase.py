@@ -24,12 +24,37 @@ from typing import Any, Optional
 
 import requests
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 import categorize
 
 _BATCH = 500
 _item_cache: dict[str, dict[str, Any]] = {}  # item_id -> {user_id, env, ...}
 _mapping_cache: dict[str, list[dict[str, Any]]] = {}  # user_id -> sorted mappings
+
+# All writes are PK-keyed upserts/deletes, so retrying POST/PATCH/DELETE on
+# transient failures is safe.
+_session = requests.Session()
+_session.mount(
+    "https://",
+    HTTPAdapter(
+        max_retries=Retry(
+            total=3,
+            backoff_factor=0.5,
+            status_forcelist=(429, 500, 502, 503, 504),
+            allowed_methods=("GET", "HEAD", "POST", "PATCH", "DELETE"),
+        )
+    ),
+)
+
+
+def clear_caches() -> None:
+    """Drop per-run caches. Long-lived processes and warm serverless
+    instances reuse module state; call before each sync run so item and
+    category-rule changes take effect."""
+    _item_cache.clear()
+    _mapping_cache.clear()
 
 
 def plaid_env() -> str:
@@ -69,7 +94,7 @@ def _req(
     prefer: Optional[str] = None,
 ) -> Any:
     extra = {"Prefer": prefer} if prefer else None
-    resp = requests.request(
+    resp = _session.request(
         method,
         f"{_base_url()}/{path}",
         params=params,
@@ -379,7 +404,7 @@ def transaction_counts() -> dict[str, Any]:
     env = f"eq.{plaid_env()}"
     first = _req("GET", "plaid_transactions", params={"select": "date", "env": env, "order": "date.asc", "limit": "1"})
     last = _req("GET", "plaid_transactions", params={"select": "date", "env": env, "order": "date.desc", "limit": "1"})
-    resp = requests.head(
+    resp = _session.head(
         f"{_base_url()}/plaid_transactions",
         params={"select": "transaction_id", "env": env},
         headers=_headers({"Prefer": "count=exact"}),
@@ -414,7 +439,7 @@ def fetch_transactions(
             "offset": str(offset),
         }
     )
-    resp = requests.get(
+    resp = _session.get(
         f"{_base_url()}/plaid_transactions",
         params=params,
         headers=_headers({"Prefer": "count=exact"}),

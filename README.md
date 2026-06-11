@@ -1,8 +1,9 @@
 # 🧛 The Count
 
-A personal-finance ledger that links bank accounts through **Plaid**, stores them
-locally in SQLite, and mirrors the same data into **Notion** so you can budget,
-slice, and report on it from inside your existing workspace.
+The transaction ingestion backend for StaffRoomAI: it pulls bank and credit-card
+transactions from **Plaid**, codes them against **Schedule C** at ingestion, and
+stores them durably in **Supabase**, where the website dashboard, MCP tools, and
+a Notion worker consume them.
 
 > *"I vant to count your transactions!"*
 
@@ -10,153 +11,102 @@ slice, and report on it from inside your existing workspace.
 
 ## What it does
 
-- **Connect institutions** with Plaid Link from a local Flask dashboard.
-- **Cache** accounts, balances, and transactions in a local SQLite database.
-- **Sync** the same data to two managed Notion databases (`Bank accounts (Plaid)`
-  and `Bank transactions (Plaid)`) via a hosted Notion Worker.
-- **Browse and export** balances, monthly cash flow, category breakdowns, and
-  filtered transactions from the dashboard (CSV export included).
-- **Stay organized** via a Notion project (Project → Task/Milestone → Activity).
+- **Pulls transactions** from Plaid (`transactions/sync`) for every linked item
+  in Supabase `plaid_items` — tokens are AES-256-GCM encrypted by the StaffRoomAI
+  website at link time and decrypted here with the shared key.
+- **Codes at ingestion**: applies the user's `category_mappings` rules
+  (merchant / name / Plaid-category matches, priority order) to assign a
+  Schedule C line; unmatched lands on `L99` (needs review); manual codings are
+  never overwritten.
+- **Writes Supabase**: `plaid_transactions`, `plaid_accounts`,
+  `plaid_sync_cursors` — read live by the website's `/the-count` dashboard, the
+  Staffroom MCP tools, and the Notion worker.
 
 ## Architecture
 
 ```
-┌──────────────────────┐        Plaid Link (browser)        ┌──────────────┐
-│  Flask dashboard     │ ─────────────────────────────────▶ │   Plaid API  │
-│  src/backend/app.py  │ ◀── access_token / transactions ── │              │
-│  (localhost:5001)    │                                    └──────┬───────┘
-│                      │                                           │
-│   ┌──────────────┐   │                                           │
-│   │  SQLite DB   │   │                                           │
-│   │ thecount.db  │   │ scripts/export_plaid_items_for_worker.py  │
-│   └──────────────┘   │ ─────────────────────────────────┐        │
-└──────────┬───────────┘                                  │        │
-           │                                              ▼        ▼
-           │ /api/sync_transactions triggers     ┌────────────────────────┐
-           └───────────────────────────────────▶ │  Notion Worker         │
-                                                 │  notion-worker/        │
-                                                 │   - plaidAccountsSync  │
-                                                 │   - plaidTransactionsSync
-                                                 └───────────┬────────────┘
-                                                             │
-                                                             ▼
-                                                 ┌────────────────────────┐
-                                                 │  Notion databases      │
-                                                 │  (managed by worker)   │
-                                                 └────────────────────────┘
+                         StaffRoomAI website (separate repo/deploy)
+                         owns Plaid Link; writes encrypted tokens to plaid_items
+                                          │
+                                          │ POST /api/sync/item  (after Link,
+                                          │  X-Sync-Secret, best-effort)
+                                          ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Vercel project "the-count"  (the-count-rho.vercel.app)         │
+│                                                                 │
+│  GET  /api/cron-sync   ← Vercel cron, daily 08:00 UTC           │
+│  POST /api/sync/item   ← website trigger, one item on demand    │
+│                                                                 │
+│  both → src/backend/plaid_sync.sync_item:                       │
+│    Plaid transactions/sync → categorize.py → Supabase upserts   │
+└──────────────┬──────────────────────────────────────────────────┘
+               ▼
+        Supabase (plaid_transactions / plaid_accounts / plaid_sync_cursors)
+               │
+               ├── website /the-count dashboard (live reads)
+               ├── Staffroom MCP tools (queries + manual categorization)
+               └── Notion worker (self-scheduled: accounts 1h, transactions 5m)
 ```
 
-Two halves talk to Plaid independently:
-
-1. **Local app** (`src/backend/`) — Flask server that owns Plaid Link, stores
-   `access_token`s and synced transactions in SQLite, and renders the dashboard.
-2. **Notion Worker** (`notion-worker/`) — a hosted `@notionhq/workers` package
-   that runs on a schedule (accounts hourly, transactions every 5 minutes) and
-   writes into two managed Notion databases. It reads `PLAID_ITEMS_JSON` from
-   its environment, which the local app exports for it.
-
-The dashboard's "sync" button also pushes the latest linked items to the worker
-and triggers an immediate sync, so the local store and Notion stay in lockstep.
+The entire HTTP surface is those two authenticated Vercel functions. There is no
+local server; `BACKEND_STORE=sqlite` survives only as the test harness and
+local-dev store.
 
 ## Repository layout
 
 | Path | Purpose |
 |---|---|
-| `run.py` | Dev entry point — boots Flask on `:5001`. |
-| `src/backend/app.py` | Flask routes (dashboard + JSON API). |
-| `src/backend/db.py` | SQLite schema and queries. |
-| `src/backend/plaid_sync.py` | Applies Plaid `transactions_sync` deltas. |
-| `src/backend/templates/dashboard.html` | Dashboard UI. |
-| `notion-worker/` | Notion Worker (TypeScript). See `notion-worker/SETUP.md`. |
+| `api/cron-sync.py` | Vercel cron function — nightly sync of all items. |
+| `api/sync/item.py` | Vercel function — on-demand single-item sync (website trigger). |
+| `src/backend/plaid_sync.py` | The sync engine: pagination, per-page cursor persistence, mutation restart. |
+| `src/backend/categorize.py` | Schedule C coding rules applied at ingestion. |
+| `src/backend/db.py` | Store dispatcher (`BACKEND_STORE=supabase` \| `sqlite`). |
+| `src/backend/db_supabase.py` | PostgREST store: token decryption, retried upserts. |
+| `src/backend/db_sqlite.py` | Test-harness / local-dev store. |
+| `scripts/sync_plaid_now.py` | Manual one-shot sync; `--full` resets cursors (the full-resync path). |
 | `scripts/verify_plaid_env.py` | Sanity-check Plaid keys vs environment. |
-| `scripts/export_plaid_items_for_worker.py` | Emit `PLAID_ITEMS_JSON` from SQLite. |
-| `scripts/disconnect_all_plaid_items.py` | Wipe linked items locally and in Plaid. |
-| `.env.example` / `.mcp.json.example` | Templates for local secrets. |
+| `scripts/disconnect_all_plaid_items.py` | Wipe linked items (Plaid + store). |
+| `notion-worker/` | Notion Worker (TypeScript) — see `notion-worker/SETUP.md`. |
+| `docs/integrations/` | Cross-repo contracts (shared "Open contracts" block). |
+| `docs/testing/` | Stage-bounded test decomposition + invariants. |
 
-## Prerequisites
+## Deployment
 
-- **Python** 3.8+
-- **Node.js** 22+ and npm 10.9.2+ (only for the Notion Worker)
-- A **Plaid** account — start in `sandbox`, then request a **Trial** in the
-  [Plaid Dashboard](https://dashboard.plaid.com/) to use real bank data on
-  `production`. Plaid no longer runs a separate `development` host.
-- (Optional) A **Notion** workspace on a Business/Enterprise plan with
-  Notion Workers enabled, and the [`ntn` CLI](https://developers.notion.com/cli/get-started/overview).
+- **Vercel project** `the-count` → `the-count-rho.vercel.app`; deploys ride the
+  Git integration on merge to `main`.
+- **Cron**: `vercel.json` schedules `GET /api/cron-sync` daily at 08:00 UTC
+  (300s max duration; per-page cursor persistence makes long backfills
+  resumable across runs).
+- **Env vars** (Vercel project settings): `PLAID_CLIENT_ID`, `PLAID_SECRET`,
+  `PLAID_ENV`, `BACKEND_STORE=supabase`, `SUPABASE_URL`,
+  `SUPABASE_SERVICE_ROLE_KEY`, `INTEGRATIONS_ENCRYPTION_KEY` (must match the
+  website's), `CRON_SECRET`, `SYNC_TRIGGER_SECRET` (must match the website's).
+- The website needs `THE_COUNT_SYNC_URL=https://the-count-rho.vercel.app` and
+  the same `SYNC_TRIGGER_SECRET` for the post-Link trigger.
 
-## Quick start
+## Local development & testing
 
 ```bash
-# 1. Clone and enter the project
-git clone https://github.com/<you>/the-count.git
-cd the-count
-
-# 2. Python environment
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-# 3. Configure Plaid
-cp .env.example .env
-# Edit .env: set PLAID_CLIENT_ID, PLAID_SECRET, PLAID_ENVIRONMENT (sandbox or production)
-python scripts/verify_plaid_env.py     # confirms keys match the environment
+# Run the test suite (isolated SQLite store, Plaid fully mocked)
+python -m pytest tests/ -q
 
-# 4. Run the dashboard
-python run.py
-# Open http://localhost:5001/dashboard, click "Add account", and link via Plaid Link.
-# Hit "Sync" to pull transactions into SQLite.
-```
-
-That's the full local loop. Linked items live in `src/backend/data/thecount.db`
-(gitignored), so re-runs pick up where you left off.
-
-### Optional: push data into Notion
-
-Once at least one account is linked locally:
-
-```bash
-# Export linked items for the worker (writes JSON to stdout)
-python3 scripts/export_plaid_items_for_worker.py > /tmp/plaid-items.json
-
-# Configure and deploy the worker
-cd notion-worker
-npm install
-ntn login                              # one-time auth to your Notion workspace
-ntn workers env set \
-  PLAID_CLIENT_ID="..." \
-  PLAID_SECRET="..." \
-  PLAID_ENV="production"               # or "sandbox"
-ntn workers env set PLAID_ITEMS_JSON="$(cat /tmp/plaid-items.json)"
-ntn workers deploy --name the-count-plaid-ledger
-```
-
-After the first successful deploy, Notion creates the two managed databases.
-Subsequent syncs run on schedule (accounts: `1h`, transactions: `5m`) — or you
-can force a run with `ntn workers sync trigger plaidTransactionsSync`.
-
-The local dashboard's **Sync** button will also auto-push items to the worker
-and trigger a sync when `ntn` is on your PATH (toggle via `NOTION_WORKER_AUTO_SYNC`).
-
-See [`notion-worker/SETUP.md`](notion-worker/SETUP.md) for the full deploy
-playbook, troubleshooting, and token-rotation guidance.
-
-## Day-to-day commands
-
-```bash
-# Run the dashboard
-python run.py
-
-# Re-verify Plaid credentials after env changes
+# Verify Plaid credentials match the configured environment
 python scripts/verify_plaid_env.py
 
-# Inspect or operate the Notion worker
-cd notion-worker
-ntn workers sync status
-ntn workers sync trigger plaidTransactionsSync --preview   # dry run
-ntn workers sync state reset plaidTransactionsSync         # reset cursors
-
-# Disconnect everything (Plaid + local) before switching environments
-PLAID_ENVIRONMENT=sandbox python scripts/disconnect_all_plaid_items.py
+# Manual sync against the production store (idempotent)
+BACKEND_STORE=supabase python scripts/sync_plaid_now.py
+BACKEND_STORE=supabase python scripts/sync_plaid_now.py --full   # reset cursors, re-pull history
 ```
+
+## Observability
+
+- Per-item status: `plaid_sync_cursors.last_sync_at` / `last_error` in Supabase.
+- Run logs: Vercel → the-count → Functions logs.
+- The cron returns a JSON report (`{ok, items:[{item_id, added, modified,
+  removed, pages, accounts, error?}]}`) visible in the cron invocation logs.
 
 ## Project management (Notion)
 
@@ -172,31 +122,18 @@ up to date — see [`CLAUDE.md`](CLAUDE.md) for the working-session protocol and
 [`GitHub-Notion-Integration-Workflow.md`](GitHub-Notion-Integration-Workflow.md)
 for the GitHub ↔ Notion linking flow.
 
-## Configuration reference
-
-Local `.env` (see `.env.example` for the full list):
-
-| Variable | Purpose |
-|---|---|
-| `PLAID_CLIENT_ID` / `PLAID_SECRET` | Plaid API credentials (per environment). |
-| `PLAID_ENVIRONMENT` | `sandbox` or `production`. |
-| `PLAID_WEBHOOK_URL` | Optional — only if you expose a public tunnel. |
-| `THE_COUNT_DB_PATH` | Override SQLite location (default `src/backend/data/thecount.db`). |
-| `NOTION_WORKER_AUTO_SYNC` | Disable auto-push to the Notion worker from the dashboard sync. |
-| `NOTION_WORKER_DIR` | Override the path to the `notion-worker/` directory. |
-| `NOTION_WORKER_ACCOUNTS_SYNC_KEY` / `NOTION_WORKER_TRANSACTIONS_SYNC_KEY` | Override the worker capability keys. |
-
 ## Troubleshooting
 
 - **"Plaid sandbox credentials failed"** — keys are per-environment; copy the
-  secret that matches `PLAID_ENVIRONMENT` from the
+  secret that matches `PLAID_ENV` from the
   [Plaid Dashboard → Keys](https://dashboard.plaid.com/developers/keys).
-- **Notion worker reports 0 upserts / 0 deletes** — `PLAID_ITEMS_JSON` is
-  missing or stale. Re-export and `ntn workers env set` it.
+- **Website-linked account shows no transactions** — check the-count's Vercel
+  function logs for `/api/sync/item` (a 401 means `SYNC_TRIGGER_SECRET` is
+  missing/mismatched between the two Vercel projects); the nightly cron will
+  still pick the item up.
+- **Items invisible to the sync** — `PLAID_ENV` filters every Supabase query;
+  it must match the env the website linked the item under.
 - **Switching from sandbox to production** — sandbox `access_token`s do **not**
   work in production. Disconnect first:
-  `PLAID_ENVIRONMENT=sandbox python scripts/disconnect_all_plaid_items.py`,
-  then change `.env` and re-link from the dashboard.
-- **Dashboard sync didn't update Notion** — make sure `ntn` is on your PATH,
-  `notion-worker/` exists at the repo root (or set `NOTION_WORKER_DIR`), and
-  `NOTION_WORKER_AUTO_SYNC` isn't set to `false`.
+  `PLAID_ENV=sandbox python scripts/disconnect_all_plaid_items.py`, then re-link
+  from the website with the production env configured.

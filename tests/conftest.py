@@ -2,19 +2,22 @@
 Shared test setup for The Count.
 
 Establishes an isolated SQLite database (via THE_COUNT_DB_PATH) and puts the
-flat-import backend modules (`db`, `app`, `plaid_sync`) on the path BEFORE they
-are imported, plus loaders for the v1 conformance-oracle fixtures.
+flat-import backend modules (`db`, `plaid_sync`) on the path BEFORE they are
+imported, plus loaders for the v1 conformance-oracle fixtures and a scripted
+fake Plaid client shared across test modules.
 """
 
 from __future__ import annotations
 
 import csv
+import importlib.util
 import json
 import os
 import sys
 import tempfile
 import uuid
 from pathlib import Path
+from types import SimpleNamespace
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 BACKEND_DIR = REPO_ROOT / "src" / "backend"
@@ -32,9 +35,40 @@ os.environ.setdefault("PLAID_CLIENT_ID", "test-client-id")
 os.environ.setdefault("PLAID_SECRET", "test-secret")
 os.environ["PLAID_ENV"] = "sandbox"
 os.environ["BACKEND_STORE"] = "sqlite"  # tests always run against isolated SQLite
-os.environ["NOTION_WORKER_AUTO_SYNC"] = "false"  # never shell out to `ntn` in tests
 
+import plaid  # noqa: E402
 import pytest  # noqa: E402
+
+
+# ---------------------------------------------------------------------------
+# Scripted fake Plaid client (shared by sources-stage and hardening tests)
+# ---------------------------------------------------------------------------
+class FakeClient:
+    """transactions_sync plays back a script: each entry is a response page
+    or an exception to raise. Cursors of each request are recorded."""
+
+    def __init__(self, script):
+        self.script = list(script)
+        self.calls = []
+
+    def transactions_sync(self, req):
+        self.calls.append(getattr(req, "cursor", None))
+        step = self.script.pop(0)
+        if isinstance(step, Exception):
+            raise step
+        return step
+
+
+def fake_page(next_cursor, has_more=False):
+    return SimpleNamespace(
+        added=[], modified=[], removed=[], has_more=has_more, next_cursor=next_cursor
+    )
+
+
+def plaid_error(error_code: str) -> plaid.ApiException:
+    e = plaid.ApiException(status=400, reason="Bad Request")
+    e.body = json.dumps({"error_code": error_code})
+    return e
 
 
 @pytest.fixture()
@@ -50,17 +84,17 @@ def fresh_db():
     return db
 
 
-@pytest.fixture()
-def app_mod(fresh_db):
-    import app as appmod
-
-    return appmod
-
-
-@pytest.fixture()
-def http(app_mod):
-    app_mod.app.config.update(TESTING=True)
-    return app_mod.app.test_client()
+@pytest.fixture(scope="session")
+def sync_item_mod():
+    """The api/sync/item.py Vercel function, loaded via importlib (the
+    nested path prevents a normal import). Safe: BACKEND_STORE=sqlite and
+    the temp DB are set above, before any backend import."""
+    spec = importlib.util.spec_from_file_location(
+        "api_sync_item", REPO_ROOT / "api" / "sync" / "item.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 
 @pytest.fixture(scope="session")
