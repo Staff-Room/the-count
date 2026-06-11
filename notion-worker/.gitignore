@@ -6,4 +6,5 @@ workers.*.json
 workers.json
 
 # Template asset (large); optional for Plaid worker
-docs/
+docs/*
+!docs/integrations/

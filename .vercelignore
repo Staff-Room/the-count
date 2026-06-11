@@ -1,0 +1,15 @@
+venv
+logs
+data
+notion-worker
+docs
+tests
+scripts
+src/backend/data
+src/backend/templates
+src/backend/__pycache__
+*.db
+*.sqlite3
+.env
+.env.*
+run.py

@@ -77,6 +77,7 @@ local store. The Notion worker and the website's MCP tools read what this backen
 | M1 | `PLAID_ENV` vs `PLAID_ENVIRONMENT` naming | All three systems now read `PLAID_ENV` first (`PLAID_ENVIRONMENT` kept as a fallback in the-count + worker). |
 | M2 | Three Plaid-item stores | Supabase `plaid_items` is the single canonical store, env-tagged (`env='sandbox'\|'production'`). the-count reads it in `BACKEND_STORE=supabase` mode; the worker reads the Supabase mirror tables; `PLAID_ITEMS_JSON` is deleted. |
 | M3 | Three Plaid Link flows | Website Link is canonical: it writes `plaid_items` (with `env`) then triggers the-count's `POST /api/sync/item`. The backend's local Link flow remains for sqlite dev mode only; the worker never links. |
+| M4 (was O9) | No cloud scheduler for the Plaid pull | Vercel project `the-count` (`the-count-rho.vercel.app`) runs `GET /api/cron-sync` daily at 08:00 UTC (`vercel.json` cron, `CRON_SECRET` bearer auth). Only that one function is deployed — the Flask app stays local (O3 still open). The 07:15 launchd job remains as a redundant local runner. |
 
 ### Unresolved (waiting on a decision)
 
@@ -90,6 +91,5 @@ local store. The Notion worker and the website's MCP tools read what this backen
 | O6 | `PLAID_WEBHOOK_URL` is dead code in the-count backend | Either implement a webhook receiver, or remove the env var. |
 | O7 | `ntn` CLI silently no-ops if missing in backend | Should fail loudly, or detect once at startup and log a warning. |
 | O8 | Plaid token rotation | Website assumes tokens stay valid; no refresh logic anywhere. |
-| O9 | Phase 4: cloud deployment of the-count's sync (Vercel cron or Fly) not done | Local launchd (07:15 daily) is the only scheduler today. Decide hosting; env needed: `BACKEND_STORE=supabase`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `INTEGRATIONS_ENCRYPTION_KEY`, `PLAID_*`, `SYNC_TRIGGER_SECRET`. |
 | O10 | Worker rollout pending | The Supabase-reading worker is committed but not deployed. Needs `ntn workers env set SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... PLAID_ENV=...` then `ntn workers deploy`, then one manual `plaidTransactionsBackfill` trigger. Until then the old direct-Plaid build keeps running (de-facto fallback). |
 | O11 | Historical backfill into `plaid_transactions` | the-count's SQLite holds existing history. One-shot import into Supabase (`env='production'`), or re-pull from Plaid with `--full` (limited to ~24 months)? |

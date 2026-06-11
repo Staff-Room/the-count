@@ -51,3 +51,4 @@ Thumbs.db
 # Local app data
 src/backend/data/
 *.db
+.vercel
