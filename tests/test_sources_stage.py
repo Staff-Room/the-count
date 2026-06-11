@@ -2,7 +2,7 @@
 Group A — Sources stage (seam S1: Plaid API -> raw transaction store).
 
 These pin the contract the Ingestion stage consumes. They run against the current
-code (db.py, plaid_sync.py, app.py) with Plaid fully mocked — no network.
+code (db.py, plaid_sync.py) with Plaid fully mocked — no network.
 
 See docs/testing/plaid-to-coded-transactions.md (Group A) and
 docs/testing/README.md for the invariants referenced (INV-*).
@@ -110,70 +110,33 @@ def test_a5_raw_json_retained_for_provenance(fresh_db):
 
 
 # ---------------------------------------------------------------------------
-# A1–A3, A6 — connection & pull mechanics (outer-loop), Plaid mocked
+# A3, A6 — pull mechanics (Plaid mocked). A1/A2 (Link flow) retired: linking
+# is website-owned (contract M3); the backend's only sources surface is the
+# sync loop itself.
 # ---------------------------------------------------------------------------
-def test_a1_create_link_token(app_mod, http, monkeypatch):
-    monkeypatch.setattr(
-        app_mod.plaid_client,
-        "link_token_create",
-        lambda req: {"link_token": "link-sandbox-1", "expiration": "2026-01-01T00:00:00Z"},
-    )
-    resp = http.post("/api/create_link_token")
-    assert resp.status_code == 200
-    assert resp.get_json()["link_token"] == "link-sandbox-1"
+def test_a3_sync_paginates_until_done_and_persists_cursor(fresh_db):
+    import plaid_sync
+    from conftest import FakeClient, fake_page
 
-
-def test_a2_exchange_persists_item(app_mod, http, monkeypatch, fresh_db):
-    monkeypatch.setattr(
-        app_mod.plaid_client,
-        "item_public_token_exchange",
-        lambda req: {"access_token": "access-1", "item_id": "item-xyz"},
-    )
-    resp = http.post(
-        "/api/exchange_public_token",
-        json={
-            "public_token": "public-1",
-            "metadata": {"institution": {"institution_id": "ins_1", "name": "Test Bank"}},
-        },
-    )
-    assert resp.status_code == 200
-    item = fresh_db.get_item("item-xyz")
-    assert item is not None
-    assert item["access_token"] == "access-1"
-    assert item["institution_name"] == "Test Bank"
-
-
-def test_a3_sync_paginates_until_done_and_persists_cursor(app_mod, http, monkeypatch, fresh_db):
     fresh_db.upsert_item("item-1", "access-1", institution_name="Test Bank")
-    pages = [
-        SimpleNamespace(added=[], modified=[], removed=[], has_more=True, next_cursor="cur-1"),
-        SimpleNamespace(added=[], modified=[], removed=[], has_more=False, next_cursor="cur-2"),
-    ]
-    calls = {"n": 0}
+    client = FakeClient([fake_page("cur-1", has_more=True), fake_page("cur-2")])
 
-    def fake_sync(req):
-        page = pages[calls["n"]]
-        calls["n"] += 1
-        return page
+    stats = plaid_sync.sync_item(client, "item-1", "access-1", min_page_interval_s=0)
 
-    monkeypatch.setattr(app_mod.plaid_client, "transactions_sync", fake_sync)
-    resp = http.post("/api/sync_transactions")
-    assert resp.status_code == 200
-    assert calls["n"] == 2                       # paginated until has_more == False
+    assert stats["pages"] == 2                   # paginated until has_more == False
     assert fresh_db.get_cursor("item-1") == "cur-2"
 
 
-def test_a6_full_resets_cursor_then_replays(app_mod, http, monkeypatch, fresh_db):
+def test_a6_full_resets_cursor_then_replays(fresh_db):
+    import plaid_sync
+    from conftest import FakeClient, fake_page
+
     fresh_db.upsert_item("item-1", "access-1")
     fresh_db.set_cursor("item-1", "old-cursor")
 
-    monkeypatch.setattr(
-        app_mod.plaid_client,
-        "transactions_sync",
-        lambda req: SimpleNamespace(
-            added=[], modified=[], removed=[], has_more=False, next_cursor="new-cursor"
-        ),
-    )
-    resp = http.post("/api/sync_transactions?full=1")
-    assert resp.status_code == 200
+    fresh_db.reset_all_sync_cursors()            # the --full path
+    client = FakeClient([fake_page("new-cursor")])
+    plaid_sync.sync_item(client, "item-1", "access-1", min_page_interval_s=0)
+
+    assert client.calls == [None]                # replayed from scratch, not old-cursor
     assert fresh_db.get_cursor("item-1") == "new-cursor"

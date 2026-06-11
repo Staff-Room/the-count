@@ -19,28 +19,8 @@ sys.path.insert(0, str(ROOT / "src" / "backend"))
 import db  # noqa: E402
 import plaid  # noqa: E402
 import plaid_sync  # noqa: E402
-from plaid.api import plaid_api  # noqa: E402
-from plaid.model.accounts_get_request import AccountsGetRequest  # noqa: E402
 
 MIN_PAGE_INTERVAL_S = 0.5
-
-ENV_MAP = {
-    "sandbox": plaid.Environment.Sandbox,
-    "production": plaid.Environment.Production,
-}
-
-
-def _client() -> plaid_api.PlaidApi:
-    env = (os.getenv("PLAID_ENV") or os.getenv("PLAID_ENVIRONMENT") or "production").lower()
-    configuration = plaid.Configuration(
-        host=ENV_MAP.get(env, plaid.Environment.Production),
-        api_key={
-            "clientId": os.getenv("PLAID_CLIENT_ID"),
-            "secret": os.getenv("PLAID_SECRET"),
-            "plaidVersion": "2020-09-14",
-        },
-    )
-    return plaid_api.PlaidApi(plaid.ApiClient(configuration))
 
 
 def run_sync() -> dict:
@@ -48,7 +28,7 @@ def run_sync() -> dict:
         raise RuntimeError(f"refusing to run with BACKEND_STORE={db.STORE!r} (need supabase)")
     if hasattr(db, "clear_caches"):
         db.clear_caches()  # warm instances reuse module state; rules may have changed
-    client = _client()
+    client = plaid_sync.make_client()
     results = []
     ok = True
     for row in db.iter_items_with_tokens():
@@ -56,19 +36,11 @@ def run_sync() -> dict:
         entry = {"item_id": item_id, "institution": row.get("institution_name")}
         try:
             entry.update(
-                plaid_sync.sync_item(
+                plaid_sync.sync_item_and_accounts(
                     client, item_id, row["access_token"],
                     min_page_interval_s=MIN_PAGE_INTERVAL_S,
                 )
             )
-            accounts = (
-                client.accounts_get(AccountsGetRequest(access_token=row["access_token"]))
-                .to_dict()
-                .get("accounts")
-                or []
-            )
-            db.upsert_accounts(item_id, accounts)
-            entry["accounts"] = len(accounts)
         except plaid.ApiException as e:
             ok = False
             try:

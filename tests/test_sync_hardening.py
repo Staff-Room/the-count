@@ -1,48 +1,17 @@
 """
 Pipeline hardening — per-page cursor durability, Plaid mutation restart,
-and fail-closed auth on the website's sync trigger.
-
-These extend Group A (seam S1): the same sync loop now backs app.py,
-api/cron-sync.py, and scripts/sync_plaid_now.py via plaid_sync.sync_item.
+and fail-closed auth + handler logic for the api/sync/item.py Vercel
+function (the website's post-Link trigger).
 """
 
 from __future__ import annotations
 
 import json
-from types import SimpleNamespace
 
 import plaid
 import pytest
 
-
-class FakeClient:
-    """Scripted transactions_sync: each entry is a response page or an
-    exception to raise."""
-
-    def __init__(self, script):
-        self.script = list(script)
-        self.calls = []
-
-    def transactions_sync(self, req):
-        self.calls.append(getattr(req, "cursor", None))
-        step = self.script.pop(0)
-        if isinstance(step, Exception):
-            raise step
-        return step
-
-
-def _page(next_cursor, has_more=False):
-    return SimpleNamespace(
-        added=[], modified=[], removed=[], has_more=has_more, next_cursor=next_cursor
-    )
-
-
-def _mutation_error():
-    e = plaid.ApiException(status=400, reason="Bad Request")
-    e.body = json.dumps(
-        {"error_code": "TRANSACTIONS_SYNC_MUTATION_DURING_PAGINATION"}
-    )
-    return e
+from conftest import FakeClient, fake_page, plaid_error
 
 
 # ---------------------------------------------------------------------------
@@ -52,7 +21,7 @@ def test_cursor_persisted_after_each_page(fresh_db):
     import plaid_sync
 
     fresh_db.upsert_item("item-1", "tok")
-    client = FakeClient([_page("cur-1", has_more=True), RuntimeError("boom")])
+    client = FakeClient([fake_page("cur-1", has_more=True), RuntimeError("boom")])
 
     with pytest.raises(RuntimeError):
         plaid_sync.sync_item(client, "item-1", "tok", min_page_interval_s=0)
@@ -69,10 +38,10 @@ def test_mutation_during_pagination_restarts_from_start_cursor(fresh_db):
     fresh_db.set_cursor("item-1", "start")
     client = FakeClient(
         [
-            _page("cur-1", has_more=True),
-            _mutation_error(),
-            _page("cur-2", has_more=True),
-            _page("cur-3"),
+            fake_page("cur-1", has_more=True),
+            plaid_error("TRANSACTIONS_SYNC_MUTATION_DURING_PAGINATION"),
+            fake_page("cur-2", has_more=True),
+            fake_page("cur-3"),
         ]
     )
 
@@ -87,36 +56,71 @@ def test_non_mutation_plaid_error_propagates(fresh_db):
     import plaid_sync
 
     fresh_db.upsert_item("item-1", "tok")
-    e = plaid.ApiException(status=400, reason="Bad Request")
-    e.body = json.dumps({"error_code": "ITEM_LOGIN_REQUIRED"})
-    client = FakeClient([e])
+    client = FakeClient([plaid_error("ITEM_LOGIN_REQUIRED")])
 
     with pytest.raises(plaid.ApiException):
         plaid_sync.sync_item(client, "item-1", "tok", min_page_interval_s=0)
 
 
 # ---------------------------------------------------------------------------
-# /api/sync/item fails closed
+# api/sync/item.py — fail-closed auth
 # ---------------------------------------------------------------------------
-def test_sync_item_401_when_secret_unset(app_mod, http, monkeypatch):
+def test_sync_item_unauthorized_when_secret_unset(sync_item_mod, monkeypatch):
     monkeypatch.delenv("SYNC_TRIGGER_SECRET", raising=False)
-    resp = http.post("/api/sync/item", json={"item_id": "x"})
-    assert resp.status_code == 401
+    assert sync_item_mod.authorized("anything") is False
+    assert sync_item_mod.authorized("") is False
 
 
-def test_sync_item_401_on_wrong_secret(app_mod, http, monkeypatch):
+def test_sync_item_unauthorized_on_wrong_secret(sync_item_mod, monkeypatch):
     monkeypatch.setenv("SYNC_TRIGGER_SECRET", "s3cret")
-    resp = http.post(
-        "/api/sync/item", json={"item_id": "x"}, headers={"X-Sync-Secret": "nope"}
-    )
-    assert resp.status_code == 401
+    assert sync_item_mod.authorized("nope") is False
 
 
-def test_sync_item_authorized_with_correct_secret(app_mod, http, monkeypatch, fresh_db):
+def test_sync_item_authorized_with_correct_secret(sync_item_mod, monkeypatch):
     monkeypatch.setenv("SYNC_TRIGGER_SECRET", "s3cret")
-    resp = http.post(
-        "/api/sync/item",
-        json={"item_id": "missing"},
-        headers={"X-Sync-Secret": "s3cret"},
-    )
-    assert resp.status_code == 404  # authorized; item simply unknown
+    assert sync_item_mod.authorized("s3cret") is True
+
+
+# ---------------------------------------------------------------------------
+# api/sync/item.py — run_item_sync
+# ---------------------------------------------------------------------------
+def test_run_item_sync_refuses_non_supabase_store(sync_item_mod, fresh_db):
+    status, payload = sync_item_mod.run_item_sync("item-1")
+    assert status == 500
+    assert "BACKEND_STORE" in payload["error"]
+
+
+def test_run_item_sync_unknown_item_is_404(sync_item_mod, fresh_db, monkeypatch):
+    # flip only the store guard; db's functions stay bound to the sqlite store
+    # because db.py star-imports at module load
+    monkeypatch.setattr(sync_item_mod.db, "STORE", "supabase")
+    status, payload = sync_item_mod.run_item_sync("no-such-item")
+    assert status == 404
+
+
+def test_run_item_sync_happy_path(sync_item_mod, fresh_db, monkeypatch):
+    monkeypatch.setattr(sync_item_mod.db, "STORE", "supabase")
+    fresh_db.upsert_item("item-1", "tok")
+    client = FakeClient([fake_page("cur-1")])
+
+    status, payload = sync_item_mod.run_item_sync("item-1", client=client)
+
+    assert status == 200
+    assert payload["ok"] is True and payload["pages"] == 1
+    assert fresh_db.get_cursor("item-1") == "cur-1"
+
+
+def test_run_item_sync_plaid_error_is_502_and_persists_last_error(
+    sync_item_mod, fresh_db, monkeypatch
+):
+    monkeypatch.setattr(sync_item_mod.db, "STORE", "supabase")
+    fresh_db.upsert_item("item-1", "tok")
+    client = FakeClient([plaid_error("ITEM_LOGIN_REQUIRED")])
+
+    status, payload = sync_item_mod.run_item_sync("item-1", client=client)
+
+    assert status == 502
+    assert payload["ok"] is False
+    assert payload["error"]["error_code"] == "ITEM_LOGIN_REQUIRED"
+    item = fresh_db.list_items()[0]
+    assert json.loads(item["last_error"])["error_code"] == "ITEM_LOGIN_REQUIRED"

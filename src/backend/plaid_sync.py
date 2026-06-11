@@ -5,10 +5,13 @@ Apply Plaid transactions_sync responses to the active store (see db.py).
 from __future__ import annotations
 
 import json
+import os
 import time
 from typing import Any
 
 import plaid
+from plaid.api import plaid_api
+from plaid.model.accounts_get_request import AccountsGetRequest
 from plaid.model.removed_transaction import RemovedTransaction
 from plaid.model.transaction import Transaction
 from plaid.model.transactions_sync_request import TransactionsSyncRequest
@@ -17,6 +20,25 @@ import db
 
 MUTATION_ERROR_CODE = "TRANSACTIONS_SYNC_MUTATION_DURING_PAGINATION"
 MAX_MUTATION_RESTARTS = 3
+
+ENV_MAP = {
+    "sandbox": plaid.Environment.Sandbox,
+    "production": plaid.Environment.Production,
+}
+
+
+def make_client() -> plaid_api.PlaidApi:
+    """Plaid API client for the configured PLAID_ENV (default production)."""
+    env = (os.getenv("PLAID_ENV") or os.getenv("PLAID_ENVIRONMENT") or "production").lower()
+    configuration = plaid.Configuration(
+        host=ENV_MAP.get(env, plaid.Environment.Production),
+        api_key={
+            "clientId": os.getenv("PLAID_CLIENT_ID"),
+            "secret": os.getenv("PLAID_SECRET"),
+            "plaidVersion": "2020-09-14",
+        },
+    )
+    return plaid_api.PlaidApi(plaid.ApiClient(configuration))
 
 
 def _transaction_to_row(tx: Transaction, item_id: str) -> dict[str, Any]:
@@ -142,3 +164,26 @@ def sync_item(
         elapsed = time.time() - t0
         if elapsed < min_page_interval_s:
             time.sleep(min_page_interval_s - elapsed)
+
+
+def sync_item_and_accounts(
+    client: Any,
+    item_id: str,
+    access_token: str,
+    *,
+    min_page_interval_s: float = 0.5,
+) -> dict[str, int]:
+    """sync_item plus an account-balance refresh (stores that support it)."""
+    stats = sync_item(
+        client, item_id, access_token, min_page_interval_s=min_page_interval_s
+    )
+    if hasattr(db, "upsert_accounts"):
+        accounts = (
+            client.accounts_get(AccountsGetRequest(access_token=access_token))
+            .to_dict()
+            .get("accounts")
+            or []
+        )
+        db.upsert_accounts(item_id, accounts)
+        stats["accounts"] = len(accounts)
+    return stats

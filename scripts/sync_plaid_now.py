@@ -30,34 +30,21 @@ load_dotenv(ROOT / ".env")
 import db  # noqa: E402
 import plaid  # noqa: E402
 import plaid_sync  # noqa: E402
-from plaid.api import plaid_api  # noqa: E402
-from plaid.model.accounts_get_request import AccountsGetRequest  # noqa: E402
 
-ENV_MAP = {
-    "sandbox": plaid.Environment.Sandbox,
-    "production": plaid.Environment.Production,
-}
 plaid_env = (os.getenv("PLAID_ENV") or os.getenv("PLAID_ENVIRONMENT") or "sandbox").lower()
-if plaid_env not in ENV_MAP:
+if plaid_env not in plaid_sync.ENV_MAP:
     print(f"Unknown PLAID_ENV={plaid_env!r}; defaulting to sandbox")
     plaid_env = "sandbox"
+os.environ["PLAID_ENV"] = plaid_env  # make_client defaults to production; pin the resolved env
 
-configuration = plaid.Configuration(
-    host=ENV_MAP[plaid_env],
-    api_key={
-        "clientId": os.getenv("PLAID_CLIENT_ID"),
-        "secret": os.getenv("PLAID_SECRET"),
-        "plaidVersion": "2020-09-14",
-    },
-)
-client = plaid_api.PlaidApi(plaid.ApiClient(configuration))
+client = plaid_sync.make_client()
 
 MIN_PAGE_INTERVAL_S = 0.5   # be polite — under 30 req/min/item
 INTER_ITEM_DELAY_S = 1.0
 
 
 def sync_one(item_id: str, access_token: str) -> dict:
-    return plaid_sync.sync_item(
+    return plaid_sync.sync_item_and_accounts(
         client, item_id, access_token, min_page_interval_s=MIN_PAGE_INTERVAL_S
     )
 
@@ -88,17 +75,10 @@ def main() -> int:
         try:
             stats = sync_one(item_id, token)
             print(f"  added={stats['added']} modified={stats['modified']} removed={stats['removed']} pages={stats['pages']}")
+            if "accounts" in stats:
+                print(f"  accounts refreshed: {stats['accounts']}")
             for k in totals:
                 totals[k] += stats[k]
-            if hasattr(db, "upsert_accounts"):
-                accounts = (
-                    client.accounts_get(AccountsGetRequest(access_token=token))
-                    .to_dict()
-                    .get("accounts")
-                    or []
-                )
-                db.upsert_accounts(item_id, accounts)
-                print(f"  accounts refreshed: {len(accounts)}")
         except plaid.ApiException as e:
             any_error = True
             try:

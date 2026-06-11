@@ -33,10 +33,13 @@ venv/bin/python scripts/disconnect_all_plaid_items.py
 PLAID_ENVIRONMENT=sandbox venv/bin/python scripts/disconnect_all_plaid_items.py
 ```
 
-## One-time: link bank accounts (The Count app)
+## One-time: link bank accounts (StaffRoomAI website)
 
-1. Run the Flask app (`python run.py` from the repo root with `.env` containing `PLAID_CLIENT_ID`, `PLAID_SECRET`, and `PLAID_ENVIRONMENT=production` after Trial access is approved (use `sandbox` until then).
-2. Use **Plaid Link** on the dashboard to connect institutions (stores `item_id` + `access_token` in SQLite).
+1. Linking is website-owned (contract M3): use **Plaid Link** on the StaffRoomAI
+   Accounts page, which writes the item (encrypted token, env-tagged) to Supabase
+   `plaid_items`. The Flask app is retired — there is no local link flow.
+2. the-count's Vercel functions pull transactions into Supabase; this worker
+   mirrors them into Notion on its own schedule (no item handoff needed).
 
 ## Push secrets to the hosted worker
 

@@ -20,15 +20,16 @@ seam, is self-contained within a single ~200k-token context window, and is tagge
             ▼                              ▼               ▼                      ▼
   ┌───────────────────┐  S1   ┌───────────────────┐  S2  ┌───────────────┐  S3  ┌──────────────┐
   │ link/exchange/sync │ ───▶ │ raw Plaid txn row  │ ───▶ │ coded row      │ ───▶ │ append-only  │
-  │ (app.py routes)    │      │ (one leg + PFC     │      │ (GL type + Sch │      │ listing +    │
+  │ (Vercel functions) │      │ (one leg + PFC     │      │ (GL type + Sch │      │ listing +    │
   │                    │      │  category guess)   │      │  C + dims +    │      │ reconcile    │
   │                    │      │                    │      │  provenance)   │      │ gate         │
   └───────────────────┘      └───────────────────┘      └───────────────┘      └──────────────┘
 ```
 
-- **S1 — Sources seam.** Input: Plaid `link_token` / `public_token` / `transactions_sync`
-  responses. Output: rows in `items`, `transactions`, `sync_cursors`
-  (`src/backend/db.py`, `src/backend/plaid_sync.py`, `src/backend/app.py`). **Implemented.**
+- **S1 — Sources seam.** Input: Plaid `transactions_sync` responses (linking is
+  website-owned, contract M3). Output: rows in `items`, `transactions`, `sync_cursors`
+  (`src/backend/db.py`, `src/backend/plaid_sync.py`; HTTP entry points are the
+  Vercel functions `api/cron-sync.py` and `api/sync/item.py`). **Implemented.**
 - **S2 — Ingestion seam.** Input: one raw Plaid transaction (a single account movement + an
   issuer/Plaid `personal_finance_category` guess). Output: **one coded listing row**
   (date, amount, vendor, GL account type, Schedule C line + optional subcategory,
@@ -51,16 +52,21 @@ the contract that Ingestion consumes.
 
 | ID | Loop | Assertion | Depends on |
 |---|---|---|---|
-| **A1** | outer | `POST /api/create_link_token` returns a `link_token` (Plaid client mocked). | `app.py:create_link_token` |
-| **A2** | outer | `POST /api/exchange_public_token` persists an `items` row with `access_token` + institution. | `app.py:exchange_public_token`, `db.upsert_item` |
-| **A3** | outer | Sync paginates `transactions_sync` until `has_more=false` and persists the final `next_cursor`. | `app.py:_sync_one_item`, `db.set/get_cursor` |
+| **A1** | — | **Retired 2026-06-11.** Link-token creation is website-owned (contract M3); no backend surface remains. | — |
+| **A2** | — | **Retired 2026-06-11.** Token exchange / item persistence is website-owned (contract M3). | — |
+| **A3** | outer | Sync paginates `transactions_sync` until `has_more=false` and persists the cursor (per page). | `plaid_sync.sync_item`, `db.set/get_cursor` |
 | **A4** | **inner** | `apply_sync_response` applies `added`/`modified`/`removed` → upsert/delete; replaying the same page is **idempotent** (one row per `transaction_id`). → **INV-COMPLETE, INV-IDEMPOTENT** | `plaid_sync.apply_sync_response`, `db` |
 | **A5** | **inner** | Raw fidelity: amount **sign**, `iso_currency_code`, `date`/`authorized_date`, PFC `primary`/`detailed`, `payment_channel` persist losslessly; `raw_json` retained for provenance. → **INV-SIGN (raw), INV-PROVENANCE (seed)** | `plaid_sync._transaction_to_row` |
-| **A6** | outer | `full=true` resets cursors (`db.reset_all_sync_cursors`) and replays history. | `app.py:sync_transactions` |
+| **A6** | outer | A full resync resets cursors (`db.reset_all_sync_cursors`) and replays history from scratch. | `plaid_sync.sync_item`, `scripts/sync_plaid_now.py --full` |
 
-**Fixture:** a `fake_plaid_sync_response(added=…, modified=…, removed=…, has_more, next_cursor)`
-factory + a temp SQLite DB via `THE_COUNT_DB_PATH`. A1–A3/A6 mock `plaid_client`; A4–A5 call
-`plaid_sync` directly with synthetic `Transaction` objects (no network). See
+Hardening extensions (same seam): per-page cursor durability, mutation-error
+restart, and fail-closed auth + handler logic for `api/sync/item.py` — see
+[`tests/test_sync_hardening.py`](../../tests/test_sync_hardening.py).
+
+**Fixture:** a scripted `FakeClient` (`tests/conftest.py`) playing back
+`fake_page(...)` responses / exceptions + a temp SQLite DB via `THE_COUNT_DB_PATH`.
+A3/A6 drive `plaid_sync.sync_item` with the fake client; A4–A5 call `plaid_sync`
+directly with synthetic `Transaction` objects (no network). See
 [`tests/test_sources_stage.py`](../../tests/test_sources_stage.py).
 
 ---
