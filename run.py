@@ -19,7 +19,7 @@ if __name__ == "__main__":
     from dotenv import load_dotenv
 
     load_dotenv()
-    plaid_env = os.getenv("PLAID_ENVIRONMENT", "sandbox")
+    plaid_env = os.getenv("PLAID_ENV") or os.getenv("PLAID_ENVIRONMENT", "sandbox")
 
     print("🧛 Starting The Count development server...")
     print(f"🏦 Plaid environment: {plaid_env}")

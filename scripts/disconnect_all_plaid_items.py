@@ -19,7 +19,7 @@ import plaid
 from plaid.api import plaid_api
 from plaid.model.item_remove_request import ItemRemoveRequest
 
-PLAID_ENV = __import__("os").getenv("PLAID_ENVIRONMENT", "sandbox")
+PLAID_ENV = (__import__("os").getenv("PLAID_ENV") or __import__("os").getenv("PLAID_ENVIRONMENT") or "sandbox")
 PLAID_ENVIRONMENTS = {
     "sandbox": plaid.Environment.Sandbox,
     "development": plaid.Environment.Development,

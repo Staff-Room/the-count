@@ -36,13 +36,14 @@ app = Flask(__name__)
 
 PLAID_CLIENT_ID = os.getenv("PLAID_CLIENT_ID")
 PLAID_SECRET = os.getenv("PLAID_SECRET")
-_raw_plaid_env = os.getenv("PLAID_ENVIRONMENT", "sandbox").lower()
+# PLAID_ENV is canonical (matches the website); PLAID_ENVIRONMENT kept as fallback.
+_raw_plaid_env = (os.getenv("PLAID_ENV") or os.getenv("PLAID_ENVIRONMENT") or "sandbox").lower()
 # Plaid retired development.plaid.com; real-data testing uses production (Trial plan).
 if _raw_plaid_env == "development":
     import warnings
 
     warnings.warn(
-        "PLAID_ENVIRONMENT=development is deprecated (host removed). Using production. "
+        "PLAID_ENV=development is deprecated (host removed). Using production. "
         "Request a Trial plan in the Plaid Dashboard for free real-data testing.",
         stacklevel=1,
     )
@@ -89,19 +90,6 @@ def _notion_worker_dir() -> Path:
     return Path(__file__).resolve().parents[2] / "notion-worker"
 
 
-def _linked_items_payload() -> list[dict[str, str]]:
-    payload = []
-    for row in db.iter_items_with_tokens():
-        entry = {
-            "item_id": row["item_id"],
-            "access_token": row["access_token"],
-        }
-        if row.get("institution_name"):
-            entry["institution_name"] = row["institution_name"]
-        payload.append(entry)
-    return payload
-
-
 def _run_ntn_command(
     ntn_bin: str, args: list[str], *, cwd: Path, description: str
 ) -> None:
@@ -118,8 +106,8 @@ def _run_ntn_command(
 
 def _sync_notion_worker_from_linked_items(*, reset_sync_state: bool = False) -> dict:
     """
-    Push linked Plaid items to Notion worker env and trigger syncs.
-    This keeps dashboard-linked institutions in lockstep with the worker.
+    Trigger Notion worker syncs after a Plaid pull. The worker reads
+    transactions from Supabase (no Plaid credentials or item handoff needed).
 
     When reset_sync_state is True, clears worker cursors first (use after
     deleting Notion databases or when Plaid/Notion are out of sync).
@@ -150,7 +138,6 @@ def _sync_notion_worker_from_linked_items(*, reset_sync_state: bool = False) -> 
             "message": "ntn CLI is not installed or not on PATH",
         }
 
-    items_payload = _linked_items_payload()
     accounts_sync_key = os.getenv(
         "NOTION_WORKER_ACCOUNTS_SYNC_KEY", "plaidAccountsSync"
     ).strip()
@@ -159,18 +146,6 @@ def _sync_notion_worker_from_linked_items(*, reset_sync_state: bool = False) -> 
     ).strip()
 
     try:
-        _run_ntn_command(
-            ntn_bin,
-            [
-                "workers",
-                "env",
-                "set",
-                f"PLAID_ITEMS_JSON={json.dumps(items_payload, separators=(',', ':'))}",
-            ],
-            cwd=worker_dir,
-            description="ntn workers env set PLAID_ITEMS_JSON",
-        )
-
         sync_keys = [
             k
             for k in (accounts_sync_key, transactions_sync_key)
@@ -200,7 +175,6 @@ def _sync_notion_worker_from_linked_items(*, reset_sync_state: bool = False) -> 
         return {
             "attempted": True,
             "ok": True,
-            "item_count": len(items_payload),
             "reset_sync_state": reset_sync_state,
             "reset": reset_keys,
             "triggered": triggered,
@@ -209,7 +183,6 @@ def _sync_notion_worker_from_linked_items(*, reset_sync_state: bool = False) -> 
         return {
             "attempted": True,
             "ok": False,
-            "item_count": len(items_payload),
             "message": str(e),
         }
 
@@ -396,6 +369,44 @@ def sync_transactions():
     return jsonify(
         {"summary": summary, "details": results, "notion_worker": notion_worker}
     )
+
+
+@app.route("/api/sync/item", methods=["POST"])
+def sync_single_item():
+    """Sync one item on demand — called by the website after Plaid Link.
+
+    Optional shared secret: if SYNC_TRIGGER_SECRET is set, callers must send
+    it in the X-Sync-Secret header.
+    """
+    secret = os.getenv("SYNC_TRIGGER_SECRET", "").strip()
+    if secret and request.headers.get("X-Sync-Secret", "") != secret:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    body = request.get_json(force=True, silent=True) or {}
+    item_id = body.get("item_id")
+    if not item_id:
+        return jsonify({"error": "item_id is required"}), 400
+
+    row = db.get_item(item_id)
+    if not row:
+        return jsonify({"error": "Unknown item"}), 404
+
+    try:
+        stats = _sync_one_item(item_id, row["access_token"])
+        if hasattr(db, "upsert_accounts"):
+            accounts_response = plaid_client.accounts_get(
+                AccountsGetRequest(access_token=row["access_token"])
+            )
+            accounts = accounts_response.to_dict().get("accounts") or []
+            db.upsert_accounts(item_id, accounts)
+        return jsonify({"ok": True, "item_id": item_id, **stats})
+    except plaid.ApiException as e:
+        err = json.loads(e.body)
+        db.set_cursor(item_id, db.get_cursor(item_id), error=json.dumps(err))
+        return jsonify({"ok": False, "item_id": item_id, "error": err}), 502
+    except Exception as e:
+        db.set_cursor(item_id, db.get_cursor(item_id), error=str(e))
+        return jsonify({"ok": False, "item_id": item_id, "error": str(e)}), 500
 
 
 @app.route("/api/accounts", methods=["GET"])

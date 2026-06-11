@@ -1,5 +1,5 @@
 """
-Apply Plaid transactions_sync responses to local SQLite storage.
+Apply Plaid transactions_sync responses to the active store (see db.py).
 """
 
 from __future__ import annotations
@@ -53,10 +53,14 @@ def apply_sync_response(item_id: str, response: Any) -> dict[str, int]:
     modified = getattr(response, "modified", None) or []
     removed = getattr(response, "removed", None) or []
 
-    for tx in list(added) + list(modified):
-        if isinstance(tx, Transaction):
-            db.upsert_transaction_row(_transaction_to_row(tx, item_id))
+    rows = [
+        _transaction_to_row(tx, item_id)
+        for tx in list(added) + list(modified)
+        if isinstance(tx, Transaction)
+    ]
+    db.upsert_transactions(rows)
 
+    removed_ids = []
     for rt in removed:
         if isinstance(rt, RemovedTransaction):
             tid = rt.transaction_id
@@ -65,7 +69,8 @@ def apply_sync_response(item_id: str, response: Any) -> dict[str, int]:
         else:
             tid = getattr(rt, "transaction_id", None)
         if tid:
-            db.delete_transaction(tid)
+            removed_ids.append(tid)
+    db.delete_transactions(removed_ids)
 
     return {
         "added": len(added),

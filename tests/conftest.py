@@ -30,7 +30,8 @@ os.environ["THE_COUNT_DB_PATH"] = str(
 )
 os.environ.setdefault("PLAID_CLIENT_ID", "test-client-id")
 os.environ.setdefault("PLAID_SECRET", "test-secret")
-os.environ.setdefault("PLAID_ENVIRONMENT", "sandbox")
+os.environ["PLAID_ENV"] = "sandbox"
+os.environ["BACKEND_STORE"] = "sqlite"  # tests always run against isolated SQLite
 os.environ["NOTION_WORKER_AUTO_SYNC"] = "false"  # never shell out to `ntn` in tests
 
 import pytest  # noqa: E402

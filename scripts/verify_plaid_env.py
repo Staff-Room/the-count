@@ -19,7 +19,7 @@ from plaid.model.country_code import CountryCode
 from plaid.model.institutions_get_request import InstitutionsGetRequest
 from plaid.model.institutions_get_request_options import InstitutionsGetRequestOptions
 
-PLAID_ENV = os.getenv("PLAID_ENVIRONMENT", "sandbox").lower()
+PLAID_ENV = (os.getenv("PLAID_ENV") or os.getenv("PLAID_ENVIRONMENT") or "sandbox").lower()
 if PLAID_ENV == "development":
     print(
         "Note: PLAID_ENVIRONMENT=development is deprecated; checking production instead.",
