@@ -1,0 +1,183 @@
+{
+  "title": "SCHEDULE C INCOME STATEMENT — TY 2025",
+  "entity": "ZW Consulting LLC (Texas)  •  Sole Proprietorship / Single-Member LLC  •  Cash basis",
+  "prepared": "Prepared: 2026-05-28  •  Source: $$$.xlsx Transactions  •  See Methodology tab for IRS citations  •  V1 — flagged items pending Rozella review",
+  "version": "V1",
+  "basis": "cash",
+  "tax_year": 2025,
+  "line_items": [
+    {
+      "line": "Line 1",
+      "description": "Gross receipts or sales",
+      "amount": 4090.52,
+      "num_txns": 2,
+      "section": "INCOME",
+      "notes": "See 'Detail' tab; filter Sch C Line = Line 1"
+    },
+    {
+      "line": "Line 7",
+      "description": "Gross income (= Line 1 for cash basis)",
+      "amount": 4090.52,
+      "num_txns": null,
+      "section": "INCOME",
+      "notes": null
+    },
+    {
+      "line": "Line 8",
+      "description": "Advertising",
+      "amount": 0.0,
+      "num_txns": 0,
+      "section": "EXPENSES",
+      "notes": null
+    },
+    {
+      "line": "Line 9",
+      "description": "Car & truck expenses (local biz transport)",
+      "amount": 117.7275,
+      "num_txns": 33,
+      "section": "EXPENSES",
+      "notes": "See 'Detail' tab; filter Sch C Line = Line 9"
+    },
+    {
+      "line": "Line 10",
+      "description": "Commissions and fees",
+      "amount": 0.0,
+      "num_txns": 0,
+      "section": "EXPENSES",
+      "notes": null
+    },
+    {
+      "line": "Line 11",
+      "description": "Contract labor",
+      "amount": 4925.0,
+      "num_txns": 5,
+      "section": "EXPENSES",
+      "notes": "See 'Detail' tab; filter Sch C Line = Line 11"
+    },
+    {
+      "line": "Line 13",
+      "description": "Depreciation and §179",
+      "amount": 0.0,
+      "num_txns": 0,
+      "section": "EXPENSES",
+      "notes": null
+    },
+    {
+      "line": "Line 15",
+      "description": "Insurance (other than health)",
+      "amount": 0.0,
+      "num_txns": 0,
+      "section": "EXPENSES",
+      "notes": null
+    },
+    {
+      "line": "Line 17",
+      "description": "Legal and professional services",
+      "amount": 300.0,
+      "num_txns": 2,
+      "section": "EXPENSES",
+      "notes": "See 'Detail' tab; filter Sch C Line = Line 17"
+    },
+    {
+      "line": "Line 18",
+      "description": "Office expense (incl. software & subscriptions)",
+      "amount": 4497.94,
+      "num_txns": 86,
+      "section": "EXPENSES",
+      "notes": "See 'Detail' tab; filter Sch C Line = Line 18"
+    },
+    {
+      "line": "Line 20b",
+      "description": "Rent or lease — other business property",
+      "amount": 5236.7,
+      "num_txns": 12,
+      "section": "EXPENSES",
+      "notes": "See 'Detail' tab; filter Sch C Line = Line 20b"
+    },
+    {
+      "line": "Line 21",
+      "description": "Repairs and maintenance",
+      "amount": 0.0,
+      "num_txns": 0,
+      "section": "EXPENSES",
+      "notes": null
+    },
+    {
+      "line": "Line 22",
+      "description": "Supplies",
+      "amount": 8.73,
+      "num_txns": 1,
+      "section": "EXPENSES",
+      "notes": "See 'Detail' tab; filter Sch C Line = Line 22"
+    },
+    {
+      "line": "Line 23",
+      "description": "Taxes and licenses",
+      "amount": 0.0,
+      "num_txns": 0,
+      "section": "EXPENSES",
+      "notes": null
+    },
+    {
+      "line": "Line 24a",
+      "description": "Travel",
+      "amount": 0.0,
+      "num_txns": 0,
+      "section": "EXPENSES",
+      "notes": null
+    },
+    {
+      "line": "Line 24b",
+      "description": "Deductible meals (50%)",
+      "amount": 86.54,
+      "num_txns": 3,
+      "section": "EXPENSES",
+      "notes": "See 'Detail' tab; filter Sch C Line = Line 24b"
+    },
+    {
+      "line": "Line 25",
+      "description": "Utilities",
+      "amount": 528.0,
+      "num_txns": 11,
+      "section": "EXPENSES",
+      "notes": "See 'Detail' tab; filter Sch C Line = Line 25"
+    },
+    {
+      "line": "Line 26",
+      "description": "Wages",
+      "amount": 0.0,
+      "num_txns": 0,
+      "section": "EXPENSES",
+      "notes": null
+    },
+    {
+      "line": "Line 27a",
+      "description": "Other expenses",
+      "amount": 0.0,
+      "num_txns": 0,
+      "section": "EXPENSES",
+      "notes": null
+    },
+    {
+      "line": "Line 28",
+      "description": "Total expenses",
+      "amount": 15700.6375,
+      "num_txns": null,
+      "section": "EXPENSES",
+      "notes": null
+    },
+    {
+      "line": "Line 31",
+      "description": "Net profit or (loss)",
+      "amount": -11610.1175,
+      "num_txns": null,
+      "section": "EXPENSES",
+      "notes": null
+    }
+  ],
+  "totals": {
+    "gross_income": 4090.52,
+    "total_expenses": 15700.6375,
+    "net_profit_or_loss": -11610.1175
+  }
+}

@@ -1,5 +1,14 @@
-# Environment variables
+# Environment variables and secrets — never commit these
 .env
+.mcp.json
+.claude/
+
+# Audit logs and encrypted data (paths under repo root, if ever created)
+.thecount/
+*.enc
+
+# Local tooling / agent artifacts (not part of source)
+.codeboarding/
 
 # Python
 __pycache__/
@@ -31,6 +40,7 @@ ENV/
 # IDE
 .vscode/
 .idea/
+.cursor/
 *.swp
 *.swo
 
@@ -41,3 +51,4 @@ Thumbs.db
 # Local app data
 src/backend/data/
 *.db
+.vercel

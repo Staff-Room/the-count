@@ -1,0 +1,28 @@
+METHODOLOGY & IRS SOURCES — TY 2025 V1,,
+ZW Consulting LLC — Cash basis sole prop / SMLLC — Schedule C,,
+,,
+Rule,Treatment,Source
+Tax year & basis,Calendar year 2025. Cash basis. Schedule C (Form 1040) as sole prop / SMLLC.,2025 Sch C Instructions
+Chart of Accounts,"Donna Walker's ""Side Hustle / Sole Prop"" COA — Schedule C aligned, parent (Sch C line) + child (GL sub-account).",chart_of_accounts.xlsx (2026-05-28)
+2025 Standard mileage rate,$0.70 per business mile. Standard mileage OR actual expenses (not both). Parking and tolls on business trips deductible in addition.,IRS Notice 2025-5
+Commute vs business transport,Trips to/from regular workplace = commute = NOT deductible. Regus coworking = regular workplace. Workplace ↔ client site = deductible.,IRS Pub 463 Topic 511
+Rideshare / public transit,Lyft/Lime/Clipper deductible only for legitimate business purpose (not commute). User estimate: 25% of TY 2025 Public Transit was non-commute.,IRS Pub 463 Ch 4
+Travel Line 24a,Deductible if away from tax home overnight for business. User: Southwest/COT $505 was personal → excluded.,IRS Pub 463 Ch 1
+Meals Line 24b,"50% deductible if business purpose documented (contact, reason).",IRC §274(n)
+Home internet (Starlink),Deductible at business-use % under §162. User estimate: 75%. Documentation method (time-based or sqft) required.,IRS Topic 509; Pub 535
+Software & subs Line 18,"100% biz SaaS (Claude, OpenAI, GitHub, Notion, MS, Lucid, GoDaddy, n8n). Consumer subs (Spotify) excluded.",IRC §162
+Contract Labor Line 11,"Payments to independent contractors. Each contractor ≥$600/yr requires 1099-NEC. Identified: Daniel Canosa, Steve, Steven Atkin, Ruben.",2025 Sch C instr. Line 11; 1099-NEC instr.
+De minimis safe harbor,"Tangible property up to $2,500/item expensed without capitalization (no AFS). MacBook ($2,031.68) qualifies. Election statement required.",Reg §1.263(a)-1(f); IRS Notice 2015-82
+SE Health Insurance Sch 1 L17,Above-the-line for premiums actually paid (medical/dental/vision/LTC). Form 7206 calc. User on Medi-Cal — deduction limited to private supplemental premiums paid.,IRS Form 7206 + instructions
+Transfers / non-deductible,"CC payments, internal transfers, family gifts (D. Walker / Rent Assistance), refunds — excluded from P&L (no impact).",—
+TX LLC operating from CA,"CA may consider as ""doing business in CA"" under R&TC §23101 → potential CA filing. Multi-state issue flagged for Rozella.",CA R&TC §23101
+,,
+,,
+REFERENCE LINKS,,
+IRS 2025 Schedule C Instructions,https://www.irs.gov/instructions/i1040sc,
+IRS Notice 2025-5 (Standard Mileage Rate),https://www.irs.gov/pub/irs-drop/n-25-05.pdf,
+"IRS Publication 463 (Travel, Gift, Car)",https://www.irs.gov/publications/p463,
+IRS Topic 511 (Business Travel),https://www.irs.gov/taxtopics/tc511,
+IRS Topic 509 (Business Use of Home),https://www.irs.gov/taxtopics/tc509,
+IRS Form 7206 (SE Health Insurance),https://www.irs.gov/forms-pubs/about-form-7206,
+Tangible Property Final Regs,https://www.irs.gov/businesses/small-businesses-self-employed/tangible-property-final-regulations,

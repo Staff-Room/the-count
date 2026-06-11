@@ -8,8 +8,11 @@ import csv
 import io
 import json
 import os
+import shutil
+import subprocess
 from calendar import monthrange
 from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 
 import plaid
 from dotenv import load_dotenv
@@ -33,11 +36,23 @@ app = Flask(__name__)
 
 PLAID_CLIENT_ID = os.getenv("PLAID_CLIENT_ID")
 PLAID_SECRET = os.getenv("PLAID_SECRET")
-PLAID_ENV = os.getenv("PLAID_ENVIRONMENT", "sandbox")
+# PLAID_ENV is canonical (matches the website); PLAID_ENVIRONMENT kept as fallback.
+_raw_plaid_env = (os.getenv("PLAID_ENV") or os.getenv("PLAID_ENVIRONMENT") or "sandbox").lower()
+# Plaid retired development.plaid.com; real-data testing uses production (Trial plan).
+if _raw_plaid_env == "development":
+    import warnings
+
+    warnings.warn(
+        "PLAID_ENV=development is deprecated (host removed). Using production. "
+        "Request a Trial plan in the Plaid Dashboard for free real-data testing.",
+        stacklevel=1,
+    )
+    PLAID_ENV = "production"
+else:
+    PLAID_ENV = _raw_plaid_env
 
 PLAID_ENVIRONMENTS = {
     "sandbox": plaid.Environment.Sandbox,
-    "development": plaid.Environment.Development,
     "production": plaid.Environment.Production,
 }
 
@@ -59,6 +74,117 @@ def _month_start(d: date | None = None) -> date:
     if d is None:
         d = date.today()
     return date(d.year, d.month, 1)
+
+
+def _env_bool(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _notion_worker_dir() -> Path:
+    configured = os.getenv("NOTION_WORKER_DIR", "").strip()
+    if configured:
+        return Path(configured).expanduser()
+    return Path(__file__).resolve().parents[2] / "notion-worker"
+
+
+def _run_ntn_command(
+    ntn_bin: str, args: list[str], *, cwd: Path, description: str
+) -> None:
+    proc = subprocess.run(
+        [ntn_bin, *args],
+        cwd=str(cwd),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"{description} failed (exit {proc.returncode})")
+
+
+def _sync_notion_worker_from_linked_items(*, reset_sync_state: bool = False) -> dict:
+    """
+    Trigger Notion worker syncs after a Plaid pull. The worker reads
+    transactions from Supabase (no Plaid credentials or item handoff needed).
+
+    When reset_sync_state is True, clears worker cursors first (use after
+    deleting Notion databases or when Plaid/Notion are out of sync).
+    """
+    if not _env_bool("NOTION_WORKER_AUTO_SYNC", True):
+        return {
+            "attempted": False,
+            "ok": False,
+            "skipped": True,
+            "message": "NOTION_WORKER_AUTO_SYNC is disabled",
+        }
+
+    worker_dir = _notion_worker_dir()
+    if not worker_dir.exists():
+        return {
+            "attempted": False,
+            "ok": False,
+            "skipped": True,
+            "message": f"Notion worker directory not found: {worker_dir}",
+        }
+
+    ntn_bin = shutil.which("ntn")
+    if not ntn_bin:
+        return {
+            "attempted": False,
+            "ok": False,
+            "skipped": True,
+            "message": "ntn CLI is not installed or not on PATH",
+        }
+
+    accounts_sync_key = os.getenv(
+        "NOTION_WORKER_ACCOUNTS_SYNC_KEY", "plaidAccountsSync"
+    ).strip()
+    transactions_sync_key = os.getenv(
+        "NOTION_WORKER_TRANSACTIONS_SYNC_KEY", "plaidTransactionsSync"
+    ).strip()
+
+    try:
+        sync_keys = [
+            k
+            for k in (accounts_sync_key, transactions_sync_key)
+            if k
+        ]
+        reset_keys: list[str] = []
+        if reset_sync_state:
+            for sync_key in sync_keys:
+                _run_ntn_command(
+                    ntn_bin,
+                    ["workers", "sync", "state", "reset", sync_key],
+                    cwd=worker_dir,
+                    description=f"ntn workers sync state reset {sync_key}",
+                )
+                reset_keys.append(sync_key)
+
+        triggered = []
+        for sync_key in sync_keys:
+            _run_ntn_command(
+                ntn_bin,
+                ["workers", "sync", "trigger", sync_key],
+                cwd=worker_dir,
+                description=f"ntn workers sync trigger {sync_key}",
+            )
+            triggered.append(sync_key)
+
+        return {
+            "attempted": True,
+            "ok": True,
+            "reset_sync_state": reset_sync_state,
+            "reset": reset_keys,
+            "triggered": triggered,
+        }
+    except Exception as e:
+        return {
+            "attempted": True,
+            "ok": False,
+            "message": str(e),
+        }
 
 
 @app.route("/")
@@ -185,12 +311,34 @@ def _sync_one_item(item_id: str, access_token: str) -> dict:
     return total_stats
 
 
+def _parse_sync_full_flag() -> bool:
+    body = request.get_json(force=True, silent=True) or {}
+    if body.get("full") is True:
+        return True
+    raw = request.args.get("full", "")
+    return str(raw).lower() in ("1", "true", "yes")
+
+
 @app.route("/api/sync_transactions", methods=["POST"])
 def sync_transactions():
     """Pull latest transactions from Plaid for all linked items."""
+    full = _parse_sync_full_flag()
     items = db.iter_items_with_tokens()
     if not items:
-        return jsonify({"synced": [], "message": "No linked accounts"})
+        notion_worker = _sync_notion_worker_from_linked_items(
+            reset_sync_state=full
+        )
+        return jsonify(
+            {
+                "synced": [],
+                "message": "No linked accounts",
+                "full": full,
+                "notion_worker": notion_worker,
+            }
+        )
+
+    if full:
+        db.reset_all_sync_cursors()
 
     results = []
     for row in items:
@@ -207,12 +355,58 @@ def sync_transactions():
             db.set_cursor(item_id, db.get_cursor(item_id), error=str(e))
             results.append({"item_id": item_id, "ok": False, "error": str(e)})
 
+    ok_results = [r for r in results if r.get("ok")]
     summary = {
         "items": len(results),
-        "ok": sum(1 for r in results if r.get("ok")),
-        "transactions_added": sum(r.get("added", 0) for r in results if r.get("ok")),
+        "ok": len(ok_results),
+        "transactions_added": sum(r.get("added", 0) for r in ok_results),
+        "transactions_modified": sum(r.get("modified", 0) for r in ok_results),
+        "full": full,
     }
-    return jsonify({"summary": summary, "details": results})
+    notion_worker = _sync_notion_worker_from_linked_items(
+        reset_sync_state=full
+    )
+    return jsonify(
+        {"summary": summary, "details": results, "notion_worker": notion_worker}
+    )
+
+
+@app.route("/api/sync/item", methods=["POST"])
+def sync_single_item():
+    """Sync one item on demand — called by the website after Plaid Link.
+
+    Optional shared secret: if SYNC_TRIGGER_SECRET is set, callers must send
+    it in the X-Sync-Secret header.
+    """
+    secret = os.getenv("SYNC_TRIGGER_SECRET", "").strip()
+    if secret and request.headers.get("X-Sync-Secret", "") != secret:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    body = request.get_json(force=True, silent=True) or {}
+    item_id = body.get("item_id")
+    if not item_id:
+        return jsonify({"error": "item_id is required"}), 400
+
+    row = db.get_item(item_id)
+    if not row:
+        return jsonify({"error": "Unknown item"}), 404
+
+    try:
+        stats = _sync_one_item(item_id, row["access_token"])
+        if hasattr(db, "upsert_accounts"):
+            accounts_response = plaid_client.accounts_get(
+                AccountsGetRequest(access_token=row["access_token"])
+            )
+            accounts = accounts_response.to_dict().get("accounts") or []
+            db.upsert_accounts(item_id, accounts)
+        return jsonify({"ok": True, "item_id": item_id, **stats})
+    except plaid.ApiException as e:
+        err = json.loads(e.body)
+        db.set_cursor(item_id, db.get_cursor(item_id), error=json.dumps(err))
+        return jsonify({"ok": False, "item_id": item_id, "error": err}), 502
+    except Exception as e:
+        db.set_cursor(item_id, db.get_cursor(item_id), error=str(e))
+        return jsonify({"ok": False, "item_id": item_id, "error": str(e)}), 500
 
 
 @app.route("/api/accounts", methods=["GET"])

@@ -1,0 +1,14 @@
+{
+  "framework": null,
+  "crons": [
+    {
+      "path": "/api/cron-sync",
+      "schedule": "0 8 * * *"
+    }
+  ],
+  "functions": {
+    "api/*.py": {
+      "maxDuration": 300
+    }
+  }
+}

@@ -150,6 +150,7 @@
             <div class="actions">
                 <button type="button" class="primary" id="linkBtn">Connect institution</button>
                 <button type="button" id="syncBtn">Sync transactions</button>
+                <button type="button" id="fullSyncBtn" title="Clears Plaid and Notion worker cursors, then replays history">Full resync</button>
                 <button type="button" id="refreshBtn">Refresh view</button>
             </div>
         </header>
@@ -298,17 +299,53 @@
             $('linkBtn').disabled = false;
         }
 
-        async function syncTx() {
+        async function syncTx(full) {
             $('syncBtn').disabled = true;
-            flash('Syncing with Plaid…', true);
+            $('fullSyncBtn').disabled = true;
+            flash(full ? 'Full resync: resetting cursors and syncing with Plaid…' : 'Syncing with Plaid…', true);
             try {
-                const res = await fetch('/api/sync_transactions', { method: 'POST' });
+                const res = await fetch('/api/sync_transactions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ full: Boolean(full) }),
+                });
                 const data = await res.json();
+                const notion = data.notion_worker;
+                const notionOk = notion && notion.attempted && notion.ok;
+                const notionFailed = notion && notion.attempted && !notion.ok;
+                const notionSkipped = notion && notion.skipped;
+
                 if (data.summary) {
-                    flash(`Synced ${data.summary.ok}/${data.summary.items} institutions; ` +
-                        `${data.summary.transactions_added} new/updated rows this run.`, true);
+                    const touched = (data.summary.transactions_added || 0) +
+                        (data.summary.transactions_modified || 0);
+                    let msg = (data.summary.full ? 'Full resync: ' : '') +
+                        `Synced ${data.summary.ok}/${data.summary.items} institutions; ` +
+                        `${touched} transaction rows touched this run ` +
+                        `(${data.summary.transactions_added || 0} added, ${data.summary.transactions_modified || 0} updated).`;
+                    if (data.summary.full && touched === 0) {
+                        msg += ' No rows from Plaid — try again in a minute or check linked accounts.';
+                    }
+                    if (data.summary.full && notionOk) {
+                        msg += ' Notion worker cursors were reset; history replay may take several minutes.';
+                    }
+                    if (notionOk) {
+                        msg += ` Notion worker updated (${notion.item_count} linked items).`;
+                    } else if (notionFailed) {
+                        msg += ` Local sync succeeded, but Notion worker update failed: ${notion.message || 'unknown error'}.`;
+                    } else if (notionSkipped) {
+                        msg += ` Notion worker skipped: ${notion.message}.`;
+                    }
+                    flash(msg, !notionFailed);
                 } else {
-                    flash(data.message || 'Done', true);
+                    let msg = data.message || 'Done';
+                    if (notionOk) {
+                        msg += ` Notion worker updated (${notion.item_count} linked items).`;
+                    } else if (notionFailed) {
+                        msg += ` Notion worker update failed: ${notion.message || 'unknown error'}.`;
+                    } else if (notionSkipped) {
+                        msg += ` Notion worker skipped: ${notion.message}.`;
+                    }
+                    flash(msg, !notionFailed);
                 }
                 txnOffset = 0;
                 await loadDashboard();
@@ -317,6 +354,7 @@
                 flash(String(e), false);
             } finally {
                 $('syncBtn').disabled = false;
+                $('fullSyncBtn').disabled = false;
             }
         }
 
@@ -457,7 +495,8 @@
             await loadDashboard();
             await loadAllTransactions(false);
         });
-        $('syncBtn').addEventListener('click', syncTx);
+        $('syncBtn').addEventListener('click', () => syncTx(false));
+        $('fullSyncBtn').addEventListener('click', () => syncTx(true));
         $('linkBtn').addEventListener('click', () => linkHandler && linkHandler.open());
         $('filterBtn').addEventListener('click', () => { txnOffset = 0; loadAllTransactions(false); });
         $('moreTxnBtn').addEventListener('click', () => {

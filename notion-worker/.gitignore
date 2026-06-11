@@ -1,0 +1,10 @@
+.env
+.env.*
+dist/
+node_modules/
+workers.*.json
+workers.json
+
+# Template asset (large); optional for Plaid worker
+docs/*
+!docs/integrations/
