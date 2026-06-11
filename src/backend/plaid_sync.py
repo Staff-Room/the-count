@@ -5,12 +5,18 @@ Apply Plaid transactions_sync responses to the active store (see db.py).
 from __future__ import annotations
 
 import json
+import time
 from typing import Any
 
+import plaid
 from plaid.model.removed_transaction import RemovedTransaction
 from plaid.model.transaction import Transaction
+from plaid.model.transactions_sync_request import TransactionsSyncRequest
 
 import db
+
+MUTATION_ERROR_CODE = "TRANSACTIONS_SYNC_MUTATION_DURING_PAGINATION"
+MAX_MUTATION_RESTARTS = 3
 
 
 def _transaction_to_row(tx: Transaction, item_id: str) -> dict[str, Any]:
@@ -77,3 +83,62 @@ def apply_sync_response(item_id: str, response: Any) -> dict[str, int]:
         "modified": len(modified),
         "removed": len(removed),
     }
+
+
+def _plaid_error_code(e: plaid.ApiException) -> str | None:
+    try:
+        return json.loads(e.body).get("error_code")
+    except Exception:
+        return None
+
+
+def sync_item(
+    client: Any,
+    item_id: str,
+    access_token: str,
+    *,
+    min_page_interval_s: float = 0.5,
+) -> dict[str, int]:
+    """Run transactions_sync to completion for one item.
+
+    The cursor is persisted after every applied page (pages are applied
+    before the cursor is saved, and upserts/deletes are idempotent), so an
+    interrupt or serverless timeout never loses progress — the next run
+    resumes where this one stopped instead of re-pulling from scratch.
+
+    On TRANSACTIONS_SYNC_MUTATION_DURING_PAGINATION, pagination restarts
+    from the cursor it began with, per Plaid's protocol; replayed pages are
+    idempotent.
+    """
+    start_cursor = db.get_cursor(item_id)
+    cursor = start_cursor
+    restarts = 0
+    stats = {"added": 0, "modified": 0, "removed": 0, "pages": 0}
+    while True:
+        t0 = time.time()
+        req = (
+            TransactionsSyncRequest(access_token=access_token, cursor=cursor)
+            if cursor
+            else TransactionsSyncRequest(access_token=access_token)
+        )
+        try:
+            response = client.transactions_sync(req)
+        except plaid.ApiException as e:
+            if _plaid_error_code(e) == MUTATION_ERROR_CODE and restarts < MAX_MUTATION_RESTARTS:
+                restarts += 1
+                cursor = start_cursor
+                db.set_cursor(item_id, cursor, error=None)
+                stats = {"added": 0, "modified": 0, "removed": 0, "pages": 0}
+                continue
+            raise
+        page = apply_sync_response(item_id, response)
+        for k in ("added", "modified", "removed"):
+            stats[k] += page[k]
+        stats["pages"] += 1
+        cursor = response.next_cursor
+        db.set_cursor(item_id, cursor, error=None)
+        if not response.has_more:
+            return stats
+        elapsed = time.time() - t0
+        if elapsed < min_page_interval_s:
+            time.sleep(min_page_interval_s - elapsed)

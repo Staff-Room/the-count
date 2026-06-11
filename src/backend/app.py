@@ -5,6 +5,7 @@ The Count - Plaid integration and financial dashboard backend.
 from __future__ import annotations
 
 import csv
+import hmac
 import io
 import json
 import os
@@ -25,7 +26,6 @@ from plaid.model.item_remove_request import ItemRemoveRequest
 from plaid.model.link_token_create_request import LinkTokenCreateRequest
 from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
 from plaid.model.products import Products
-from plaid.model.transactions_sync_request import TransactionsSyncRequest
 
 import db
 import plaid_sync
@@ -285,30 +285,7 @@ def exchange_public_token():
 
 def _sync_one_item(item_id: str, access_token: str) -> dict:
     """Run transactions_sync until complete; persist cursor and transactions."""
-    cursor = db.get_cursor(item_id)
-    total_stats = {"added": 0, "modified": 0, "removed": 0, "pages": 0}
-
-    while True:
-        if cursor:
-            sync_req = TransactionsSyncRequest(
-                access_token=access_token, cursor=cursor
-            )
-        else:
-            sync_req = TransactionsSyncRequest(access_token=access_token)
-
-        response = plaid_client.transactions_sync(sync_req)
-        total_stats["pages"] += 1
-        page = plaid_sync.apply_sync_response(item_id, response)
-        total_stats["added"] += page["added"]
-        total_stats["modified"] += page["modified"]
-        total_stats["removed"] += page["removed"]
-
-        cursor = response.next_cursor
-        if not response.has_more:
-            break
-
-    db.set_cursor(item_id, cursor, error=None)
-    return total_stats
+    return plaid_sync.sync_item(plaid_client, item_id, access_token)
 
 
 def _parse_sync_full_flag() -> bool:
@@ -323,6 +300,8 @@ def _parse_sync_full_flag() -> bool:
 def sync_transactions():
     """Pull latest transactions from Plaid for all linked items."""
     full = _parse_sync_full_flag()
+    if hasattr(db, "clear_caches"):
+        db.clear_caches()
     items = db.iter_items_with_tokens()
     if not items:
         notion_worker = _sync_notion_worker_from_linked_items(
@@ -375,13 +354,16 @@ def sync_transactions():
 def sync_single_item():
     """Sync one item on demand — called by the website after Plaid Link.
 
-    Optional shared secret: if SYNC_TRIGGER_SECRET is set, callers must send
-    it in the X-Sync-Secret header.
+    Fails closed: SYNC_TRIGGER_SECRET must be set, and callers must send it
+    in the X-Sync-Secret header (constant-time compare).
     """
     secret = os.getenv("SYNC_TRIGGER_SECRET", "").strip()
-    if secret and request.headers.get("X-Sync-Secret", "") != secret:
+    provided = request.headers.get("X-Sync-Secret", "")
+    if not secret or not hmac.compare_digest(provided, secret):
         return jsonify({"error": "Unauthorized"}), 401
 
+    if hasattr(db, "clear_caches"):
+        db.clear_caches()
     body = request.get_json(force=True, silent=True) or {}
     item_id = body.get("item_id")
     if not item_id:

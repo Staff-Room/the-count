@@ -32,7 +32,6 @@ import plaid  # noqa: E402
 import plaid_sync  # noqa: E402
 from plaid.api import plaid_api  # noqa: E402
 from plaid.model.accounts_get_request import AccountsGetRequest  # noqa: E402
-from plaid.model.transactions_sync_request import TransactionsSyncRequest  # noqa: E402
 
 ENV_MAP = {
     "sandbox": plaid.Environment.Sandbox,
@@ -58,29 +57,9 @@ INTER_ITEM_DELAY_S = 1.0
 
 
 def sync_one(item_id: str, access_token: str) -> dict:
-    cursor = db.get_cursor(item_id)
-    stats = {"added": 0, "modified": 0, "removed": 0, "pages": 0}
-    while True:
-        t0 = time.time()
-        req = (
-            TransactionsSyncRequest(access_token=access_token, cursor=cursor)
-            if cursor
-            else TransactionsSyncRequest(access_token=access_token)
-        )
-        response = client.transactions_sync(req)
-        page = plaid_sync.apply_sync_response(item_id, response)
-        stats["added"] += page["added"]
-        stats["modified"] += page["modified"]
-        stats["removed"] += page["removed"]
-        stats["pages"] += 1
-        cursor = response.next_cursor
-        if not response.has_more:
-            break
-        elapsed = time.time() - t0
-        if elapsed < MIN_PAGE_INTERVAL_S:
-            time.sleep(MIN_PAGE_INTERVAL_S - elapsed)
-    db.set_cursor(item_id, cursor, error=None)
-    return stats
+    return plaid_sync.sync_item(
+        client, item_id, access_token, min_page_interval_s=MIN_PAGE_INTERVAL_S
+    )
 
 
 def main() -> int:
