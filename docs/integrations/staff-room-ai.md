@@ -1,6 +1,6 @@
 # The Count ↔ Staff Room AI: integration contracts (backend view)
 
-> Last audited: 2026-06-11. Sibling docs:
+> Last audited: 2026-06-12. Sibling docs:
 > - `v0-staff-room-ai/docs/integrations/the-count.md`
 > - `notion-worker/docs/integrations/the-count.md` (relative path; under `the-count/notion-worker/`)
 
@@ -36,7 +36,7 @@ tools read what this backend writes.
 | Route | Method | Auth | Request | Response | Notes |
 |---|---|---|---|---|---|
 | `/api/cron-sync` | GET | `Authorization: Bearer $CRON_SECRET` (fail-closed, constant-time) | — | `{ok, items[]}` | Vercel cron, daily 08:00 UTC; syncs all active items + account balances |
-| `/api/sync/item` | POST | `X-Sync-Secret: $SYNC_TRIGGER_SECRET` (fail-closed, constant-time) | `{item_id}` | `{ok, item_id, added, modified, removed, pages, accounts}` | Called by the website after Plaid Link (`THE_COUNT_SYNC_URL`); 404 unknown item, 502 Plaid error |
+| `/api/sync/item` | POST | `X-Sync-Secret: $SYNC_TRIGGER_SECRET` (fail-closed, constant-time) | `{item_id}` | `{ok, item_id, added, modified, removed, pages, accounts}` | Three website callers (`THE_COUNT_SYNC_URL`): post-Link trigger (fire-and-forget), the dashboard "Sync from bank" button, and the `sync_transactions` MCP tool — last two fan out over all active items via `lib/integrations/the-count-sync.ts`. 404 unknown item, 502 Plaid error |
 
 ## What this backend CONSUMES
 
