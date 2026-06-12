@@ -458,12 +458,20 @@ def _amounts(params: dict[str, str], select: str) -> list[dict[str, Any]]:
     """Page through all matching rows (aggregates are computed client-side)."""
     out: list[dict[str, Any]] = []
     offset = 0
-    page = 10_000
+    # PostgREST silently caps responses at max-rows (Supabase default 1000);
+    # paging above the cap makes the len(rows) < page check exit early.
+    page = 1_000
     while True:
         rows = _req(
             "GET",
             "plaid_transactions",
-            params={**params, "select": select, "limit": str(page), "offset": str(offset)},
+            params={
+                **params,
+                "select": select,
+                "order": "transaction_id",
+                "limit": str(page),
+                "offset": str(offset),
+            },
         ) or []
         out.extend(rows)
         if len(rows) < page:
