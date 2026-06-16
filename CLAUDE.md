@@ -36,3 +36,17 @@ When working on this project, Claude Code should:
 To create new activities: fetch template content (ID: `15f592a30352800998baef9f9bcf83dd`) → create page with `notion-create-pages` → set relation properties using full URLs. Note: use create-pages, not duplicate-page.
 
 The Notion project page URL: https://www.notion.so/26e592a3035280ebbe93cfe1d58af13a
+
+## Agent skills
+
+### Issue tracker
+
+Issues and PRDs are tracked as GitHub issues (`Staff-Room/the-count`) via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Five canonical triage roles, mapped 1:1 to identically-named GitHub labels (only `wontfix` exists today; the other four need creating). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context — one `CONTEXT.md` (created lazily by `/grill-with-docs`) + the existing `docs/adr/` at the repo root. See `docs/agents/domain.md`.
